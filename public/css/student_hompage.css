@@ -9,6 +9,11 @@
     }
     .column2 {
     float: left;
+    width: 2%;
+    padding: 2%;
+    }
+    .column3 {
+    float: left;
     width: 50%;
     /* height: 15%; */
     padding: 1%;
