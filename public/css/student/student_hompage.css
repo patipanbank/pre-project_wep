@@ -4,19 +4,14 @@
     /* Set additional styling options for the columns*/
     .column1 {
     float: left;
-    width: 15%;
+    width: 10%;
     padding: 2%;
     }
     .column2 {
     float: left;
-    width: 2%;
-    padding: 2%;
-    }
-    .column3 {
-    float: left;
     width: 50%;
     /* height: 15%; */
-    padding: 1%;
+    padding: 2%;
     }
 
     .row:after {
@@ -40,5 +35,10 @@
         color: #253b6d;
     }
 
-   
+    img {
+        max-width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+
 
