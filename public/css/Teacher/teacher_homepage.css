@@ -6,38 +6,24 @@
     width: 70%;
 }
 
-.card2:hover { box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
+.card2:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
 
 
 .card2 {
     display: flex;
-    justify-content: space-between; /* จัดปุ่มไปทางขวาสุด */
+    justify-content: space-between;
+    /* จัดปุ่มไปทางขวาสุด */
+}
+.popup {
+    /* position: fixed; */
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.button1 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: yellow;
-    border: none;
-    font-weight: bold;
-    color: black;
+.popup-dialog {
+    max-width: 800px;
 }
-.button2 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: green;
-    border: none;
-    font-weight: bold;
-    color: white;
-}
-.button3 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: red;
-    border: none;
-    font-weight: bold;
-    color: white;
-}
+
