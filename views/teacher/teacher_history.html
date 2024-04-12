@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <title>Teacher History</title>
     <link rel="stylesheet" href="/public/css/Teacher/teacher_history.css">
 </head>
+
 <body>
     <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
 
@@ -27,8 +29,7 @@
                             href="/views/teacher/teacher_homepage.html">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;"
-                            href="/views/teacher/teacher_history.html">HISTORY</a>
+                        <a class="nav-link" style="color: white;" href="/views/teacher/teacher_history.html">HISTORY</a>
                     </li>
                 </ul>
             </div>
@@ -40,7 +41,7 @@
 
     <div class="control-width">
 
-        
+
         <div class="card2 mt-5" onclick="toggleDetails(this)">
             <div>
                 <h2>Jhon Carther 6431501...</h2>
@@ -52,7 +53,7 @@
                 </div>
             </div>
             <div class="button2 p-5">
-                <button type="button">Approve</button>
+                <span class="badge bg-success" style="width: 150px; height: 50px; font-size: 25px;">Approve</span>
             </div>
         </div>
         <div class="card2 mt-5" onclick="toggleDetails(this)">
@@ -66,7 +67,7 @@
                 </div>
             </div>
             <div class="button3 p-5">
-                <button type="button">Reject</button>
+                <span class="badge bg-danger" style="width: 150px; height: 50px; font-size: 25px;">Reject</span>
             </div>
         </div>
 
@@ -82,4 +83,5 @@
             }
         </script>
 </body>
+
 </html>
