@@ -39,6 +39,10 @@
         max-width: 100%;
         transition: all 0.3s ease;
     }
+
+    .container {
+        max-width: 1650px; /* เพิ่มความกว้างสูงสุดของ container */
+    }
     
 
 
