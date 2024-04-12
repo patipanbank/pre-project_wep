@@ -9,6 +9,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <title>Teacher History</title>
+    <link rel="stylesheet" href="/public/css/Teacher/teacher_history.css">
 </head>
 <body>
     <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
@@ -36,5 +37,49 @@
             </div>
         </div>
     </nav>
+
+    <div class="control-width">
+
+        
+        <div class="card2 mt-5" onclick="toggleDetails(this)">
+            <div>
+                <h2>Jhon Carther 6431501...</h2>
+                <h3>Monday 4/4/2567 14:00-14:30</h3>
+                <p>Click more details</p>
+                <div class="details" style="display: none;">
+                    <p>Student:..............................................b</p>
+                    <p>Teacher:..............................................b</p>
+                </div>
+            </div>
+            <div class="button2 p-5">
+                <button type="button">Approve</button>
+            </div>
+        </div>
+        <div class="card2 mt-5" onclick="toggleDetails(this)">
+            <div>
+                <h2>Susan Chift 6431501...</h2>
+                <h3>Monday 4/4/2567 14:30-15:00</h3>
+                <p>Click more details</p>
+                <div class="details" style="display: none;">
+                    <p>Student:..............................................c</p>
+                    <p>Teacher:..............................................c</p>
+                </div>
+            </div>
+            <div class="button3 p-5">
+                <button type="button">Reject</button>
+            </div>
+        </div>
+
+
+        <script>
+            function toggleDetails(card) {
+                var details = card.querySelector(".details");
+                if (details.style.display === "none") {
+                    details.style.display = "block";
+                } else {
+                    details.style.display = "none";
+                }
+            }
+        </script>
 </body>
 </html>
