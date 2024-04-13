@@ -35,7 +35,11 @@
         color: #253b6d;
     }
 
-    img {
+    #imgt{
+        height: 280px;
+        width: 200px;
+    }
+    #imgnav {
         max-width: 100%;
         transition: all 0.3s ease;
     }
