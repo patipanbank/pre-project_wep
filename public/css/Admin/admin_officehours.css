@@ -1,0 +1,52 @@
+.row {
+    box-sizing: border-box;
+}
+/* Set additional styling options for the columns*/
+.column1 {
+float: left;
+width: 10%;
+padding: 2%;
+}
+.column2 {
+float: left;
+width: 50%;
+/* height: 15%; */
+padding: 2%;
+}
+
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+.p1 {
+    font-size: 30px;
+    font-weight: bold;
+    color: red;
+}
+.p2 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #253b6d;
+}
+.p3 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #253b6d;
+}
+
+#imgt{
+    height: 280px;
+    width: 200px;
+}
+#imgnav {
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+.container {
+    max-width: 1650px; /* เพิ่มความกว้างสูงสุดของ container */
+}
+
+
+

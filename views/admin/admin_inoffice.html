@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Import</title>
+    <title>Admin Inoffice</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/public/css/Admin/admin_import.css">
+    <link rel="stylesheet" href="/public/css/Admin/admin_inoffice.css">
 </head>
 
 <body>
+
     <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
 
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
@@ -30,7 +30,8 @@
                             href="/views/admin/admin_homepage.html">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/views/admin/admin_officehous.html">OFFICE HOURS</a>
+                        <a class="nav-link" style="color: white;" href="/views/admin/admin_officehous.html">OFFICE
+                            HOURS</a>
                     </li>
                 </ul>
             </div>
@@ -39,40 +40,12 @@
             </div>
         </div>
     </nav>
-    <div class="row">
-        <div class="col">
-            <div class="mt-2 float-start" style="margin-left: 10px;">
-                <form action="#" method="GET" id="searchForm">
-                    <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-        <div class="col mt-2">
-            <button type="button" class="float-end" id="importBt" style="margin-right: 10px;" data-bs-toggle="modal"
-                data-bs-target="#importModal">Import</button>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="importModalLabel">Import Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- เพิ่ม input element เพื่อรับไฟล์ Excel -->
-                    <input type="file" id="excelFile"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <!-- เพิ่มปุ่ม Upload -->
-                    <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
-                </div>
-            </div>
-        </div>
+
+    <div class="mt-2 float-end" style="margin-right: 10px;">
+        <form action="#" method="GET" id="searchForm">
+            <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
     </div>
 
     <div class="container">
@@ -102,7 +75,7 @@
                             <p class="mb-0">Asst. Prof. Worasak Rueangsirarak, PhD</p>
                             <p>053-917198</p>
                             <div class="mb-0">
-                                <span class="badge bg-danger" style="font-size: 23px;">OUT OFFICE</span>
+                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
                             </div>
                         </div>
                     </div>
@@ -115,7 +88,7 @@
                             <p class="mb-0">Asst. Prof. Pattaramon Vuttipittayamongkol, PhD</p>
                             <p>053-916762</p>
                             <div class="mb-0">
-                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
+                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
                             </div>
                         </div>
                     </div>
@@ -190,66 +163,10 @@
             </div>
         </div>
         <div class="mt-5">
-            <h3>SE teacher</h3>
-            <div class="p-5">
-                <div class="row">
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/ดร_ณัฐพล_อุ่นศรี.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">รองศาสตราจารย์ ดร.ณัฐพล อุ่นศรี</p>
-                            <p class="mb-0">Assoc.Prof.Nattapol Aunsri, PhD</p>
-                            <p>053-916765</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/csm_mce_05_2f59449767.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ น.อ. ดร.ธงชัย อยู่ญาติวงศ์</p>
-                            <p class="mb-0">Asst.Prof.Gp.Capt.Thongchai Yooyativong, PhD</p>
-                            <p>053-917200</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/อ.นชา.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ ดร.นชา ชลดำรงค์กุล</p>
-                            <p class="mb-0">Asst.Prof.Nacha Chondamrongkul, PhD</p>
-                            <p>053-916757</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/อ.นนทวรรษ.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">อาจารย์นนทวรรษ ธงสิบสอง</p>
-                            <p class="mb-0">Nontawat Thongsibsong</p>
-                            <p>053-916762</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            <h3>SE Teacher</h3>
         </div>
     </div>
+
     <script>
         function searchTeachers() {
             var input, filter, container, teachers, i, thaiName, engName, txtValue;
@@ -269,19 +186,7 @@
                 }
             }
         }
-        // เรียกใช้งาน modal โดยใช้ Bootstrap
-        var myModal = new bootstrap.Modal(document.getElementById('importModal'));
-
-        // เมื่อกดปุ่ม Import ให้แสดง modal
-        document.getElementById('importBt').addEventListener('click', function () {
-            myModal.show();
-        });
-        // เมื่อปิด Modal ให้เครียร์ค่าของ input element
-        document.getElementById('importModal').addEventListener('hidden.bs.modal', function () {
-            document.getElementById('excelFile').value = ''; // เครียร์ค่าของ input element
-        });
-
     </script>
 </body>
 
-</html>
+</html>l
