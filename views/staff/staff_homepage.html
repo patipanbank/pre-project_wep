@@ -213,6 +213,26 @@
         </div>
     </div>
 
+    <script>
+        // เมื่อหน้าเว็บโหลดเสร็จสมบูรณ์
+        window.addEventListener('load', function () {
+            // ทำการเลื่อนลงทีละหน่วยทุก 500 มิลลิวินาที (0.5 วินาที)
+            setInterval(function () {
+                window.scrollBy(0, 220); // 1 หมายถึงเลื่อนลง 1 หน่วยในแนวแกน Y
+            }, 3000);
+        });
+        window.addEventListener('scroll', function () {
+            const scrolled = window.scrollY;
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+            if (scrolled === totalHeight) {
+                // ค้างไว้เป็นเวลา 3 วินาทีก่อนที่จะทำการเลื่อนขึ้น
+                setTimeout(function () {
+                    window.scrollTo(0, 0); // เลื่อนขึ้นไปที่ด้านบนของหน้าเว็บ
+                }, 3000);
+            }
+        });
+    </script>
 </body>
 
 </html>
