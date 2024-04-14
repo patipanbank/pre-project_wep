@@ -16,20 +16,44 @@ body{
 }
 .container{
   position: relative;
-  height: 500px;
-  width: 700px;
+  height: 600px;
+  width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(red, green, blue);
+  background-color: rgb(56, 56, 56);
   box-shadow: 0 20px 25px 25px rgba(0, 0, 0, 0.5);
 }
-.container .image{
-  position: absolute;
-  top: 0;
-  left: 0;
+
+  .container .days{
+    display: flex;
+    flex-wrap: wrap;
   }
-  .container .img{
-    height: 500px;
+.container .day,
+.container .number
+{
+  height: 60px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  .container .date{
+    width: 500px;
     padding: 30px;
   }
+  .container h3{
+    font-size: 50px;
+    font-weight: 800;
+    margin: 0 15px 30px ;
+  }
+  
+  .container .image{
+    position: absolute;
+    top: 0;
+    right:  0;
+    }
+    .img{
+      height: 800px;
+      padding: 50px;
+    }
