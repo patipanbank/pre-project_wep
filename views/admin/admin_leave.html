@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Homepage</title>
+    <title>Admin Leave</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/public/css/Staff/staff_homepage.css">
+    <link rel="stylesheet" href="/public/css/Admin/admin_leave.css">
 </head>
 
 <body>
@@ -27,7 +27,11 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link active" style="color: white;" aria-current="page"
-                            href="/views/staff/staff_homepage.html">HOME</a>
+                            href="/views/admin/admin_homepage.html">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/views/admin/admin_officehous.html">OFFICE
+                            HOURS</a>
                     </li>
                 </ul>
             </div>
@@ -36,6 +40,13 @@
             </div>
         </div>
     </nav>
+
+    <div class="mt-2 float-end" style="margin-right: 10px;">
+        <form action="#" method="GET" id="searchForm">
+            <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
 
     <div class="container">
         <div class="mt-5">
@@ -51,7 +62,7 @@
                             <p class="mb-0">Asst.Prof.Teeravisit Laohapensaeng, PhD</p>
                             <p>053-916744</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -64,7 +75,7 @@
                             <p class="mb-0">Asst. Prof. Worasak Rueangsirarak, PhD</p>
                             <p>053-917198</p>
                             <div class="mb-0">
-                                <span class="badge bg-danger" style="font-size: 23px;">OUT OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -90,61 +101,7 @@
                             <p class="mb-0">Kemachart Kemavuthanon, PhD</p>
                             <p>053-916764</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/อ.กานต์.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">อาจารย์กานต์ โสภณรณฤทธิ์</p>
-                            <p class="mb-0">Karn Soponronnarit</p>
-                            <p>053-916764</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/343002713_928186348515350_4746513580003795479_n.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">อาจารย์ ดร.ขวัญตา คีรีมาศทอง</p>
-                            <p class="mb-0">Khwunta Kirimasthong, PhD</p>
-                            <p>053-916762</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/อ_ชยพล_คำยอด.jpg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">อาจารย์ ดร.ชยพล คำยอด</p>
-                            <p class="mb-0">Chayapol Kamyod, PhD</p>
-                            <p>053-916746</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
-                        <div style="display: inline-block; text-align: center;">
-                            <img id="imgt" src="/public/img/Titiya_Chomngern.jpeg" alt=""
-                                style="width: 200px; display: block; margin-left: auto; margin-right: auto;">
-                            <p class="mt-2 mb-0">อาจารย์ ดร.ฐิติยา ชมเงิน</p>
-                            <p class="mb-0">Titiya Chomngern, PhD</p>
-                            <p>053-916747</p>
-                            <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -164,7 +121,7 @@
                             <p class="mb-0">Assoc.Prof.Nattapol Aunsri, PhD</p>
                             <p>053-916765</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -177,7 +134,7 @@
                             <p class="mb-0">Asst.Prof.Gp.Capt.Thongchai Yooyativong, PhD</p>
                             <p>053-917200</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -190,7 +147,7 @@
                             <p class="mb-0">Asst.Prof.Nacha Chondamrongkul, PhD</p>
                             <p>053-916757</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -203,7 +160,7 @@
                             <p class="mb-0">Nontawat Thongsibsong</p>
                             <p>053-916762</p>
                             <div class="mb-0">
-                                <span class="badge bg-success" style="font-size: 23px;">IN OFFICE</span>
+                                <span class="badge bg-secondary" style="font-size: 23px;">LEAVE</span>
                             </div>
                         </div>
                     </div>
@@ -214,24 +171,24 @@
     </div>
 
     <script>
-        // เมื่อหน้าเว็บโหลดเสร็จสมบูรณ์
-        window.addEventListener('load', function () {
-            // ทำการเลื่อนลงทีละหน่วยทุก 500 มิลลิวินาที (0.5 วินาที)
-            setInterval(function () {
-                window.scrollBy(0, 220); // 1 หมายถึงเลื่อนลง 1 หน่วยในแนวแกน Y
-            }, 3000);
-        });
-        window.addEventListener('scroll', function () {
-            const scrolled = window.scrollY;
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        function searchTeachers() {
+            var input, filter, container, teachers, i, thaiName, engName, txtValue;
+            input = document.getElementById('searchInput');
+            filter = input.value.toLowerCase();
+            container = document.querySelector('.container'); // เลือก container ที่มีอาจารย์
+            teachers = container.querySelectorAll('.col');
 
-            if (scrolled === totalHeight) {
-                // ค้างไว้เป็นเวลา 3 วินาทีก่อนที่จะทำการเลื่อนขึ้น
-                setTimeout(function () {
-                    window.scrollTo(0, 0); // เลื่อนขึ้นไปที่ด้านบนของหน้าเว็บ
-                }, 3000);
+            for (i = 0; i < teachers.length; i++) {
+                thaiName = teachers[i].querySelectorAll('p')[0].textContent.toLowerCase();
+                engName = teachers[i].querySelectorAll('p')[1].textContent.toLowerCase();
+                txtValue = thaiName + ' ' + engName;
+                if (txtValue.indexOf(filter) > -1) {
+                    teachers[i].style.display = '';
+                } else {
+                    teachers[i].style.display = 'none';
+                }
             }
-        });
+        }
     </script>
 </body>
 
