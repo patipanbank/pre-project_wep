@@ -266,22 +266,65 @@
             </div>
         </div>
         <div class="bt mt-5">
-            <button class="bg-success" style="color: white; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+            <button id="update-office-hours-btn" class="bg-success"
+                style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
                 type="button">Update Office Hours</button>
-            <button class="bg-secondary" style="color: white; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+            <button id="update-leave-btn" class="bg-secondary"
+                style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
                 type="button">Update Leave</button>
-            <button class="bg-info" style="color: rgb(0, 0, 0); border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
-                type="button">Clear Office Hours and Leave</button>
+            <button id="clear-btn" class="bg-info"
+                style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Clear</button>
+            <button id="clearall-btn" class="bg-primary"
+                style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Clear All</button>
+
         </div>
     </div>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         flatpickr("#datepicker", {
             minDate: "today", // วันที่แรก
             mode: "range"
         });
+
+        $(document).ready(function () {
+            // When a cell in the table is clicked
+            $("td").click(function () {
+                // Toggle the 'bg-warning' class when a cell is clicked
+                $(this).toggleClass("bg-warning");
+            });
+
+            // When the 'Update Office Hours' button is clicked
+            $("#update-office-hours-btn").click(function () {
+                // Change all cells with 'bg-warning' to 'bg-success'
+                $("td.bg-warning").removeClass("bg-warning bg-secondary").addClass("bg-success");
+            });
+
+            // When the 'Update Leave' button is clicked
+            $("#update-leave-btn").click(function () {
+                // Change all cells with 'bg-warning' to 'bg-secondary'
+                $("td.bg-warning").removeClass("bg-warning bg-success").addClass("bg-secondary");
+            });
+
+            // When the 'Clear' button is clicked
+            $("#clear-btn").click(function () {
+                // Remove the 'bg-warning' class from all selected cells
+                $("td.bg-warning").removeClass("bg-warning bg-success bg-secondary");
+            });
+
+            // When the 'Clear All' button is clicked
+            $("#clearall-btn").click(function () {
+                // Remove both 'bg-success' and 'bg-secondary' classes from all cells
+                $("td").removeClass("bg-warning bg-success bg-secondary");
+            });
+        });
+
+
     </script>
 </body>
 

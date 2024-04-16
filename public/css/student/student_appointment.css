@@ -22,14 +22,22 @@
     margin-top: 20px;
   }
   
-  .bt {
+  .circle {
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    border: none;
     display: flex;
-    /* align-items: center; */
+    align-items: center;
     justify-content: center;
-    /* height: 550px; */
-    
   }
-
-  .selected {
-    background-color: green !important;
-}
+  .circlewraper {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .rowcircle {
+    display: flex;
+    margin: 50px;
+  }

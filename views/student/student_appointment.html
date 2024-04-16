@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Appointment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <title>Student Appointment</title>
-    <link rel="stylesheet" href="/public/css/student/student_hompage.css">
+    <link rel="stylesheet" href="/public/css/student/student_calenderstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <!-- <h1>hEELO.</h1> -->
-
-    <img src="/public/img/Header-School-IT-MFU_Thai.png" alt="">
+    <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
 
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
         <div class="container-fluid">
@@ -31,7 +31,8 @@
                             href="/views/student/student_homepage.html">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="#">STATUS APPOINTMENT</a>
+                        <a class="nav-link" style="color: white;"
+                            href="/views/student/student_statusappointment.html">STATUS APPOINTMENT</a>
                     </li>
                 </ul>
             </div>
@@ -41,7 +42,282 @@
         </div>
     </nav>
 
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div style="display: inline-block; text-align: center;">
+                    <img id="imgt" src="/public/img/ดร.ธีรวิศิฏฐ์_01.jpg" alt=""
+                        style="width: 150px; display: block; margin-left: auto; margin-right: auto; margin-top: 20px;">
+                    <p class="mt-2 mb-0 fs-6">ผู้ช่วยศาสตราจารย์ ดร.ธีรวิศิฏฐ์ เลาหะเพ็ญแสง</p>
+                    <p class="mb-0 fs-6">Asst.Prof.Teeravisit Laohapensaeng, PhD</p>
+                    <p class="fs-6">053-916744</p>
+                </div>
+            </div>
+            <div class="col-md-9 coltable">
+                <div class="d-flex justify-content-end" style="margin-bottom: 10px; margin-top: 10px;">
+                    <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>
+                    <i class="fa fa-arrow-right" style="margin-right: 5px;"></i>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time/Day</th>
+                                <th colspan="2" scope="col">8:00-9:00</th>
+                                <th colspan="2" scope="col">9:00-10:00</th>
+                                <th colspan="2" scope="col">10:00-11:00</th>
+                                <th colspan="2" scope="col">11:00-12:00</th>
+                                <th colspan="2" scope="col">12:00-13:00</th>
+                                <th colspan="2" scope="col">13:00-14:00</th>
+                                <th colspan="2" scope="col">14:00-15:00</th>
+                                <th colspan="2" scope="col">15:00-16:00</th>
+                                <th colspan="2" scope="col">16:00-17:00</th>
+                                <th colspan="2" scope="col">17:00-18:00</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Sunday</div>
+                                    <div>14/4/67</div>
+                                </th>
+                                <td class="bg-danger" id="unavailable"></td>
+                                <td class="bg-success" id="available"></td>
+                                <td class="bg-warning" id="waiting"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Monday</div>
+                                    <div>15/4/67</div>
+                                </th>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td class="bg-secondary leave" onclick="alert('leave')"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Tuesday</div>
+                                    <div>16/4/67</div>
+                                </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Wednesday</div>
+                                    <div>17/4/67</div>
+                                </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Thursday</div>
+                                    <div>18/4/67</div>
+                                </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> 
+                                    <div>Friday</div>
+                                    <div>19/4/67</div>
+                                </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <div>Saturday</div>
+                                    <div>20/4/67</div>
+                                </th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="circlewraper">
+            <div class="rowcircle mt-5">
+                <div class="circle bg-success">
+                </div>
+                <p style="font-weight: bold; margin-left: 5px;">Available</p>
+            </div>
+            <div class="rowcircle mt-5">
+                <div class="circle bg-danger">
+                </div>
+                <p style="font-weight: bold; margin-left: 5px;">Unavailable</p>
+            </div>
+            <div class="rowcircle mt-5">
+                <div class="circle bg-warning">
+                </div>
+                <p style="font-weight: bold; margin-left: 5px;">Waiting</p>
+            </div>
+            <div class="rowcircle mt-5">
+                <div class="circle bg-secondary">
+                </div>
+                <p style="font-weight: bold; margin-left: 5px;">Leave</p>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        document.querySelector('#available').onclick = () => {
+            // console.log('555');
+            Swal.fire({
+                title: "Topic or Details",
+                text: "Sunday 14/4/67 8:30-9:00",
+                input: "textarea",
+                // icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Appointment"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Appointment",
+                        text: result.value,
+                        icon: "success"
+                    });
+                }
+            });
+        }
+
+        document.querySelector('#unavailable').onclick = () => {
+            alert('This it unavailable');
+        }
+        document.querySelector('#waiting').onclick = () => {
+            alert('This it waiting');
+        }
+
+    </script>
 </body>
 
 </html>
