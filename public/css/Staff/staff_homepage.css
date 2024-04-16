@@ -43,6 +43,9 @@ clear: both;
     max-width: 100%;
     transition: all 0.3s ease;
 }
+.col {
+    width: 25%; /* แบ่งคอลัมน์เป็น 4 ส่วนเท่าๆ กัน */
+}
 
 .container {
     max-width: 1650px; /* เพิ่มความกว้างสูงสุดของ container */
