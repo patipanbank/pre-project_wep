@@ -11,8 +11,8 @@
   
   .coltable {
     position: relative;
-    height: 550px;
-    width: 1250px;
+    height: 600px;
+    width: 1300px;
     /* display: flex; */
     /* align-items: center; */
     justify-content: space-between;
@@ -32,7 +32,7 @@
     justify-content: center;
   }
   .circlewraper {
-    width: 100vw;
+    /* width: 100vw; */
     display: flex;
     justify-content: center;
   }
