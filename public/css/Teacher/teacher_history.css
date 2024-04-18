@@ -20,30 +20,13 @@
     justify-content: space-between; /* จัดปุ่มไปทางขวาสุด */
 }
 
-.button1 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: yellow;
-    border: none;
+.badge {
+    font-size: 25px;
     font-weight: bold;
-    color: black;
-}
-.button2 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: green;
-    border: none;
-    font-weight: bold;
-    color: white;
-}
-.button3 button {
-    padding: 10px 20px; /* ปรับขนาดของปุ่ม */
-    font-size: 16px; /* ปรับขนาดตัวอักษร */
-    border-radius: 10px;
-    background-color: red;
-    border: none;
-    font-weight: bold;
-    color: white;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    
 }
