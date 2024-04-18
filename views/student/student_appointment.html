@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/public/css/student/student_calenderstyle.css">
+    <link rel="stylesheet" href="/public/css/student/student_appointment.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -62,28 +62,38 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">Time/Day</th>
-                                <th colspan="2" scope="col">8:00-9:00</th>
-                                <th colspan="2" scope="col">9:00-10:00</th>
-                                <th colspan="2" scope="col">10:00-11:00</th>
-                                <th colspan="2" scope="col">11:00-12:00</th>
-                                <th colspan="2" scope="col">12:00-13:00</th>
-                                <th colspan="2" scope="col">13:00-14:00</th>
-                                <th colspan="2" scope="col">14:00-15:00</th>
-                                <th colspan="2" scope="col">15:00-16:00</th>
-                                <th colspan="2" scope="col">16:00-17:00</th>
-                                <th colspan="2" scope="col">17:00-18:00</th>
+                                <th scope="col" style="float: inline-start;">Time/Day</th>
+                                <th scope="col">08:00-08:30</th>
+                                <th scope="col">08:30-09:00</th>
+                                <th scope="col">09:00-09:30</th>
+                                <th scope="col">09:30-10:00</th>
+                                <th scope="col">10:00-10:30</th>
+                                <th scope="col">10:30-11:00</th>
+                                <th scope="col">11:00-11:30</th>
+                                <th scope="col">11:30-12:00</th>
+                                <th scope="col">12:00-12:30</th>
+                                <th scope="col">12:30-13:00</th>
+                                <th scope="col">13:00-13:30</th>
+                                <th scope="col">13:30-14:00</th>
+                                <th scope="col">14:00-14:30</th>
+                                <th scope="col">14:30-15:00</th>
+                                <th scope="col">15:00-15:30</th>
+                                <th scope="col">15:30-16:00</th>
+                                <th scope="col">16:00-16:30</th>
+                                <th scope="col">16:30-17:00</th>
+                                <th scope="col">17:00-17:30</th>
+                                <th scope="col">17:30-18:00</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Sunday</div>
                                     <div>14/4/67</div>
                                 </th>
-                                <td class="bg-danger" id="unavailable"></td>
-                                <td class="bg-success" id="available"></td>
-                                <td class="bg-warning" id="waiting"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -103,7 +113,7 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Monday</div>
                                     <div>15/4/67</div>
                                 </th>
@@ -129,10 +139,12 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Tuesday</div>
                                     <div>16/4/67</div>
                                 </th>
+                                <td class="bg-warning" onclick="alert('Waiting for Appointment')"></td>
+                                <td class="bg-success available-cell"></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -141,12 +153,10 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="bg-danger" onclick="alert('Unavailable')"></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -155,7 +165,7 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Wednesday</div>
                                     <div>17/4/67</div>
                                 </th>
@@ -175,20 +185,20 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
                             </tr>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Thursday</div>
                                     <div>18/4/67</div>
                                 </th>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td class="bg-success available-cell"></td>
+                                <td class="bg-success available-cell"></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -207,7 +217,7 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <th scope="row"> 
+                                <th scope="row">
                                     <div>Friday</div>
                                     <div>19/4/67</div>
                                 </th>
@@ -288,34 +298,55 @@
     </div>
 
     <script>
-        document.querySelector('#available').onclick = () => {
-            // console.log('555');
-            Swal.fire({
-                title: "Topic or Details",
-                text: "Sunday 14/4/67 8:30-9:00",
-                input: "textarea",
-                // icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Appointment"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Appointment",
-                        text: result.value,
-                        icon: "success"
-                    });
-                }
-            });
-        }
+        // สร้างฟังก์ชัน JavaScript เพื่อดึงข้อมูลของหัวตารางเฉพาะสำหรับคอลัมน์ที่คลิก
+function getTableHeaderForColumn(columnIndex) {
+    const headers = document.querySelectorAll('.table-bordered thead th');
+    const headerText = headers[columnIndex].innerText;
+    return headerText;
+}
 
-        document.querySelector('#unavailable').onclick = () => {
-            alert('This it unavailable');
-        }
-        document.querySelector('#waiting').onclick = () => {
-            alert('This it waiting');
-        }
+// เลือกทุกช่องที่มีคลาส "available-cell"
+const availableCells = document.querySelectorAll('.available-cell');
+
+// วนลูปผ่านทุกช่องที่มีคลาส "available-cell" เพื่อกำหนดค่า onclick
+availableCells.forEach(cell => {
+    cell.onclick = () => {
+        // ดึงข้อความจากแถวและคอลัมน์ของช่องที่ถูกคลิก
+        const row = cell.parentElement.children[0].innerText.trim();
+        const columnText = cell.innerText.trim();
+
+        // แยกข้อความวันที่และเวลาออกจากกัน
+        const day = row.split('\n')[0];
+        const date = row.split('\n')[1];
+        const time = columnText;
+
+        // ดึงข้อมูลหัวตารางเฉพาะสำหรับคอลัมน์ที่คลิก
+        const columnIndex = cell.cellIndex;
+        const tableHeader = getTableHeaderForColumn(columnIndex);
+
+        // แสดง SweetAlert พร้อมกับข้อความของเวลาและวันที่และข้อมูลหัวตารางเฉพาะสำหรับคอลัมน์ที่คลิก
+        Swal.fire({
+            title: "Topic or Details",
+            html: `<div>${day}</div><div>${date}</div><div>${time}</div><div>${tableHeader}</div>`,
+            input: "textarea",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Appointment"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // แสดง SweetAlert สำหรับการนัดหมายพร้อมข้อมูลที่ผู้ใช้ป้อน
+                Swal.fire({
+                    title: "Appointment",
+                    text: result.value,
+                    icon: "success"
+                });
+            }
+        });
+    };
+});
+
+
 
     </script>
 </body>
