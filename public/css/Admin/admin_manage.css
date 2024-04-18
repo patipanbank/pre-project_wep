@@ -26,3 +26,7 @@
     max-width: 1850px;
 }
 
+.switch-btn {
+    height: 20px;
+    /* width: 100%; */
+}
