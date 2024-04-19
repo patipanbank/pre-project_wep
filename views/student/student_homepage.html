@@ -40,11 +40,18 @@
         </div>
     </nav>
 
-    <div class="mt-2 float-end" style="margin-right: 10px;">
-        <form action="#" method="GET" id="searchForm">
-            <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
+    <div class="row sandim">
+        <div class="col-md-2">
+            <div class="mt-2 float-start" style="margin-left: 10px;">
+                <form action="#" method="GET" id="searchForm">
+                    <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="col mt-2">
+            <h4>TO DAY: <span id="current-date"></span><span id="current-time" style="margin-left: 10px;"></span></h4>
+        </div>
     </div>
 
     <div class="container">
@@ -61,7 +68,8 @@
                             <p class="mb-0">Asst.Prof.Teeravisit Laohapensaeng, PhD</p>
                             <p>053-916744</p>
                             <div class="mb-0">
-                                <button type="button" class="btn btn-success" onclick="window.location.href='/views/student/student_appointment.html'">Appointment</button>
+                                <button type="button" class="btn btn-success"
+                                    onclick="window.location.href='/views/student/student_appointment.html'">Appointment</button>
                             </div>
                         </div>
                     </div>
@@ -242,6 +250,31 @@
                 }
             }
         }
+
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            document.getElementById('current-time').textContent = timeString;
+
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var day = days[now.getDay()];
+            var month = months[now.getMonth()];
+            var date = now.getDate();
+            var year = now.getFullYear();
+            var dateString = day + ', ' + month + ' ' + date + ', ' + year;
+            document.getElementById('current-date').textContent = dateString;
+        }
+
+        // เรียกใช้ฟังก์ชันเพื่อแสดงวันที่และเวลาเมื่อหน้าเว็บโหลดเสร็จ
+        updateTime();
+
+        // อัพเดทวันที่และเวลาทุกๆ 1 วินาที
+        setInterval(updateTime, 1000);
+
     </script>
 </body>
 
