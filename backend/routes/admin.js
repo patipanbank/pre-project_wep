@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const page = require('../controller/admin');
+router.get("/all", page.all );
+router.get("/editofficehours", page.editofficehours );
+router.get("/homepage", page.homepage );
+router.get("/inoffice", page.inoffice );
+router.get("/leave", page.leave );
+router.get("/manage", page.manage );
+router.get("/officehours", page.officehours );
+router.get("/outoffice", page.outoffice );
+module.exports = router;

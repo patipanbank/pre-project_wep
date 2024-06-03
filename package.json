@@ -1,0 +1,19 @@
+{
+  "name": "pre-project_wep",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "run": "nodemon --env-file=.env app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.19.2",
+    "mysql2": "^3.10.0",
+    "nodemon": "^3.1.2"
+  }
+}

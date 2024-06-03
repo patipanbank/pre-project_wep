@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Office Hours</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/css/Admin/admin_officehours.css">
+</head>
+
+<body>
+
+    <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
+
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color: white;" aria-current="page"
+                            href="/admin/homepage">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
+                            TEACHER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE
+                            HOURS</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mt-2 float-end" style="margin-right: 10px;">
+        <form action="#" method="GET" id="searchForm">
+            <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="mt-5">
+            <h3>CE teacher</h3>
+            <div class="p-5">
+                <div class="row">
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/ดร.ธีรวิศิฏฐ์_01.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ ดร.ธีรวิศิฏฐ์ เลาหะเพ็ญแสง</p>
+                            <p class="mb-0">Asst.Prof.Teeravisit Laohapensaeng, PhD</p>
+                            <p>053-916744</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success"
+                                    onclick="window.location.href='/admin/editofficehours'">Edit office
+                                    hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: red;">OUT OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/mit_56.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ ดร.วรศักดิ์ เรืองศิรรักษ์</p>
+                            <p class="mb-0">Asst. Prof. Worasak Rueangsirarak, PhD</p>
+                            <p>053-917198</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: gray;">LEAVE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/ice_26.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ ดร.ภัทรมน วุฒิพิทยามงคล</p>
+                            <p class="mb-0">Asst. Prof. Pattaramon Vuttipittayamongkol, PhD</p>
+                            <p>053-916762</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/AjKit__1_.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์ ดร.เขมชาติ เขมาวุฒานนท์</p>
+                            <p class="mb-0">Kemachart Kemavuthanon, PhD</p>
+                            <p>053-916764</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/อ.กานต์.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์กานต์ โสภณรณฤทธิ์</p>
+                            <p class="mb-0">Karn Soponronnarit</p>
+                            <p>053-916764</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/343002713_928186348515350_4746513580003795479_n.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์ ดร.ขวัญตา คีรีมาศทอง</p>
+                            <p class="mb-0">Khwunta Kirimasthong, PhD</p>
+                            <p>053-916762</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/อ_ชยพล_คำยอด.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์ ดร.ชยพล คำยอด</p>
+                            <p class="mb-0">Chayapol Kamyod, PhD</p>
+                            <p>053-916746</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/Titiya_Chomngern.jpeg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์ ดร.ฐิติยา ชมเงิน</p>
+                            <p class="mb-0">Titiya Chomngern, PhD</p>
+                            <p>053-916747</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5">
+            <h3>SE teacher</h3>
+            <div class="p-5">
+                <div class="row">
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/ดร_ณัฐพล_อุ่นศรี.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">รองศาสตราจารย์ ดร.ณัฐพล อุ่นศรี</p>
+                            <p class="mb-0">Assoc.Prof.Nattapol Aunsri, PhD</p>
+                            <p>053-916765</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/csm_mce_05_2f59449767.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ น.อ. ดร.ธงชัย อยู่ญาติวงศ์</p>
+                            <p class="mb-0">Asst.Prof.Gp.Capt.Thongchai Yooyativong, PhD</p>
+                            <p>053-917200</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/อ.นชา.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">ผู้ช่วยศาสตราจารย์ ดร.นชา ชลดำรงค์กุล</p>
+                            <p class="mb-0">Asst.Prof.Nacha Chondamrongkul, PhD</p>
+                            <p>053-916757</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- <h3 style="color: green;">IN OFFICE</h3> -->
+                        <div style="text-align: center;">
+                            <img id="imgt" src="/public/img/อ.นนทวรรษ.jpg" alt=""
+                                style="display: block; margin-left: auto; margin-right: auto;">
+                            <p class="mt-2 mb-0">อาจารย์นนทวรรษ ธงสิบสอง</p>
+                            <p class="mb-0">Nontawat Thongsibsong</p>
+                            <p>053-916762</p>
+                            <div class="mb-0">
+                                <button type="button" class="btn btn-success">Edit office hours</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchTeachers() {
+            var input, filter, container, teachers, i, thaiName, engName, txtValue;
+            input = document.getElementById('searchInput');
+            filter = input.value.toLowerCase();
+            container = document.querySelector('.container'); // เลือก container ที่มีอาจารย์
+            teachers = container.querySelectorAll('.col');
+
+            for (i = 0; i < teachers.length; i++) {
+                thaiName = teachers[i].querySelectorAll('p')[0].textContent.toLowerCase();
+                engName = teachers[i].querySelectorAll('p')[1].textContent.toLowerCase();
+                txtValue = thaiName + ' ' + engName;
+                if (txtValue.indexOf(filter) > -1) {
+                    teachers[i].style.display = '';
+                } else {
+                    teachers[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
