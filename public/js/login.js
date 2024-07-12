@@ -1,22 +1,29 @@
-async function login() {
-    try {
-        const response = await fetch("http://localhost:3001/auth/google", {
-            method: 'GET',
-            mode: 'cors', // 'no-cors' if you want to disable CORS, but not recommended
-            credentials: 'include', // Include cookies if needed
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any additional headers if needed
-            }
-        });
+// async function login() {
+//     try {
+//         const response = await axios.get("http://localhost:3001/auth/google", {
+//             withCredentials: true, // Include cookies if needed
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 // Add any additional headers if needed
+//             }
+//         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
+//         console.log(response.data); // Assuming the response is JSON
+//     } catch (error) {
+//         console.error('There has been a problem with your axios request:', error);
+//         if (error.response) {
+//             // Server responded with a status other than 2xx
+//             console.error('Error response:', error.response.data);
+//         } else if (error.request) {
+//             // Request was made but no response received
+//             console.error('Error request:', error.request);
+//         } else {
+//             // Something else happened
+//             console.error('Error message:', error.message);
+//         }
+//     }
+// }
 
-        const data = await response.json(); // Assuming the response is JSON
-        console.log(data);
-    } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-    }
+export async function login() {
+    window.location.href = "http://localhost:3001/auth/google";
 }
