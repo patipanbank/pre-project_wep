@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const login = require('../controller/login');
@@ -38,10 +37,16 @@ router.get('/auth/callback', async (req, res) => {
         let role = 0; // Default role to 0 (student)
         console.log(profile);
 
-        if (profile.hd === "lamduan.mfu.ac.th") {
-            role = 0; // student
-        } else if (profile.hd === "mfu.ac.th") {
-            role = 1; // teacher
+        // Check specific email for admin role
+        if (profile.email === "6431501061@lamduan.mfu.ac.th") {
+            role = 2; // admin
+        } else {
+            // Check domain for student or teacher role
+            if (profile.hd === "lamduan.mfu.ac.th") {
+                role = 0; // student
+            } else if (profile.hd === "mfu.ac.th") {
+                role = 1; // teacher
+            }
         }
 
         let user = await findeUserbyemail({ email: profile.email });
@@ -55,8 +60,11 @@ router.get('/auth/callback', async (req, res) => {
 
         if (user.role === 0) {
             res.redirect('/student/homepage');
-        } else if (user.role === 1) {
+        } else if (
+            user.role === 1) {
             res.redirect('/teacher/homepage');
+        } else if (user.role === 2) {
+            res.redirect('/admin/homepage');
         } else {
             res.redirect('/');
         }
@@ -67,5 +75,3 @@ router.get('/auth/callback', async (req, res) => {
 });
 
 module.exports = router;
-
-
