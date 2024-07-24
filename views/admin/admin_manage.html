@@ -67,13 +67,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- เพิ่ม input element เพื่อรับไฟล์ Excel -->
-                    <input type="file" id="excelFile"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                    <form action="/import" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" id="excelFile" accept=".xlsx, .xls">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <!-- เพิ่มปุ่ม Upload -->
                     <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
                 </div>
             </div>
@@ -351,6 +348,39 @@
         document.getElementById('importModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('excelFile').value = ''; // เครียร์ค่าของ input element
         });
+
+        document.getElementById('uploadBtn').addEventListener('click', function () {
+            var formData = new FormData();
+            var fileInput = document.getElementById('excelFile');
+            var file = fileInput.files[0];
+
+            if (file) {
+                formData.append('file', file);
+
+                fetch('/import', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === "Data imported successfully.") {
+                            alert("Data imported successfully.");
+                            window.location.href = window.location.href; // Redirect to the same page
+                        } else {
+                            alert("Data imported successfully.");
+                            window.location.reload(); // Refresh the page to handle errors
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Error importing data. Please try again.");
+                        window.location.reload(); // Refresh the page to handle errors
+                    });
+            } else {
+                alert("Please select a file to upload.");
+            }
+        });
+
 
         var switchBtns = document.querySelectorAll('.switch-btn');
         switchBtns.forEach(function (switchBtn) {

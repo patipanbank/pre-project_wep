@@ -1,13 +1,18 @@
-
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const multer = require("multer");
+const xlsx = require("xlsx");
+const { DataTypes, Op } = require("sequelize");
+const sequelize = require("./backend/config/db");
+
 const login = require('./backend/routes/login');
 const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
-const connection = require('./backend/config/db');
+const { error } = require("console");
+
 const app = express();
 
 const corsOptions = {
@@ -20,10 +25,99 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Define your data model
+const Data = sequelize.define("data", {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensure email uniqueness
+  },
+  tel: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  tableName: 'data',
+  timestamps: false
+});
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Endpoint to handle file uploads
+app.post("/import", upload.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const workbook = xlsx.read(file.buffer, { type: "buffer" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = xlsx.utils.sheet_to_json(sheet);
+
+    // Extract emails from the imported data
+    const importedEmails = new Set(data.map(item => item.email));
+
+    // Use a transaction to ensure data consistency
+    const transaction = await sequelize.transaction();
+
+    try {
+      // Prepare records to create
+      const newRecords = [];
+
+      for (const item of data) {
+        const [record, created] = await Data.findOrCreate({
+          where: { email: item.email },
+          defaults: { name: item.name, tel: item.tel },
+          transaction
+        });
+
+        if (!created) {
+          // Update existing record
+          await record.update({
+            name: item.name,
+            tel: item.tel,
+          }, { transaction });
+        }
+      }
+
+      // Delete records not in the imported data
+      await Data.destroy({
+        where: {
+          email: {
+            [Op.notIn]: Array.from(importedEmails)
+          }
+        },
+        transaction
+      });
+
+      // Commit the transaction
+      await transaction.commit();
+      res.status(200).json({ message: "Data imported, updated, and cleaned up successfully." });
+    } catch (err) {
+      // Rollback the transaction in case of error
+      await transaction.rollback();
+      console.error("Transaction error:", err);
+      res.status(500).json({ message: "Transaction error: " + err.message });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Error importing data: " + error.message });
+  }
+});
+
+
 // Sync Database
-connection.sync()
-    .then(() => console.log('Database connected...'))
-    .catch(err => console.log('Error: ' + err));
+sequelize.sync()
+  .then(() => console.log('Database connected...'))
+  .catch(err => console.log('Error: ' + err));
 
 app.use("/", login);
 app.use("/student", student);
