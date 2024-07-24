@@ -48,7 +48,7 @@ router.get('/auth/callback', async (req, res) => {
                 role = 1; // teacher
             }
         }
-
+        console.log(profile.email);
         let user = await findeUserbyemail({ email: profile.email });
         if (!user) {
             user = await createUser({ email: profile.email, name: profile.name, role: role });

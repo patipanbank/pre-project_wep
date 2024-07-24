@@ -17,7 +17,8 @@ async function createUser({ email, name, role }) {
 
 async function findeUserbyemail({ email }) {
     try {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({where:{email:email}});
+        console.log(user);
         return user;
     } catch (error) {
         console.error(error);
