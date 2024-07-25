@@ -150,3 +150,48 @@
 </body>
 
 </html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Images</title>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+    <div id="gallery"></div>
+
+    <script>
+        async function fetchImages() {
+            try {
+                const response = await fetch('/data/images');
+                const data = await response.json();
+
+                const gallery = document.getElementById('gallery');
+                data.forEach(item => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = item.image;
+                    imgElement.alt = item.name;
+                    imgElement.style.width = '200px'; // Adjust the size as needed
+                    imgElement.style.height = '200px'; // Adjust the size as needed
+
+                    const info = document.createElement('p');
+                    info.textContent = `Name: ${item.name}, Email: ${item.email}, Tel: ${item.tel}`;
+
+                    const container = document.createElement('div');
+                    container.appendChild(imgElement);
+                    container.appendChild(info);
+
+                    gallery.appendChild(container);
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchImages);
+    </script>
+</body>
+</html> -->

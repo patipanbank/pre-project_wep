@@ -1,3 +1,4 @@
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -11,7 +12,7 @@ const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
-const { error } = require("console");
+
 
 const app = express();
 
@@ -34,22 +35,31 @@ const Data = sequelize.define("data", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensure email uniqueness
+    unique: true,
   },
   tel: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
+  },
+  image: {
+    type: DataTypes.TEXT, // TEXT allows null
+    allowNull: true,
+  },
+  major: {
+    type: DataTypes.STRING, // or DataTypes.TEXT depending on the expected size
+    allowNull: true,
   },
 }, {
   tableName: 'data',
   timestamps: false
 });
 
+
+
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Endpoint to handle file uploads
 app.post("/import", upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
@@ -69,13 +79,15 @@ app.post("/import", upload.single("file"), async (req, res) => {
     const transaction = await sequelize.transaction();
 
     try {
-      // Prepare records to create
-      const newRecords = [];
-
       for (const item of data) {
         const [record, created] = await Data.findOrCreate({
           where: { email: item.email },
-          defaults: { name: item.name, tel: item.tel },
+          defaults: {
+            name: item.name,
+            tel: item.tel || null,
+            image: item.image || null,
+            major: item.major || null, // Ensure major is set to null if not provided
+          },
           transaction
         });
 
@@ -83,7 +95,9 @@ app.post("/import", upload.single("file"), async (req, res) => {
           // Update existing record
           await record.update({
             name: item.name,
-            tel: item.tel,
+            tel: item.tel || null,
+            image: item.image || null,
+            major: item.major || null, // Ensure major is set to null if not provided
           }, { transaction });
         }
       }
@@ -114,10 +128,26 @@ app.post("/import", upload.single("file"), async (req, res) => {
 });
 
 
-// Sync Database
+app.get('/data/images', async (req, res) => {
+  try {
+    const data = await Data.findAll({
+      attributes: ['name', 'email', 'tel', 'image', 'major'] // Include major
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).json({ message: "Error fetching data: " + error.message });
+  }
+});
+
 sequelize.sync()
-  .then(() => console.log('Database connected...'))
+  .then(() => console.log('Database connected and synced...'))
   .catch(err => console.log('Error: ' + err));
+
+// Serve the HTML file
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.use("/", login);
 app.use("/student", student);
