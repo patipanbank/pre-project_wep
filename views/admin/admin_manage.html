@@ -84,6 +84,75 @@
     </div>
 
     <script>
+
+        function toggleAvailability(id) {
+            const checkbox = document.getElementById(`available-${id}`);
+            const available = checkbox.checked ? 'on' : 'off';
+
+            fetch(`/data/${id}/available`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ available }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Availability updated successfully.') {
+                        updateCardStyle(id, available);
+                        reorderCards();
+                    } else {
+                        alert('Error updating availability: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function updateCardStyle(id, available) {
+            const card = document.getElementById(`card-${id}`);
+            if (available === 'off') {
+                card.style.opacity = '0.5';
+            } else {
+                card.style.opacity = '1';
+            }
+        }
+
+        function reorderCards() {
+            const cardContainer = document.getElementById('cardContainer');
+            const cards = Array.from(cardContainer.getElementsByClassName('card'));
+
+            cards.sort((a, b) => {
+                const availableA = a.querySelector('.form-check-input').checked ? 0 : 1;
+                const availableB = b.querySelector('.form-check-input').checked ? 0 : 1;
+                return availableA - availableB;
+            });
+
+            cards.forEach(card => cardContainer.appendChild(card));
+        }
+
+
+
+        function updateAvailableStatus(email, available) {
+            fetch('/data/available', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, available })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message !== 'Available status updated successfully.') {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating available status. Please try again.');
+                });
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             fetch('/data/images')
                 .then(response => response.json())
@@ -92,22 +161,28 @@
                     data.forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'card';
+                        card.id = `card-${item.id}`;
                         card.innerHTML = `
-                    <div class="card">
                         <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
                         <div class="card-body">
                             <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
                             <p class="card-text">Major: ${item.major}</p>
                             <p class="card-text">Email: ${item.email}</p>
                             <p class="card-text">Tel: ${item.tel}</p>
+                            <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
+                            <label class="form-check-label" for="available-${item.id}">Available</label>
+                            </div>
                         </div>
-                    </div>
-                `;
+                        `;
                         cardContainer.appendChild(card);
+                        updateCardStyle(item.id, item.available); // Set initial card style
                     });
+                    reorderCards(); // Reorder cards initially
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
+
 
         function searchTeachers() {
             var input, filter, cardContainer, cards, cardBody, i, txtValue;

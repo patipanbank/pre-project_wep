@@ -1,4 +1,3 @@
-
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -12,7 +11,6 @@ const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
-
 
 const app = express();
 
@@ -49,12 +47,15 @@ const Data = sequelize.define("data", {
     type: DataTypes.STRING, // or DataTypes.TEXT depending on the expected size
     allowNull: true,
   },
+  available: {
+    type: DataTypes.ENUM('on', 'off'),
+    allowNull: false,
+    defaultValue: 'on',
+  },
 }, {
   tableName: 'data',
   timestamps: false
 });
-
-
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -87,6 +88,7 @@ app.post("/import", upload.single("file"), async (req, res) => {
             tel: item.tel || null,
             image: item.image || null,
             major: item.major || null, // Ensure major is set to null if not provided
+            available: item.available || 'on', // Ensure available is set to 'on' if not provided
           },
           transaction
         });
@@ -98,6 +100,7 @@ app.post("/import", upload.single("file"), async (req, res) => {
             tel: item.tel || null,
             image: item.image || null,
             major: item.major || null, // Ensure major is set to null if not provided
+            available: item.available || 'on', // Ensure available is set to 'on' if not provided
           }, { transaction });
         }
       }
@@ -127,12 +130,12 @@ app.post("/import", upload.single("file"), async (req, res) => {
   }
 });
 
-
 app.get('/data/images', async (req, res) => {
   try {
     const data = await Data.findAll({
-      attributes: ['name', 'email', 'tel', 'image', 'major'] // Include major
+      attributes: ['id', 'name', 'email', 'tel', 'image', 'major', 'available'] // Include available
     });
+    console.log(data); // Log the fetched data to see if IDs are correct
     res.status(200).json(data);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -140,7 +143,34 @@ app.get('/data/images', async (req, res) => {
   }
 });
 
-sequelize.sync()
+
+app.put('/data/:id/available', async (req, res) => {
+  const { id } = req.params;
+  const { available } = req.body;
+
+  console.log(`Received ID: ${id}`);
+  console.log(`Received available status: ${available}`);
+
+  try {
+    const record = await Data.findByPk(id);
+    if (!record) {
+      return res.status(404).json({ message: 'Record not found.' });
+    }
+
+    record.available = available;
+    await record.save();
+
+    res.status(200).json({ message: 'Availability updated successfully.' });
+  } catch (error) {
+    console.error('Error updating availability:', error);
+    res.status(500).json({ message: 'Error updating availability: ' + error.message });
+  }
+});
+
+
+
+
+sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))
   .catch(err => console.log('Error: ' + err));
 
