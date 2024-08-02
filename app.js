@@ -48,7 +48,7 @@ const Data = sequelize.define("data", {
     allowNull: true,
   },
   available: {
-    type: DataTypes.ENUM('on', 'off'),
+    type: DataTypes.STRING,
     allowNull: false,
     defaultValue: 'on',
   },

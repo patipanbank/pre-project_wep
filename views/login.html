@@ -35,14 +35,100 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
 
-<body>
-    <button type="button" onclick="login()">Login</button>
+
+</head>
+<style>
+    body {
+        background-image: url(/public/img/ดีไซน์ที่ยังไม่ได้ตั้งชื่อ.png);
+        background-size: cover;
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-color: #f8f9fa;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-container {
+        text-align: center;
+
+    }
+
+
+
+    .card-authentication {
+        max-width: 400px;
+        width: 70%;
+        padding: 50px;
+
+
+        border-radius: 21px;
+        justify-content: center;
+        height: 30%;
+        backdrop-filter: blur(px);
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+
+
+    .login-btn {
+        background-color: transparent;
+        background-image: none;
+        border: 1px solid goldenrod;
+        border-radius: 21px;
+        background-color: goldenrod;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 20px;
+        font-weight: 400;
+        height: 40px;
+        padding: 0 20px;
+        line-height: 1.5;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+
+    h2 {
+        color: #cc0000;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-weight: 600;
+        vertical-align: baseline;
+    }
+</style>
+
+<body style="background-image: url(/public/img/ดีไซน์ที่ยังไม่ได้ตั้งชื่อ.png)">
+
+    <div class="card-authentication">
+
+        <div class="login-container">
+            <div class="text-center margin-bottom-large"></div>
+            <h2>Welcome</h2>
+            <hr>
+            
+            <div class="mb-4"></div>
+            <br>
+            <div>
+                
+                <button class="login-btn " type="button" onclick="login()"><i class="fa fa-google"></i> Login with Google</button>
+            </div>
+
+
+        </div>
+    </div>
+
     <script type="module">
         import { login } from '/public/js/login.js';
         window.login = login; // Make login available globally
     </script>
+    
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </body>
 
 </html>

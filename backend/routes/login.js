@@ -4,6 +4,7 @@ const login = require('../controller/login');
 const axios = require('axios');
 const { createUser, findeUserbyemail } = require('../service/user');
 
+
 router.get("/login", login.pageLogin);
 router.get("/auth", login.auth);
 
