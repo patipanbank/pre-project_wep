@@ -11,7 +11,6 @@ const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
-
 const app = express();
 
 const corsOptions = {
@@ -143,6 +142,16 @@ app.get('/data/images', async (req, res) => {
   }
 });
 
+// Add this to your existing routes
+app.get('/data/count', async (req, res) => {
+  try {
+    const count = await Data.count();
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error fetching data count:', error);
+    res.status(500).json({ message: 'Error fetching data count: ' + error.message });
+  }
+});
 
 app.put('/data/:id/available', async (req, res) => {
   const { id } = req.params;
@@ -166,9 +175,6 @@ app.put('/data/:id/available', async (req, res) => {
     res.status(500).json({ message: 'Error updating availability: ' + error.message });
   }
 });
-
-
-
 
 sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))

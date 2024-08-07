@@ -34,14 +34,10 @@
                         <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
                             TEACHER</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE
-                            HOURS</a>
-                    </li>
                 </ul>
             </div>
             <div>
-                <button type="button" class="btn btn-danger">Logout</button>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
             </div>
         </div>
     </nav>
@@ -52,7 +48,7 @@
             <div class="col">
                 <div class="d-flex">
                     <div class="text-white">
-                        <h1 id="alls">12</h1>
+                        <h1 id="alls">0</h1>
                         <h6>All</h6>
                     </div>
                 </div>
@@ -119,11 +115,21 @@
             }
         }
 
+        // Function to fetch the count and update the widget
+        function fetchAllCount() {
+            fetch('/data/count')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('alls').innerText = data.count;
+                })
+                .catch(error => console.error('Error fetching all count:', error));
+        }
+
         var data = {
             labels: ['All', 'In Office', 'Out Office', 'Leave'],
             datasets: [{
                 label: 'Number of Teachers',
-                data: [12, 4, 4, 4], // จำนวนครูทั้งหมด, ครูที่อยู่ในสำนักงาน, ครูที่ไม่ได้อยู่ในสำนักงาน, ครูที่ลาออก
+                data: [12, 4, 4, 4], // Placeholder data, can be updated dynamically as needed
                 backgroundColor: [
                     'yellow',
                     'green',
@@ -146,52 +152,18 @@
                 }
             }
         });
+
+        // Fetch the count when the page loads
+        document.addEventListener('DOMContentLoaded', fetchAllCount);
+
+        function logout() {
+            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
+                .then(() => {
+                    window.location.href = '/login'; // Redirect to login after logout
+                })
+                .catch(error => console.error('Error logging out:', error));
+        }
     </script>
 </body>
 
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Images</title>
-</head>
-<body>
-    <h1>Image Gallery</h1>
-    <div id="gallery"></div>
-
-    <script>
-        async function fetchImages() {
-            try {
-                const response = await fetch('/data/images');
-                const data = await response.json();
-
-                const gallery = document.getElementById('gallery');
-                data.forEach(item => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = item.image;
-                    imgElement.alt = item.name;
-                    imgElement.style.width = '200px'; // Adjust the size as needed
-                    imgElement.style.height = '200px'; // Adjust the size as needed
-
-                    const info = document.createElement('p');
-                    info.textContent = `Name: ${item.name}, Email: ${item.email}, Tel: ${item.tel}`;
-
-                    const container = document.createElement('div');
-                    container.appendChild(imgElement);
-                    container.appendChild(info);
-
-                    gallery.appendChild(container);
-                });
-            } catch (error) {
-                console.error('Error fetching images:', error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchImages);
-    </script>
-</body>
-</html> -->

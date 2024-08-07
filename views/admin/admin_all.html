@@ -12,46 +12,35 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/public/css/Admin/admin_all.css">
-    
-    
 </head>
 
-
 <body>
-    
-    
+
     <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
 
-<nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" style="color: white;" aria-current="page"
-                        href="/admin/homepage">HOME</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
-                        TEACHER</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE
-                        HOURS</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color: white;" aria-current="page"
+                            href="/admin/homepage">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
+                            TEACHER</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
         </div>
-        <div>
-            <button type="button" class="btn btn-danger">Logout</button>
-        </div>
-    </div>
-</nav>
-
-
-    
+    </nav>
 
     <div class="row sandim">
         <div class="col-md-2">
@@ -69,10 +58,8 @@
             <!-- Cards will be added dynamically here -->
         </div>
     </div>
-    
-    
-    <script>
 
+    <script>
         function updateCardStyle(id, available) {
             const card = document.getElementById(`card-${id}`);
             if (available === 'off') {
@@ -95,8 +82,6 @@
             cards.forEach(card => cardContainer.appendChild(card));
         }
 
-
-
         document.addEventListener('DOMContentLoaded', function () {
             fetch('/data/images')
                 .then(response => response.json())
@@ -107,16 +92,16 @@
                         card.className = 'card';
                         card.id = `card-${item.id}`;
                         card.innerHTML = `
-                        <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
-                        <div class="card-body">
-                            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
-                            <p class="card-text">Major: ${item.major}</p>
-                            <p class="card-text">Email: ${item.email}</p>
-                            <p class="card-text">Tel: ${item.tel}</p>
-                            <div class="form-check form-switch">
-                            <input class="form-check-input hide-switch" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
+                            <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+                                <p class="card-text">Major: ${item.major}</p>
+                                <p class="card-text">Email: ${item.email}</p>
+                                <p class="card-text">Tel: ${item.tel}</p>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input hide-switch" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
+                                </div>
                             </div>
-                        </div>
                         `;
                         cardContainer.appendChild(card);
                         updateCardStyle(item.id, item.available); // Set initial card style
@@ -125,7 +110,6 @@
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
-
 
         function searchTeachers() {
             var input, filter, cardContainer, cards, cardBody, i, txtValue;
@@ -145,6 +129,14 @@
             }
         }
 
+        function logout() {
+            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
+                .then(() => {
+                    window.location.href = '/login'; // Redirect to login after logout
+                })
+                .catch(error => console.error('Error logging out:', error));
+        }
+        
     </script>
 </body>
 

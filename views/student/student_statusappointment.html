@@ -30,13 +30,13 @@
                             href="/student/homepage">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" style="color: white;"
-                            href="/student/statusappointment">STATUS APPOINTMENT</a>
+                        <a class="nav-link" style="color: white;" href="/student/statusappointment">STATUS
+                            APPOINTMENT</a>
                     </li>
                 </ul>
             </div>
             <div>
-                <button type="button" class="btn btn-danger">Logout</button>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
             </div>
         </div>
     </nav>
@@ -95,6 +95,15 @@
                     details.style.display = "none";
                 }
             }
+
+            function logout() {
+                fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
+                    .then(() => {
+                        window.location.href = '/login'; // Redirect to login after logout
+                    })
+                    .catch(error => console.error('Error logging out:', error));
+            }
+
         </script>
 
 </body>
