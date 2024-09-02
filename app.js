@@ -5,6 +5,7 @@ const multer = require("multer");
 const xlsx = require("xlsx");
 const { DataTypes, Op } = require("sequelize");
 const sequelize = require("./backend/config/db");
+const Data = require("./backend/model/data");
 
 const login = require('./backend/routes/login');
 const student = require('./backend/routes/student');
@@ -24,37 +25,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Define your data model
-const Data = sequelize.define("data", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  tel: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  image: {
-    type: DataTypes.TEXT, // TEXT allows null
-    allowNull: true,
-  },
-  major: {
-    type: DataTypes.STRING, // or DataTypes.TEXT depending on the expected size
-    allowNull: true,
-  },
-  available: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'on',
-  },
-}, {
-  tableName: 'data',
-  timestamps: false
-});
+// const Data = sequelize.define("data", {
+//   name: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//   },
+//   email: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     unique: true,
+//   },
+//   tel: {
+//     type: DataTypes.STRING,
+//     allowNull: true,
+//   },
+//   image: {
+//     type: DataTypes.TEXT, // TEXT allows null
+//     allowNull: true,
+//   },
+//   major: {
+//     type: DataTypes.STRING, // or DataTypes.TEXT depending on the expected size
+//     allowNull: true,
+//   },
+//   available: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     defaultValue: 'on',
+//   },
+// }, {
+//   tableName: 'data',
+//   timestamps: false
+// });
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -143,13 +144,17 @@ app.get('/data/images', async (req, res) => {
 });
 
 // Add this to your existing routes
-app.get('/data/count', async (req, res) => {
+app.get('/data/count/available', async (req, res) => {
   try {
-    const count = await Data.count();
+    const count = await Data.count({
+      where: {
+        available: 'on'
+      }
+    });
     res.status(200).json({ count });
   } catch (error) {
-    console.error('Error fetching data count:', error);
-    res.status(500).json({ message: 'Error fetching data count: ' + error.message });
+    console.error('Error fetching available data count:', error);
+    res.status(500).json({ message: 'Error fetching available data count: ' + error.message });
   }
 });
 
@@ -176,17 +181,30 @@ app.put('/data/:id/available', async (req, res) => {
   }
 });
 
-sequelize.sync({ alter: true })
-  .then(() => console.log('Database connected and synced...'))
-  .catch(err => console.log('Error: ' + err));
+app.post('/data', async (req, res) => {
+  const { name, email } = req.body;
 
-// Serve the HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  try {
+    // Create a new user
+    const newUser = await Data.create({ name, email });
+
+    // Generate the weekly schedule
+    const schedulesData = generateWeeklySchedule(newUser.id);
+
+    // Bulk insert the generated schedules
+    await Schedule.bulkCreate(
+      schedulesData.map(([date, data_id, timeslots_id]) => ({
+        date,
+        data_id,
+        timeslots_id,
+      }))
+    );
+
+    res.status(201).json({ user_id: newUser.id, schedules_created: schedulesData.length });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
-
-
-// scheduleGenerator.js
 const generateWeeklySchedule = (data_id) => {
   const timeslotsPerDay = 18; // Number of time slots per day (08:00 to 17:00)
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -203,24 +221,15 @@ const generateWeeklySchedule = (data_id) => {
   return queries;
 };
 
-module.exports = generateWeeklySchedule;
-// Create a new user and schedule
-app.post('/data', (req, res) => {
-  const { name, email } = req.body;
-  const sql = 'INSERT INTO data (name, email) VALUES (?, ?)';
-  connection.query(sql, [name, email], (err, results) => {
-    if (err) return res.status(500).send(err);
+sequelize.sync({ alter: true })
+  .then(() => console.log('Database connected and synced...'))
+  .catch(err => console.log('Error: ' + err));
 
-    const data_id = results.insertId;
-    const schedules = generateWeeklySchedule(data_id);
-
-    const scheduleSql = 'INSERT INTO schedules (date, data_id, timeslots_id) VALUES ?';
-    connection.query(scheduleSql, [schedules], (err, scheduleResults) => {
-      if (err) return res.status(500).send(err);
-      res.status(201).json({ user_id: data_id, schedules_created: schedules.length });
-    });
-  });
+// Serve the HTML file
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 
 app.use("/", login);
 app.use("/student", student);

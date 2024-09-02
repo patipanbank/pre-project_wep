@@ -20,4 +20,5 @@ const User = connection.define('user', {
         allowNull:false
     }
 });
+
 module.exports =User;

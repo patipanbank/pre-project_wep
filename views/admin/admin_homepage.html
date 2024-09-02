@@ -120,7 +120,7 @@
 
         // Function to fetch the count and update the widget
         function fetchAllCount() {
-            fetch('/data/count')
+            fetch('/data/count/available')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('alls').innerText = data.count;
