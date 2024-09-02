@@ -7,7 +7,7 @@ const { DataTypes, Op } = require("sequelize");
 const sequelize = require("./backend/config/db");
 const Datas = require("./backend/model/data");
 const login = require('./backend/routes/login');
-const {createdata} = require('./backend/controller/data.controller');
+const {createdata,createdatafromfile} = require('./backend/controller/data.controller');
 const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
@@ -182,6 +182,8 @@ app.put('/data/:id/available', async (req, res) => {
 });
 
 app.post('/data', createdata);
+app.post('/data/file', createdatafromfile);
+
 
 sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))
