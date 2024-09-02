@@ -5,9 +5,9 @@ const multer = require("multer");
 const xlsx = require("xlsx");
 const { DataTypes, Op } = require("sequelize");
 const sequelize = require("./backend/config/db");
-const Data = require("./backend/model/data");
-
+const Datas = require("./backend/model/data");
 const login = require('./backend/routes/login');
+const {createdata} = require('./backend/controller/data.controller');
 const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
@@ -181,45 +181,7 @@ app.put('/data/:id/available', async (req, res) => {
   }
 });
 
-app.post('/data', async (req, res) => {
-  const { name, email } = req.body;
-
-  try {
-    // Create a new user
-    const newUser = await Data.create({ name, email });
-
-    // Generate the weekly schedule
-    const schedulesData = generateWeeklySchedule(newUser.id);
-
-    // Bulk insert the generated schedules
-    await Schedule.bulkCreate(
-      schedulesData.map(([date, data_id, timeslots_id]) => ({
-        date,
-        data_id,
-        timeslots_id,
-      }))
-    );
-
-    res.status(201).json({ user_id: newUser.id, schedules_created: schedulesData.length });
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-const generateWeeklySchedule = (data_id) => {
-  const timeslotsPerDay = 18; // Number of time slots per day (08:00 to 17:00)
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  let queries = [];
-
-  for (let day = 0; day < daysOfWeek.length; day++) {
-    for (let slot = 0; slot < timeslotsPerDay; slot++) {
-      let timeslots_id = slot + 1 + day * timeslotsPerDay;
-      let date = new Date();
-      queries.push([date, data_id, timeslots_id]);
-    }
-  }
-
-  return queries;
-};
+app.post('/data', createdata);
 
 sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))

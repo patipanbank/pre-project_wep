@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const connection = require('../config/db');
-const Data = connection.define('Data', {
-  id: {
+const Datas = connection.define('Data', {
+  data_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
@@ -39,4 +39,4 @@ const Data = connection.define('Data', {
   timestamps: false // Set this to true if you want to include createdAt and updatedAt fields
 });
 
-module.exports = Data;
+module.exports = Datas;

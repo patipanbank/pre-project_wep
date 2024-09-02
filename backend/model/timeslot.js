@@ -1,4 +1,6 @@
-const Timeslot = sequelize.define('Timeslot', {
+const connection = require('../config/db');
+const { DataTypes } = require('sequelize');
+const Timeslot = connection.define('Timeslot', {
     timeslots_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -20,3 +22,4 @@ const Timeslot = sequelize.define('Timeslot', {
     tableName: 'timeslots',
     timestamps: false,
   });
+module.exports = Timeslot;

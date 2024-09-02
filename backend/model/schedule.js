@@ -1,4 +1,8 @@
-const Schedule = sequelize.define('Schedule', {
+const connection = require('../config/db');
+const { DataTypes } = require('sequelize');
+const Data = require('./data')
+const Timeslot = require('./timeslot')
+const Schedule = connection.define('Schedule', {
     schedules_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -16,7 +20,7 @@ const Schedule = sequelize.define('Schedule', {
       type: DataTypes.DATE,
     },
   }, {
-    tableName: 'schedules',
+    tableName: 'schedules', 
     timestamps: false,
   });
   
@@ -24,5 +28,7 @@ const Schedule = sequelize.define('Schedule', {
   Schedule.belongsTo(Data, { foreignKey: 'data_id' });
   Schedule.belongsTo(Timeslot, { foreignKey: 'timeslots_id' });
   
-  Data.hasMany(Schedule, { foreignKey: 'data_id' });
-  Timeslot.hasMany(Schedule, { foreignKey: 'timeslots_id' });
+Data.hasMany(Schedule, { foreignKey: 'data_id' });
+Timeslot.hasMany(Schedule, { foreignKey: 'timeslots_id' });
+
+module.exports = Schedule;
