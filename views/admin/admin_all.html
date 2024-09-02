@@ -63,7 +63,7 @@
     </div>
 
     <script>
-        function updateCardStyle(id, available) {
+         function updateCardStyle(id, available) {
             const card = document.getElementById(`card-${id}`);
             if (available === 'off') {
                 card.style.opacity = '0.5';
@@ -90,22 +90,24 @@
                 .then(response => response.json())
                 .then(data => {
                     const cardContainer = document.getElementById('cardContainer');
-                    data.forEach(item => {
+                    // Filter data to only include items with available status 'on'
+                    const filteredData = data.filter(item => item.available === 'on');
+                    filteredData.forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'card';
                         card.id = `card-${item.id}`;
                         card.innerHTML = `
-                            <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
-                            <div class="card-body">
-                                <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
-                                <p class="card-text">Major: ${item.major}</p>
-                                <p class="card-text">Email: ${item.email}</p>
-                                <p class="card-text">Tel: ${item.tel}</p>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input hide-switch" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
-                                </div>
+                        <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
+                        <div class="card-body">
+                            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+                            <p class="card-text">Major: ${item.major}</p>
+                            <p class="card-text">Email: ${item.email}</p>
+                            <p class="card-text">Tel: ${item.tel}</p>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input hide-switch" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
                             </div>
-                        `;
+                    `;
+
                         cardContainer.appendChild(card);
                         updateCardStyle(item.id, item.available); // Set initial card style
                     });

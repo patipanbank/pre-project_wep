@@ -185,6 +185,43 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+
+// scheduleGenerator.js
+const generateWeeklySchedule = (data_id) => {
+  const timeslotsPerDay = 18; // Number of time slots per day (08:00 to 17:00)
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  let queries = [];
+
+  for (let day = 0; day < daysOfWeek.length; day++) {
+    for (let slot = 0; slot < timeslotsPerDay; slot++) {
+      let timeslots_id = slot + 1 + day * timeslotsPerDay;
+      let date = new Date();
+      queries.push([date, data_id, timeslots_id]);
+    }
+  }
+
+  return queries;
+};
+
+module.exports = generateWeeklySchedule;
+// Create a new user and schedule
+app.post('/data', (req, res) => {
+  const { name, email } = req.body;
+  const sql = 'INSERT INTO data (name, email) VALUES (?, ?)';
+  connection.query(sql, [name, email], (err, results) => {
+    if (err) return res.status(500).send(err);
+
+    const data_id = results.insertId;
+    const schedules = generateWeeklySchedule(data_id);
+
+    const scheduleSql = 'INSERT INTO schedules (date, data_id, timeslots_id) VALUES ?';
+    connection.query(scheduleSql, [schedules], (err, scheduleResults) => {
+      if (err) return res.status(500).send(err);
+      res.status(201).json({ user_id: data_id, schedules_created: schedules.length });
+    });
+  });
+});
+
 app.use("/", login);
 app.use("/student", student);
 app.use("/teacher", teacher);
