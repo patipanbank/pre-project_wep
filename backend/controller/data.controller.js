@@ -48,19 +48,8 @@ const createdatafromfile = async (req, res) => {
 
     try {
       for (const item of data) {
-        if (!created) {
-          // Update existing record
-          await record.update({
-            name: item.name,
-            tel: item.tel || null,
-            image: item.image || null,
-            major: item.major || null, // Ensure major is set to null if not provided
-            available: item.available || 'on', // Ensure available is set to 'on' if not provided
-          }, { transaction });
-          continue;
-        }
-          const [record, created] = await Datas.findOrCreate({
-            where: { email: item.email },
+        const [record, created] = await Datas.findOrCreate({
+          where: { email: item.email },
             defaults: {
               name: item.name,
               tel: item.tel || null,
@@ -70,8 +59,19 @@ const createdatafromfile = async (req, res) => {
             },
             transaction
           });
-           //   Generate the weekly schedule
-      const schedulesData = generateWeeklySchedule(newUser.dataValues.data_id);
+          //   Generate the weekly schedule
+          if (!created) {
+            // Update existing record
+            await record.update({
+              name: item.name,
+              tel: item.tel || null,
+              image: item.image || null,
+              major: item.major || null, // Ensure major is set to null if not provided
+              available: item.available || 'on', // Ensure available is set to 'on' if not provided
+            }, { transaction });
+            continue;
+          }
+          const schedulesData = generateWeeklySchedule(record.dataValues.data_id);
   
       // Bulk insert the generated schedules
       await Schedule.bulkCreate(
