@@ -81,7 +81,7 @@ app.post("/import", upload.single("file"), async (req, res) => {
 
     try {
       for (const item of data) {
-        const [record, created] = await Data.findOrCreate({
+        const [record, created] = await Datas.findOrCreate({
           where: { email: item.email },
           defaults: {
             name: item.name,
@@ -106,7 +106,7 @@ app.post("/import", upload.single("file"), async (req, res) => {
       }
 
       // Delete records not in the imported data
-      await Data.destroy({
+      await Datas.destroy({
         where: {
           email: {
             [Op.notIn]: Array.from(importedEmails)
@@ -132,8 +132,8 @@ app.post("/import", upload.single("file"), async (req, res) => {
 
 app.get('/data/images', async (req, res) => {
   try {
-    const data = await Data.findAll({
-      attributes: ['id', 'name', 'email', 'tel', 'image', 'major', 'available'] // Include available
+    const data = await Datas.findAll({
+      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available'] // Include available
     });
     console.log(data); // Log the fetched data to see if IDs are correct
     res.status(200).json(data);
@@ -146,7 +146,7 @@ app.get('/data/images', async (req, res) => {
 // Add this to your existing routes
 app.get('/data/count/available', async (req, res) => {
   try {
-    const count = await Data.count({
+    const count = await Datas.count({
       where: {
         available: 'on'
       }
@@ -166,7 +166,7 @@ app.put('/data/:id/available', async (req, res) => {
   console.log(`Received available status: ${available}`);
 
   try {
-    const record = await Data.findByPk(id);
+    const record = await Datas.findByPk(id);
     if (!record) {
       return res.status(404).json({ message: 'Record not found.' });
     }
