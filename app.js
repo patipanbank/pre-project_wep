@@ -6,8 +6,10 @@ const xlsx = require("xlsx");
 const { DataTypes, Op } = require("sequelize");
 const sequelize = require("./backend/config/db");
 const Datas = require("./backend/model/data");
+const Schedule = require("./backend/model/schedule");
+const { generateWeeklySchedule } = require('./backend/service/schedule.service');
 const login = require('./backend/routes/login');
-const {createdata,createdatafromfile} = require('./backend/controller/data.controller');
+const { createdata, createdatafromfile } = require('./backend/controller/data.controller');
 const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
@@ -23,39 +25,6 @@ app.use(cors(corsOptions));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Define your data model
-// const Data = sequelize.define("data", {
-//   name: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//   },
-//   email: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     unique: true,
-//   },
-//   tel: {
-//     type: DataTypes.STRING,
-//     allowNull: true,
-//   },
-//   image: {
-//     type: DataTypes.TEXT, // TEXT allows null
-//     allowNull: true,
-//   },
-//   major: {
-//     type: DataTypes.STRING, // or DataTypes.TEXT depending on the expected size
-//     allowNull: true,
-//   },
-//   available: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//     defaultValue: 'on',
-//   },
-// }, {
-//   tableName: 'data',
-//   timestamps: false
-// });
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -103,6 +72,19 @@ app.post("/import", upload.single("file"), async (req, res) => {
             available: item.available || 'on', // Ensure available is set to 'on' if not provided
           }, { transaction });
         }
+
+        // Generate the weekly schedule
+        const schedulesData = generateWeeklySchedule(record.dataValues.data_id);
+
+        // Bulk insert the generated schedules
+        await Schedule.bulkCreate(
+          schedulesData.map(([date, data_id, timeslots_id]) => ({
+            date,
+            data_id,
+            timeslots_id,
+          })),
+          { transaction }
+        );
       }
 
       // Delete records not in the imported data
@@ -143,7 +125,6 @@ app.get('/data/images', async (req, res) => {
   }
 });
 
-// Add this to your existing routes
 app.get('/data/count/available', async (req, res) => {
   try {
     const count = await Datas.count({
@@ -184,7 +165,6 @@ app.put('/data/:id/available', async (req, res) => {
 app.post('/data', createdata);
 app.post('/data/file', createdatafromfile);
 
-
 sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))
   .catch(err => console.log('Error: ' + err));
@@ -193,7 +173,6 @@ sequelize.sync({ alter: true })
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
-
 
 app.use("/", login);
 app.use("/student", student);
