@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -338,6 +338,201 @@
         });
 
 
+    </script>
+</body>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Edit OfficeHours</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/public/css/Admin/admin_editofficehours.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
+
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color: white;" aria-current="page"
+                            href="/admin/homepage">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
+                            TEACHER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE HOURS</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div style="text-align: center;">
+                    <img id="imgt" src="/public/img/ดร.ธีรวิศิฏฐ์_01.jpg" alt=""
+                        style="width: 150px; display: block; margin-left: auto; margin-right: auto; margin-top: 20px;">
+                    <p class="mt-2 mb-0 fs-6">ผู้ช่วยศาสตราจารย์ ดร.ธีรวิศิฏฐ์ เลาหะเพ็ญแสง</p>
+                    <p class="mb-0 fs-6">Asst.Prof.Teeravisit Laohapensaeng, PhD</p>
+                    <p class="fs-6">053-916744</p>
+                </div>
+            </div>
+            <div class="col-md-9 coltable">
+                <div class="d-flex justify-content-end" style="margin-bottom: 10px; margin-top: 10px;">
+                    <i class="fa fa-calendar" style="margin-right: 5px;">
+                        <input type="text" id="datepicker">
+                    </i>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="float: inline-start;">Time/Day</th>
+                                <!-- Generate headers based on timeslot data -->
+                                <th scope="col">08:00-08:30</th>
+                                <th scope="col">08:30-09:00</th>
+                                <th scope="col">09:00-09:30</th>
+                                <th scope="col">09:30-10:00</th>
+                                <th scope="col">10:00-10:30</th>
+                                <th scope="col">10:30-11:00</th>
+                                <th scope="col">11:00-11:30</th>
+                                <th scope="col">11:30-12:00</th>
+                                <th scope="col">12:00-12:30</th>
+                                <th scope="col">12:30-13:00</th>
+                                <th scope="col">13:00-13:30</th>
+                                <th scope="col">13:30-14:00</th>
+                                <th scope="col">14:00-14:30</th>
+                                <th scope="col">14:30-15:00</th>
+                                <th scope="col">15:00-15:30</th>
+                                <th scope="col">15:30-16:00</th>
+                                <th scope="col">16:00-16:30</th>
+                                <th scope="col">16:30-17:00</th>
+                                <th scope="col">17:00-17:30</th>
+                                <th scope="col">17:30-18:00</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody">
+                            <!-- Rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="bt mt-5">
+            <button id="update-office-hours-btn" class="bg-success"
+                style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Update Office Hours</button>
+            <button id="update-leave-btn" class="bg-secondary"
+                style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Update Leave</button>
+            <button id="clear-btn" class="bg-info"
+                style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Clear</button>
+            <button id="clearall-btn" class="bg-primary"
+                style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
+                type="button">Clear All</button>
+        </div>
+    </div>
+
+    <script>
+        flatpickr("#datepicker", {
+            mode: "range"
+        });
+
+        const schedules = [
+            { schedules_id: 1711, date: '2024-09-03', created_at: '2024-09-02 17:31:20', data_id: 52, timeslots_id: 1 },
+            { schedules_id: 1712, date: '2024-09-03', created_at: '2024-09-02 17:31:20', data_id: 52, timeslots_id: 2 },
+            // ... (other rows)
+        ];
+
+        const timeslots = [
+            { timeslots_id: 1, start_time: '08:00:00', end_time: '08:30:00', dayofweek: 'Monday' },
+            { timeslots_id: 2, start_time: '08:30:00', end_time: '09:00:00', dayofweek: 'Monday' },
+            // ... (other timeslots)
+        ];
+
+        $(document).ready(function () {
+            const tableBody = $('#scheduleTableBody');
+
+            // Create a map for easy lookup of timeslot by ID
+            const timeslotMap = timeslots.reduce((acc, slot) => {
+                acc[slot.timeslots_id] = slot;
+                return acc;
+            }, {});
+
+            // Group schedules by day
+            const scheduleGroups = schedules.reduce((acc, sched) => {
+                const day = timeslotMap[sched.timeslots_id]?.dayofweek || 'Unknown';
+                if (!acc[day]) {
+                    acc[day] = [];
+                }
+                acc[day].push(sched);
+                return acc;
+            }, {});
+
+            // Days of the week for ordering
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            daysOfWeek.forEach(day => {
+                const rowData = scheduleGroups[day] || [];
+                const date = rowData.length ? rowData[0].date : '';
+
+                const row = $('<tr>');
+                row.append(`<th scope="row"><div>${day}</div><div>${date}</div></th>`);
+                for (let i = 1; i <= 20; i++) { // Assuming 20 timeslots
+                    const slot = rowData.find(s => timeslotMap[s.timeslots_id]?.start_time.includes(`0${i < 10 ? '0' : ''}${i}:`));
+                    row.append(`<td class="${slot ? 'bg-success' : ''}"></td>`);
+                }
+                tableBody.append(row);
+            });
+
+            // Existing interactivity
+            $("td").click(function () {
+                $(this).toggleClass("bg-warning");
+            });
+
+            $("#update-office-hours-btn").click(function () {
+                $("td.bg-warning").removeClass("bg-warning bg-secondary").addClass("bg-success");
+            });
+
+            $("#update-leave-btn").click(function () {
+                $("td.bg-warning").removeClass("bg-warning bg-success").addClass("bg-secondary");
+            });
+
+            $("#clear-btn").click(function () {
+                $("td.bg-warning").removeClass("bg-warning bg-success bg-secondary");
+            });
+
+            $("#clearall-btn").click(function () {
+                $("td").removeClass("bg-warning bg-success bg-secondary");
+            });
+        });
     </script>
 </body>
 
