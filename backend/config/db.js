@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 const { Sequelize } = require('sequelize');
-const connection = new Sequelize("project_web","root","",{
+const password = process.env.DB_PASSWORD || '';
+const connection = new Sequelize("project_web","root",password,{
     host: 'localhost',
     dialect: 'mysql'
 });
