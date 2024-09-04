@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +16,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        .selected {
+            background-color: #d4edda !important;
+            /* สีพื้นหลังของเซลล์ที่เลือก */
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+            /* สีพื้นหลังของเซลล์ที่อัปเดตแล้ว */
+        }
+
+        .bg-secondary {
+            background-color: #6c757d !important;
+            /* สีพื้นหลังของเซลล์ที่อัปเดต Leave */
+        }
+    </style>
+
 </head>
 
 <body>
@@ -133,6 +150,48 @@
                     }
                 })
                 .catch(error => console.error('Error fetching profile data:', error));
+
+            // Add event listener for cell clicks
+            $(document).on('click', 'td', function () {
+                // Get the current class of the cell
+                var currentClass = $(this).attr('class');
+
+                // If the cell has 'bg-success' or 'bg-secondary', change it to 'bg-warning'
+                if (currentClass.includes('bg-success') || currentClass.includes('bg-secondary')) {
+                    $(this).removeClass('bg-success bg-secondary').addClass('bg-warning');
+                } else if (currentClass.includes('bg-warning')) {
+                    // Toggle 'bg-warning' if it's already present
+                    $(this).removeClass('bg-warning');
+                } else {
+                    // Add 'bg-warning' if it's not present
+                    $(this).addClass('bg-warning');
+                }
+            });
+
+            // When the 'Update Office Hours' button is clicked
+            $("#update-office-hours-btn").click(function () {
+                // Change all cells with 'bg-warning' to 'bg-success'
+                $("td.bg-warning").removeClass("bg-warning").addClass("bg-success");
+            });
+
+            // When the 'Update Leave' button is clicked
+            $("#update-leave-btn").click(function () {
+                // Change all cells with 'bg-warning' to 'bg-secondary'
+                $("td.bg-warning").removeClass("bg-warning").addClass("bg-secondary");
+            });
+
+            // When the 'Clear' button is clicked
+            $("#clear-btn").click(function () {
+                // Remove the 'bg-warning' class from all selected cells
+                $("td.bg-warning").removeClass("bg-warning");
+            });
+
+            // When the 'Clear All' button is clicked
+            $("#clearall-btn").click(function () {
+                // Remove both 'bg-success' and 'bg-secondary' classes from all cells
+                $("td").removeClass("bg-warning bg-success bg-secondary");
+            });
+
         });
 
         flatpickr("#datepicker", {
@@ -251,7 +310,6 @@
                         { timeslots_id: 90, start_time: '16:30:00', end_time: '17:00:00', dayofweek: 'Friday' },
                     ];
 
-
                     const timeslotMap = timeslots.reduce((acc, slot) => {
                         acc[slot.timeslots_id] = slot;
                         return acc;
@@ -282,8 +340,8 @@
                     });
                 })
                 .catch(error => console.error('Error fetching schedules:', error));
-
         });
+
     </script>
 </body>
 
