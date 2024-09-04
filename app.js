@@ -112,6 +112,25 @@ app.post("/import", upload.single("file"), async (req, res) => {
   }
 });
 
+app.get('/data/images/:data_id', async (req, res) => {
+  try {
+    const data_id = req.params.data_id; // Get data_id from the request params
+    const data = await Datas.findOne({
+      where: { data_id: data_id },
+      attributes: ['name', 'tel', 'image', 'major', 'email'] // Only fetch required fields
+    });
+
+    if (!data) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).json({ message: "Error fetching data: " + error.message });
+  }
+});
+
 app.get('/data/images', async (req, res) => {
   try {
     const data = await Datas.findAll({
@@ -122,6 +141,27 @@ app.get('/data/images', async (req, res) => {
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ message: "Error fetching data: " + error.message });
+  }
+});
+
+app.get('/schedules/:data_id', async (req, res) => {
+  try {
+    const { data_id } = req.params; // Extract data_id from the URL parameters
+
+    const data = await Schedule.findAll({
+      where: { data_id }, // Use the extracted data_id in your query
+      attributes: ['schedules_id', 'date', 'created_at', 'updated_at', 'data_id', 'timeslots_id', 'status']
+    });
+
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ message: "No schedule found for the given data_id" });
+    }
+
+  } catch (error) {
+    console.error("Error fetching schedules:", error);
+    res.status(500).json({ message: "Error fetching schedules: " + error.message });
   }
 });
 

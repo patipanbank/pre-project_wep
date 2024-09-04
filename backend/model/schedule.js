@@ -19,6 +19,11 @@ const Schedule = connection.define('Schedule', {
     updated_at: {
       type: DataTypes.DATE,
     },
+    status: {
+      type: DataTypes.ENUM('Available', 'Unavailable', 'Waiting', 'Leave', 'Empty'),
+      allowNull: false,
+      defaultValue: 'Empty',
+    }
   }, {
     tableName: 'schedules', 
     timestamps: false,

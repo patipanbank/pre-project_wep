@@ -95,7 +95,7 @@
                     filteredData.forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'card';
-                        card.id = `card-${item.id}`;
+                        card.id = `card-${item.data_id}`;
                         card.innerHTML = `
                         <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
                         <div class="card-body">
@@ -104,14 +104,14 @@
                             <p class="card-text">Email: ${item.email}</p>
                             <p class="card-text">Tel: ${item.tel}</p>
                             <div class="form-check form-switch">
-                                <input class="form-check-input hide-switch" type="checkbox" id="available-${item.id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.id})">
+                                <input class="form-check-input hide-switch" type="checkbox" id="available-${item.data_id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.data_id})">
                             </div>
-                            <button class="btn btn-primary" onclick="makeOfficehours(${item.id})">Edit Officehours</button>
+                            <button class="btn btn-primary" onclick="makeOfficehours(${item.data_id})">Edit Officehours</button>
                         </div>
                     `;
 
                         cardContainer.appendChild(card);
-                        updateCardStyle(item.id, item.available); // Set initial card style
+                        updateCardStyle(item.data_id, item.available); // Set initial card style
                     });
                     reorderCards(); // Reorder cards initially
                 })
@@ -119,9 +119,11 @@
         });
 
         function makeOfficehours(id) {
-            // Redirect to the Officehours page with the given ID
-            window.location.href = `/admin/editofficehours`;
+            // Redirect to the Officehours page with the given ID as a query parameter
+            window.location.href = `/admin/editofficehours?data_id=${id}`;
+            console.log(id)
         }
+
 
         function searchTeachers() {
             var input, filter, cardContainer, cards, cardBody, i, txtValue;
