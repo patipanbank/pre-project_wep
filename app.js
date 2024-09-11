@@ -14,6 +14,8 @@ const student = require('./backend/routes/student');
 const teacher = require('./backend/routes/teacher');
 const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
+const schedule = require('./backend/routes/schedule.routes');
+
 const app = express();
 
 const corsOptions = {
@@ -287,6 +289,8 @@ sequelize.sync({ alter: true })
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+app.use("/schedule",schedule) 
 
 app.use("/", login);
 app.use("/student", student);
