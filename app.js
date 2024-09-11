@@ -33,8 +33,14 @@ const upload = multer({ storage });
 app.post("/import", upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
+    const { startDate } = req.body; // Capture the start date from the request body
+
     if (!file) {
       return res.status(400).send("No file uploaded.");
+    }
+
+    if (!startDate) {
+      return res.status(400).send("Start date is required.");
     }
 
     const workbook = xlsx.read(file.buffer, { type: "buffer" });
@@ -42,13 +48,14 @@ app.post("/import", upload.single("file"), async (req, res) => {
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet);
 
-    // Extract emails from the imported data
     const importedEmails = new Set(data.map(item => item.email));
+    const importedDataIds = new Set(data.map(item => item.data_id));
 
-    // Use a transaction to ensure data consistency
     const transaction = await sequelize.transaction();
-
     try {
+      // Track which data_ids have been processed
+      const processedDataIds = new Set();
+
       for (const item of data) {
         const [record, created] = await Datas.findOrCreate({
           where: { email: item.email },
@@ -56,52 +63,92 @@ app.post("/import", upload.single("file"), async (req, res) => {
             name: item.name,
             tel: item.tel || null,
             image: item.image || null,
-            major: item.major || null, // Ensure major is set to null if not provided
-            available: item.available || 'on', // Ensure available is set to 'on' if not provided
+            major: item.major || null,
+            available: item.available || 'on',
           },
-          transaction
+          transaction,
         });
 
         if (!created) {
-          // Update existing record
           await record.update({
             name: item.name,
             tel: item.tel || null,
             image: item.image || null,
-            major: item.major || null, // Ensure major is set to null if not provided
-            available: item.available || 'on', // Ensure available is set to 'on' if not provided
+            major: item.major || null,
+            available: item.available || 'on',
           }, { transaction });
         }
 
-        // Generate the weekly schedule
-        const schedulesData = generateWeeklySchedule(record.dataValues.data_id);
+        processedDataIds.add(record.dataValues.data_id);
 
-        // Bulk insert the generated schedules
-        await Schedule.bulkCreate(
-          schedulesData.map(([date, data_id, timeslots_id]) => ({
-            date,
-            data_id,
-            timeslots_id,
-          })),
-          { transaction }
-        );
+        // Generate new weekly schedules based on startDate
+        const newSchedulesData = generateWeeklySchedule(record.dataValues.data_id, startDate);
+        const newScheduleDates = new Set(newSchedulesData.map(([date]) => date.toISOString())); // Dates from new schedule
+
+        // Fetch existing schedules for this data_id
+        const existingSchedules = await Schedule.findAll({
+          where: { data_id: record.dataValues.data_id },
+          transaction,
+        });
+
+        if (existingSchedules.length > 0) {
+          // Update existing schedules
+          for (const schedule of existingSchedules) {
+            const currentDateISO = new Date(schedule.date).toISOString();
+            if (newScheduleDates.has(currentDateISO)) {
+              await schedule.update({
+                date: new Date(startDate), // Update date based on new startDate
+                updated_at: new Date(), // Set updated_at to current date/time
+              }, { transaction });
+            }
+          }
+
+          // Delete schedules that are not in the new data
+          await Schedule.destroy({
+            where: {
+              data_id: record.dataValues.data_id,
+              date: {
+                [Op.notIn]: Array.from(newScheduleDates),
+              },
+            },
+            transaction,
+          });
+        } else {
+          // Create new schedules if none exist
+          await Schedule.bulkCreate(
+            newSchedulesData.map(([date, data_id, timeslots_id]) => ({
+              date,
+              data_id,
+              timeslots_id,
+            })),
+            { transaction }
+          );
+        }
       }
 
-      // Delete records not in the imported data
+      // Remove schedules for data_id values not present in the import
+      await Schedule.destroy({
+        where: {
+          data_id: {
+            [Op.notIn]: Array.from(processedDataIds),
+          },
+        },
+        transaction,
+      });
+
+      // Remove data entries not present in the import
       await Datas.destroy({
         where: {
           email: {
-            [Op.notIn]: Array.from(importedEmails)
-          }
+            [Op.notIn]: Array.from(importedEmails),
+          },
         },
-        transaction
+        transaction,
       });
 
-      // Commit the transaction
       await transaction.commit();
       res.status(200).json({ message: "Data imported, updated, and cleaned up successfully." });
     } catch (err) {
-      // Rollback the transaction in case of error
       await transaction.rollback();
       console.error("Transaction error:", err);
       res.status(500).json({ message: "Transaction error: " + err.message });
@@ -111,6 +158,23 @@ app.post("/import", upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Error importing data: " + error.message });
   }
 });
+
+
+
+
+app.delete('/schedules/cleanup', async (req, res) => {
+  try {
+    const deletedCount = await Schedule.destroy({
+      where: { data_id: null }
+    });
+
+    res.status(200).json({ message: `${deletedCount} schedules with null data_id deleted.` });
+  } catch (error) {
+    console.error('Error during schedule cleanup:', error);
+    res.status(500).json({ message: 'Error during schedule cleanup: ' + error.message });
+  }
+});
+
 
 app.get('/data/images/:data_id', async (req, res) => {
   try {
@@ -146,24 +210,34 @@ app.get('/data/images', async (req, res) => {
 
 app.get('/schedules/:data_id', async (req, res) => {
   try {
-    const { data_id } = req.params; // Extract data_id from the URL parameters
+    const { data_id } = req.params;
+    const { startDate, endDate } = req.query; // Extract date range from query parameters
+
+    let whereClause = { data_id };
+
+    // Add date range to where clause if both startDate and endDate are provided
+    if (startDate && endDate) {
+      whereClause.date = {
+        [Op.between]: [new Date(startDate), new Date(endDate)]
+      };
+    }
 
     const data = await Schedule.findAll({
-      where: { data_id }, // Use the extracted data_id in your query
+      where: whereClause,
       attributes: ['schedules_id', 'date', 'created_at', 'updated_at', 'data_id', 'timeslots_id', 'status']
     });
 
-    if (data) {
+    if (data.length > 0) {
       res.status(200).json(data);
     } else {
-      res.status(404).json({ message: "No schedule found for the given data_id" });
+      res.status(404).json({ message: "No schedules found for the given criteria" });
     }
-
   } catch (error) {
     console.error("Error fetching schedules:", error);
     res.status(500).json({ message: "Error fetching schedules: " + error.message });
   }
 });
+
 
 app.get('/data/count/available', async (req, res) => {
   try {
@@ -202,8 +276,8 @@ app.put('/data/:id/available', async (req, res) => {
   }
 });
 
-app.post('/data', createdata);
-app.post('/data/file', createdatafromfile);
+// app.post('/data', createdata);
+// app.post('/data/file', createdatafromfile);
 
 sequelize.sync({ alter: true })
   .then(() => console.log('Database connected and synced...'))

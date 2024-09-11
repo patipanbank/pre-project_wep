@@ -200,6 +200,7 @@
 
         $(document).ready(function () {
             const tableBody = $('#scheduleTableBody');
+            
 
             const data_id = new URLSearchParams(window.location.search).get('data_id'); // Get data_id from URL
 
@@ -326,6 +327,7 @@
 
                     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
+                    console.log(schedules)
                     daysOfWeek.forEach(day => {
                         const rowData = scheduleGroups[day] || [];
                         const date = rowData.length ? rowData[0].date : '';
