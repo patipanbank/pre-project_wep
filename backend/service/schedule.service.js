@@ -1,3 +1,4 @@
+const Schedule = require('../model/schedule');
 const generateWeeklySchedule = (data_id) => {
   const timeslotsPerDay = 18; // Number of time slots per day (08:00 to 17:00)
   const daysOfWeek = 5; // Number of weekdays (Monday to Friday)
@@ -39,4 +40,24 @@ const generateWeeklySchedule = (data_id) => {
   return queries;
 };
 
-module.exports = { generateWeeklySchedule };
+const editMultipleSchedules = async (schedules) => {
+  try {
+      const results = await Promise.all(schedules.map(async (schedule) => {
+          const { data_id, timeslots_id, status } = schedule;
+          const res = await Schedule.update(
+              { status: status },
+              { where: { data_id: data_id, timeslots_id: timeslots_id } }
+          );
+          return res ? { message: `Schedule with data_id: ${data_id} updated successfully` } : null;
+      }));
+
+      return results.filter(Boolean);  // Return only successful results
+  } catch (err) {
+      console.error(err);
+      throw err;
+  }
+};
+
+
+
+module.exports = { generateWeeklySchedule, editMultipleSchedules };
