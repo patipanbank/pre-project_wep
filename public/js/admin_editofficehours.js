@@ -47,4 +47,62 @@ const updateOfficeHours = async (status) => {
     }
 }
 
+const clearOfficeHours = async () => {
+    let schedules = [];
+
+    $("td.bg-warning").each(function() {
+        let colIndex = $(this).index() - 1; // Adjust for day column
+        let rowIndex = $(this).parent().index();
+        let slotId = rowIndex * 18 + colIndex + 1;
+
+        schedules.push({ data_id: data_id, timeslots_id: slotId, status: 'Empty' });
+
+        $(this).removeClass("bg-warning bg-success bg-secondary").addClass("bg-empty");
+    });
+
+    try {
+        const res = await fetch(`/schedule/edit`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ schedules })
+        });
+        const data = await res.json();
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const clearAllOfficeHours = async () => {
+    let schedules = [];
+
+    $("td").each(function() {
+        if ($(this).hasClass('bg-success') || $(this).hasClass('bg-secondary')) {
+            let colIndex = $(this).index() - 1; 
+            let rowIndex = $(this).parent().index();
+            let slotId = rowIndex * 18 + colIndex + 1;
+
+            schedules.push({ data_id: data_id, timeslots_id: slotId, status: 'Empty' });
+
+            $(this).removeClass("bg-success bg-secondary").addClass("bg-empty");
+        }
+    });
+
+    try {
+        const res = await fetch(`/schedule/edit`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ schedules })
+        });
+        const data = await res.json();
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 
