@@ -314,10 +314,11 @@
 
           daysOfWeek.forEach(day => {
             const rowData = scheduleGroups[day] || [];
-            const date = rowData.length ? rowData[0].date : '';
+            // const date = rowData.length ? rowData[0].date : '';
 
             const row = $('<tr>');
-            row.append(`<th scope="row"><div>${day}</div><div>${date}</div></th>`);
+            row.append(`<th scope="row"><div>${day}</div><div>all/all/all</div></th>`);
+            // row.append(`<th scope="row"><div>${day}</div><div>${date}</div></th>`);
 
             // Generate time slots every 30 minutes from 08:00 to 17:30
             for (let hour = 8; hour <= 16; hour++) {
