@@ -60,9 +60,10 @@ app.post("/import", upload.single("file"), async (req, res) => {
 
       for (const item of data) {
         const [record, created] = await Datas.findOrCreate({
-          where: { email: item.email },
+          where: { data_id: item.data_id }, // Use data_id from import data
           defaults: {
             name: item.name,
+            email: item.email,
             tel: item.tel || null,
             image: item.image || null,
             major: item.major || null,
@@ -81,59 +82,114 @@ app.post("/import", upload.single("file"), async (req, res) => {
           }, { transaction });
         }
 
-        processedDataIds.add(record.dataValues.data_id);
+        const data_id = record.dataValues.data_id;
+        processedDataIds.add(data_id);
 
         // Generate new weekly schedules based on startDate
-        const newSchedulesData = generateWeeklySchedule(record.dataValues.data_id, startDate);
-        const newScheduleDates = new Set(newSchedulesData.map(([date]) => date.toISOString())); // Dates from new schedule
+        const newSchedulesData = generateWeeklySchedule(data_id, startDate);
+        const newScheduleDates = new Set(newSchedulesData.map(([date]) => date.toISOString()));
 
         // Fetch existing schedules for this data_id
         const existingSchedules = await Schedule.findAll({
-          where: { data_id: record.dataValues.data_id },
+          where: { data_id },
           transaction,
         });
 
-        if (existingSchedules.length > 0) {
-          // Update existing schedules
-          for (const schedule of existingSchedules) {
-            const currentDateISO = new Date(schedule.date).toISOString();
-            if (newScheduleDates.has(currentDateISO)) {
-              await schedule.update({
-                date: new Date(startDate), // Update date based on new startDate
-                updated_at: new Date(), // Set updated_at to current date/time
-              }, { transaction });
+        // Calculate the number of weeks already covered
+        const existingScheduleDates = new Set(existingSchedules.map(schedule => new Date(schedule.date).toISOString()));
+        const existingWeeks = new Set(existingSchedules.map(schedule => {
+          const date = new Date(schedule.date);
+          const weekNumber = Math.floor((date - new Date(startDate)) / (1000 * 60 * 60 * 24 * 7));
+          return weekNumber;
+        }));
+
+        // Determine weeks to be added
+        const weeksToAdd = new Set();
+        for (let week = 0; week < 24; week++) {
+          if (!existingWeeks.has(week)) {
+            weeksToAdd.add(week);
+          }
+        }
+
+        // Update existing schedules
+        const updates = [];
+        for (const schedule of existingSchedules) {
+          const currentDateISO = new Date(schedule.date).toISOString();
+          if (newScheduleDates.has(currentDateISO)) {
+            // Find the corresponding new date
+            const newDate = newSchedulesData.find(([date]) => date.toISOString() === currentDateISO)[0];
+            updates.push(schedule.update({
+              date: newDate,
+              updated_at: new Date(), // Update the timestamp
+            }, { transaction }));
+          }
+        }
+
+        await Promise.all(updates);
+
+        // Create missing schedules only for weeks not covered
+        if (weeksToAdd.size > 0) {
+          const schedulesToCreate = [];
+          for (const week of weeksToAdd) {
+            const weekStartDate = new Date(startDate);
+            weekStartDate.setDate(weekStartDate.getDate() + week * 7);
+
+            for (let day = 0; day < 5; day++) {
+              for (let slot = 0; slot < 18; slot++) {
+                let timeslots_id = slot + 1 + day * 18;
+                let date = new Date(weekStartDate);
+                date.setDate(weekStartDate.getDate() + day);
+                date.setHours(8 + Math.floor(slot / 2)); // Assuming slots are 30 minutes each
+                date.setMinutes((slot % 2) * 30); // Set minutes to 0 or 30
+
+                schedulesToCreate.push({
+                  date,
+                  data_id, // Use the existing data_id
+                  timeslots_id,
+                  status: 'Empty', // Default status or adjust as needed
+                });
+              }
             }
           }
 
-          // Delete schedules that are not in the new data
-          await Schedule.destroy({
-            where: {
-              data_id: record.dataValues.data_id,
-              date: {
-                [Op.notIn]: Array.from(newScheduleDates),
-              },
-            },
-            transaction,
-          });
-        } else {
-          // Create new schedules if none exist
-          await Schedule.bulkCreate(
-            newSchedulesData.map(([date, data_id, timeslots_id]) => ({
-              date,
-              data_id,
-              timeslots_id,
-            })),
-            { transaction }
-          );
+          if (schedulesToCreate.length > 0) {
+            await Schedule.bulkCreate(schedulesToCreate, { transaction });
+          }
         }
+
+        // Delete old schedules that are older than the selected startDate
+        await Schedule.destroy({
+          where: {
+            data_id,
+            date: {
+              [Op.lt]: new Date(startDate), // Remove schedules older than startDate
+            },
+          },
+          transaction,
+        });
+
+        // Delete schedules that are beyond the 24-week period
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + (24 * 7 * 1)); // Adding 24 weeks
+
+        await Schedule.destroy({
+          where: {
+            data_id,
+            date: {
+              [Op.gt]: endDate, // Remove schedules beyond 24 weeks from startDate
+            },
+          },
+          transaction,
+        });
       }
 
-      // Remove schedules for data_id values not present in the import
+      // Remove schedules with null data_id or with data_id not in importedDataIds
       await Schedule.destroy({
         where: {
-          data_id: {
-            [Op.notIn]: Array.from(processedDataIds),
-          },
+          [Op.or]: [
+            { data_id: { [Op.is]: null } },
+            { data_id: { [Op.notIn]: Array.from(processedDataIds) } }
+          ]
         },
         transaction,
       });
@@ -160,9 +216,6 @@ app.post("/import", upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Error importing data: " + error.message });
   }
 });
-
-
-
 
 app.delete('/schedules/cleanup', async (req, res) => {
   try {

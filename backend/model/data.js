@@ -1,11 +1,12 @@
 const { DataTypes } = require('sequelize');
 const connection = require('../config/db');
+
 const Datas = connection.define('Data', {
   data_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true // Automatically generate unique id if needed
+    // Remove autoIncrement to allow manual setting of data_id
   },
   name: {
     type: DataTypes.STRING(255),
