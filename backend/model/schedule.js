@@ -2,6 +2,7 @@ const connection = require('../config/db');
 const { DataTypes } = require('sequelize');
 const Data = require('./data')
 const Timeslot = require('./timeslot')
+const Semester = require('./semester')
 const Schedule = connection.define('Schedule', {
     schedules_id: {
       type: DataTypes.INTEGER,
@@ -32,8 +33,10 @@ const Schedule = connection.define('Schedule', {
   // Associations
   Schedule.belongsTo(Data, { foreignKey: 'data_id' });
   Schedule.belongsTo(Timeslot, { foreignKey: 'timeslots_id' });
+  Schedule.belongsTo(Semester, { foreignKey: 'semester_id' });
   
 Data.hasMany(Schedule, { foreignKey: 'data_id' });
 Timeslot.hasMany(Schedule, { foreignKey: 'timeslots_id' });
+Semester.hasMany(Schedule, { foreignKey: 'semester_id' });
 
 module.exports = Schedule;

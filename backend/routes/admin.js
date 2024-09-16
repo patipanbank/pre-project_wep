@@ -9,4 +9,5 @@ router.get("/leave", page.leave );
 router.get("/manage", page.manage );
 router.get("/officehours", page.officehours );
 router.get("/outoffice", page.outoffice );
+router.get("/semester", page.semester );
 module.exports = router;

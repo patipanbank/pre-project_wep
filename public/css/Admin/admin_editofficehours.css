@@ -4,12 +4,13 @@
 }
 
 .container {
-  max-width: 1820px;
+  /* max-width: 1650px; */
+  justify-content: left;
 }
 
 .coltable {
   /* position: relative; */
-  /* height: 400px; */
+  height: 400px;
   /* width: 1300px; */
   /* display: flex; */
   /* align-items: center; */
@@ -28,6 +29,8 @@
 
 }
 
-.selected {
-  background-color: green !important;
+.table th, .table td {
+  text-align: left; /* จัดข้อความให้อยู่กลางแนวนอน */
+  vertical-align: top; /* จัดข้อความให้อยู่บนสุดของเซลล์แนวตั้ง */
 }
+

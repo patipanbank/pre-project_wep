@@ -1,0 +1,58 @@
+.container {
+    max-width: 1650px;
+    /* เพิ่มความกว้างสูงสุดของ container */
+}
+
+.container2 {
+    display: flex;
+    justify-content: center; /* จัดกึ่งกลางแนวนอน */
+    gap: 100px; /* ระยะห่างระหว่าง col */
+    padding: 50px;
+}
+
+.col {
+    flex: 0 0 30%; /* ควบคุมขนาดของคอลัมน์ ให้แต่ละ col มีขนาด 30% ของพื้นที่ */
+    /* max-width: 1800px; กำหนดขนาดความกว้างสูงสุด */
+}
+
+
+#imgnav {
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input,
+select {
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.message {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}

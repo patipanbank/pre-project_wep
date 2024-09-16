@@ -24,5 +24,8 @@ module.exports.officehours = (req, res) => {
 module.exports.outoffice = (req, res) => {
     res.status(200).sendFile(path.join(__dirname, "../../views/admin/admin_outoffice.html"));
 }
+module.exports.semester = (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, "../../views/admin/admin_semester.html"));
+}
 
 

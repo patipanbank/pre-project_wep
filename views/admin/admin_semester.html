@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Manage Semester</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/public/css/Admin/admin_semester.css">
+</head>
+
+<body>
+  <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt></nav>
+
+  <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" style="color: white;" aria-current="page" href="/admin/homepage">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE TEACHER</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE HOURS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="color: white;" href="/admin/semester">SEMESTER</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container2">
+    <div class="row">
+      <!-- Create Semester Form -->
+      <div class="col">
+        <h2>Create Semester</h2>
+        <form id="createSemesterForm">
+          <div class="mb-3">
+            <label for="year" class="form-label">Year</label>
+            <input type="number" class="form-control" id="year" required>
+          </div>
+          <div class="mb-3">
+            <label for="term" class="form-label">Term</label>
+            <select class="form-select" id="term" required>
+              <option value>Select Term</option>
+              <option value="1">Term 1</option>
+              <option value="2">Term 2</option>
+              <option value="3">Term 3</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="start_date" required>
+          </div>
+          <div class="mb-3">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="end_date" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Create
+            Semester</button>
+        </form>
+      </div>
+
+      <!-- Update Semester Form -->
+      <div class="col">
+        <h2>Update Semester</h2>
+        <form id="updateSemesterForm">
+          <div class="mb-3">
+            <label for="update_select_year" class="form-label">Year</label>
+            <select class="form-select" id="update_select_year" required>
+              <option value>Select Year</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="update_select_term" class="form-label">Term</label>
+            <select class="form-select" id="update_select_term" required>
+              <option value>Select Term</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="update_start_date" class="form-label">Start
+              Date</label>
+            <input type="date" class="form-control" id="update_start_date" required>
+          </div>
+          <div class="mb-3">
+            <label for="update_end_date" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="update_end_date" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Update
+            Semester</button>
+        </form>
+      </div>
+
+      <!-- Delete Semester Form -->
+      <div class="col">
+        <h2>Delete Semester</h2>
+        <form id="deleteSemesterForm">
+          <div class="mb-3">
+            <label for="delete_select_year" class="form-label">Year</label>
+            <select class="form-select" id="delete_select_year" required>
+              <option value>Select Year</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="delete_select_term" class="form-label">Term</label>
+            <select class="form-select" id="delete_select_term" required>
+              <option value>Select Term</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-danger">Delete
+            Semester</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Handle Create Semester Form Submission
+  document.getElementById('createSemesterForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const start_date = document.getElementById('start_date').value;
+    const end_date = document.getElementById('end_date').value;
+    const term = document.getElementById('term').value;
+    const year = document.getElementById('year').value;
+
+    try {
+      const response = await fetch('/api/semesters/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ start_date, end_date, term, year })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert('Semester created successfully!');
+        // Reset the form after successful creation
+        document.getElementById('createSemesterForm').reset();
+        // Optionally reload options
+        loadSemesterOptions();
+      } else {
+        alert('Error creating semester: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error creating semester: ' + error.message);
+    }
+  });
+  
+    // Handle Update Semester Form Submission
+    document.getElementById('updateSemesterForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const start_date = document.getElementById('update_start_date').value;
+      const end_date = document.getElementById('update_end_date').value;
+      const term = document.getElementById('update_select_term').value;
+      const year = document.getElementById('update_select_year').value;
+  
+      try {
+        const response = await fetch('/api/semesters/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ start_date, end_date, term, year })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          alert('Semester updated successfully!');
+          document.getElementById('updateSemesterForm').reset();
+          loadSemesterOptions();
+        } else {
+          alert('Error updating semester: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating semester: ' + error.message);
+      }
+    });
+  
+    // Populate year and term dropdowns
+    async function loadSemesterOptions() {
+      try {
+        const yearResponse = await fetch('/api/semesters/years');
+        const years = await yearResponse.json();
+        const termResponse = await fetch('/api/semesters/terms');
+        const terms = await termResponse.json();
+        if (!Array.isArray(years) || !Array.isArray(terms)) {
+          throw new Error('Received data is not an array');
+        }
+        const updateYearSelect = document.getElementById('update_select_year');
+        const updateTermSelect = document.getElementById('update_select_term');
+        years.forEach(year => {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          updateYearSelect.appendChild(option);
+        });
+        terms.forEach(term => {
+          const option = document.createElement('option');
+          option.value = term;
+          option.textContent = term;
+          updateTermSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading options:', error);
+      }
+    }
+  
+    // Handle selection change for year in update semester form
+    document.getElementById('update_select_year').addEventListener('change', async function() {
+      const year = this.value;
+      if (year) {
+        await loadTermsForYear(year);
+      } else {
+        document.getElementById('update_select_term').innerHTML = '<option value>Select Term</option>';
+        document.getElementById('update_start_date').value = '';
+        document.getElementById('update_end_date').value = '';
+      }
+    });
+  
+    async function loadTermsForYear(year) {
+      try {
+        const termResponse = await fetch(`/api/semesters/terms/byYear?year=${year}`);
+        const terms = await termResponse.json();
+        if (!Array.isArray(terms)) {
+          throw new Error('Terms response is not an array');
+        }
+        const updateTermSelect = document.getElementById('update_select_term');
+        updateTermSelect.innerHTML = '<option value>Select Term</option>';
+        if (terms.length === 0) {
+          updateTermSelect.innerHTML = '<option value>Select Term</option>';
+          document.getElementById('update_start_date').value = '';
+          document.getElementById('update_end_date').value = '';
+        } else {
+          terms.forEach(term => {
+            const option = document.createElement('option');
+            option.value = term;
+            option.textContent = `Term ${term}`;
+            updateTermSelect.appendChild(option);
+          });
+        }
+      } catch (error) {
+        console.error('Error loading terms:', error);
+      }
+    }
+  
+    // Initialize the semester options
+    loadSemesterOptions();
+  
+    // Handle selection change for term in update semester form
+    document.getElementById('update_select_term').addEventListener('change', loadSemesterDates);
+    async function loadSemesterDates() {
+      const year = document.getElementById('update_select_year').value;
+      const term = document.getElementById('update_select_term').value;
+      if (year && term) {
+        try {
+          const response = await fetch(`/api/semesters/semesters?year=${year}&term=${term}`);
+          const semesters = await response.json();
+          if (Array.isArray(semesters) && semesters.length > 0) {
+            const semester = semesters[0];
+            document.getElementById('update_start_date').value = semester.start_date || '';
+            document.getElementById('update_end_date').value = semester.end_date || '';
+          } else {
+            document.getElementById('update_start_date').value = '';
+            document.getElementById('update_end_date').value = '';
+            alert('No semester found for the selected year and term. Please select a valid combination.');
+          }
+        } catch (error) {
+          console.error('Error loading semester dates:', error);
+          alert('Error loading semester dates: ' + error.message);
+        }
+      } else {
+        document.getElementById('update_start_date').value = '';
+        document.getElementById('update_end_date').value = '';
+      }
+    }
+  
+    // Handle Delete Semester Form Submission
+    document.getElementById('deleteSemesterForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const year = document.getElementById('delete_select_year').value;
+      const term = document.getElementById('delete_select_term').value;
+  
+      if (confirm('Are you sure you want to delete this semester? This action cannot be undone.')) {
+        try {
+          const response = await fetch('/api/semesters/delete', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ year, term })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert('Semester deleted successfully!');
+            document.getElementById('deleteSemesterForm').reset();
+            loadDeleteSemesterOptions();
+          } else {
+            alert('Error deleting semester: ' + result.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error deleting semester: ' + error.message);
+        }
+      }
+    });
+  
+    // Populate year and term dropdowns for delete semester form
+    async function loadDeleteSemesterOptions() {
+      try {
+        const yearResponse = await fetch('/api/semesters/years');
+        const years = await yearResponse.json();
+        const deleteYearSelect = document.getElementById('delete_select_year');
+        deleteYearSelect.innerHTML = '<option value>Select Year</option>';
+        years.forEach(year => {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          deleteYearSelect.appendChild(option);
+        });
+  
+        deleteYearSelect.addEventListener('change', async function () {
+          const year = this.value;
+          if (year) {
+            await loadTermsForYearForDelete(year);
+          } else {
+            document.getElementById('delete_select_term').innerHTML = '<option value>Select Term</option>';
+          }
+        });
+      } catch (error) {
+        console.error('Error loading delete semester options:', error);
+      }
+    }
+  
+    async function loadTermsForYearForDelete(year) {
+      try {
+        const termResponse = await fetch(`/api/semesters/terms/byYear?year=${year}`);
+        const terms = await termResponse.json();
+        const deleteTermSelect = document.getElementById('delete_select_term');
+        deleteTermSelect.innerHTML = '<option value>Select Term</option>';
+        if (terms.length === 0) {
+          deleteTermSelect.innerHTML = '<option value>Select Term</option>';
+        } else {
+          terms.forEach(term => {
+            const option = document.createElement('option');
+            option.value = term;
+            option.textContent = `Term ${term}`;
+            deleteTermSelect.appendChild(option);
+          });
+        }
+      } catch (error) {
+        console.error('Error loading terms for delete:', error);
+      }
+    }
+  
+    // Initialize delete semester options
+    loadDeleteSemesterOptions();
+  </script>
+  
+</body>
+
+</html>

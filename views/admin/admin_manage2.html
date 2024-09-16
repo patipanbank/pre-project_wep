@@ -71,6 +71,11 @@
                 <div class="modal-body">
                     <form id="importForm" enctype="multipart/form-data">
                         <input type="file" name="file" id="excelFile" accept=".xlsx, .xls">
+                        <div class="mt-3">
+                            <label for="startDate">Select start date for schedule generation:</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control">
+                            <small id="dateError" class="form-text text-danger" style="display: none;">Please select a Monday.</small>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
                         </div>
@@ -132,6 +137,26 @@
             cards.forEach(card => cardContainer.appendChild(card));
         }
 
+        function updateAvailableStatus(email, available) {
+            fetch('/data/available', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, available })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message !== 'Available status updated successfully.') {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating available status. Please try again.');
+                });
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             fetch('/data/images')
                 .then(response => response.json())
@@ -180,50 +205,65 @@
             }
         }
 
+        function isMonday(date) {
+            return date.getDay() === 1;
+        }
+
+        function validateStartDate() {
+            const startDateInput = document.getElementById('startDate');
+            const dateError = document.getElementById('dateError');
+            const startDate = new Date(startDateInput.value);
+
+            if (!isMonday(startDate)) {
+                dateError.style.display = 'block';
+                return false;
+            } else {
+                dateError.style.display = 'none';
+                return true;
+            }
+        }
+
         // When the upload button is clicked
         document.getElementById('uploadBtn').addEventListener('click', function () {
-            var formData = new FormData();
-            var fileInput = document.getElementById('excelFile');
-            var file = fileInput.files[0];
+            if (validateStartDate()) {
+                var formData = new FormData();
+                var fileInput = document.getElementById('excelFile');
+                var file = fileInput.files[0];
+                var startDate = document.getElementById('startDate').value;
 
-            if (file) {
-                formData.append('file', file);
+                if (file && startDate) {
+                    formData.append('file', file);
+                    formData.append('startDate', startDate);
 
-                fetch('/import', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message === "Data imported, updated, and cleaned up successfully.") {
-                            alert("Data imported successfully.");
-                            window.location.reload();
-                        } else {
-                            alert("" + data.message);
-                            window.location.reload();
-                        }
+                    fetch('/import', {
+                        method: 'POST',
+                        body: formData
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert("Error importing data. Please try again.");
-                    });
-            } else {
-                alert("Please select a file to upload.");
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message === "Data imported, updated, and cleaned up successfully.") {
+                                alert("Data imported successfully.");
+                                window.location.reload();
+                            } else {
+                                alert("Error: " + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("Error importing data. Please try again.");
+                        });
+                } else {
+                    alert("Please select a file and start date to upload.");
+                }
             }
         });
 
         function logout() {
-            fetch('/logout', {
-                method: 'POST'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/login';
-                    } else {
-                        alert('Error logging out. Please try again.');
-                    }
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/login';
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => console.error('Error logging out:', error));
         }
     </script>
 </body>

@@ -1,9 +1,9 @@
-const {Router} = require('express');
+// const {Router} = require('express');
 
-const { editScheduleController } = require('../controller/schedule.controller');
+// const { editScheduleController } = require('../controller/schedule.controller');
 
-const router = Router();
+// const router = Router();
 
-router.put('/edit', editScheduleController);
+// router.put('/edit', editScheduleController);
 
-module.exports = router;
+// module.exports = router;
