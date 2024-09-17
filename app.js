@@ -133,6 +133,28 @@ app.get('/semester/all', async (req, res) => {
   }
 });
 
+// Route for fetching semester details by ID
+app.get('/semester/:id', async (req, res) => {
+  try {
+    const semesterId = req.params.id;
+    const semester = await Semester.findByPk(semesterId);
+    if (semester) {
+      res.json({
+        semester_id: semester.semester_id,
+        term: semester.term,
+        year: semester.year,
+        start_date: semester.start_date,
+        end_date: semester.end_date
+      });
+    } else {
+      res.status(404).json({ error: 'Semester not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching semester details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 app.get('/data/count/available', async (req, res) => {
   try {

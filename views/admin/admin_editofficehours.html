@@ -76,6 +76,7 @@
         <div class="table-responsive mt-3">
           <label for="semester-select">Select Semester:</label>
           <select id="semester-select" class="form-control">
+            <option value>Select Semester</option>
             <!-- Options will be populated by JavaScript -->
           </select>
 
@@ -112,14 +113,14 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       console.log("Document is ready");
-    
+
       const currentYear = new Date().getFullYear();
-    
+
       fetch('/semester/all')
         .then(response => response.json())
         .then(semesters => {
           const semesterSelect = document.getElementById('semester-select');
-    
+
           // Sort semesters by year and term to ensure proper order
           semesters.sort((a, b) => {
             if (a.year !== b.year) {
@@ -128,22 +129,22 @@
               return a.term - b.term;
             }
           });
-    
-          let defaultOptionSelected = false;
-    
+
+          let defaultOptionSelected = true;
+
           semesters.forEach(semester => {
             const option = document.createElement('option');
             option.value = semester.semester_id;
             option.textContent = `${semester.term}/${semester.year}`;
             semesterSelect.appendChild(option);
-    
+
             // Set default option to Term 1 of the current year
             if (!defaultOptionSelected && semester.term === '1' && semester.year === currentYear) {
               option.selected = true;
               defaultOptionSelected = true;
             }
           });
-    
+
           // If no Term 1 for current year is found, set the first semester as default
           if (!defaultOptionSelected && semesters.length > 0) {
             semesterSelect.options[0].selected = true;
@@ -151,11 +152,32 @@
         })
         .catch(error => console.error('Error fetching semesters:', error));
     });
-    
+
+    document.getElementById('semester-select').addEventListener('change', function () {
+      const selectedSemesterId = this.value;
+      fetch(`/semester/${selectedSemesterId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(semester => {
+          console.log(`SemesterID: ${semester.semester_id}`);
+          console.log(`Term: ${semester.term}`);
+          console.log(`Year: ${semester.year}`);
+          console.log(`Start Date: ${semester.start_date}`);
+          console.log(`End Date: ${semester.end_date}`);
+        })
+        .catch(error => {
+          console.error('Error fetching semester details:', error);
+        });
+    });
+
     $(document).ready(function () {
       // Existing code for fetching and displaying profile data
       const data_id = new URLSearchParams(window.location.search).get("data_id"); // Get data_id from URL
-    
+
       // Fetch profile data for the given data_id
       fetch(`/data/images/${data_id}`)
         .then((response) => response.json())
@@ -169,18 +191,18 @@
           }
         })
         .catch((error) => console.error("Error fetching profile data:", error));
-    
+
       // Fetch and display time slots
       fetch('/api/timeslots')
         .then(response => response.json())
         .then(timeslots => {
           const tableBody = $('#scheduleTableBody');
           const thead = $('thead tr');
-    
+
           // Clear existing headers
           thead.empty();
           thead.append('<th scope="col">Day/Time</th>');
-    
+
           // Prepare headers and rows
           const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
           let timeSlots = [];
@@ -191,10 +213,10 @@
               thead.append(`<th scope="col">${timeRange}</th>`);
             }
           });
-    
+
           // Clear existing rows
           tableBody.empty();
-    
+
           // Create rows for each day and add time slot data
           daysOfWeek.forEach(day => {
             let row = `<tr><th scope="row">${day}</th>`;
@@ -203,7 +225,7 @@
                 slot.dayofweek === day &&
                 `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}` === timeSlot
               );
-    
+
               if (slotData) {
                 row += `<td data-timeslots_id="${slotData.timeslots_id}" data-start_time="${slotData.start_time}" data-end_time="${slotData.end_time}" data-dayofweek="${slotData.dayofweek}"></td>`;
               } else {
@@ -215,13 +237,13 @@
           });
         })
         .catch((error) => console.error("Error fetching timeslots:", error));
-    
+
       // Helper function to format time
       function formatTime(timeString) {
         const [hours, minutes] = timeString.split(':');
         return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
       }
-    
+
       // Add click event listener for table cells
       $(document).on("click", "td", function () {
         $(this).toggleClass("bg-warning");
@@ -236,9 +258,6 @@
       });
     });
   </script>
-  
-  
-
 </body>
 
 </html>
