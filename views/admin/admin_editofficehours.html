@@ -14,18 +14,6 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <style>
-    .selected {
-      background-color: black;
-      /* เปลี่ยนสีพื้นหลังเป็นสีดำ */
-      color: white;
-      /* เปลี่ยนสีตัวอักษรเป็นสีขาว */
-    }
-
-    .table th.centered {
-      text-align: center;
-      vertical-align: middle;
-    }
   </style>
 </head>
 
@@ -95,10 +83,11 @@
       </div>
     </div>
     <div class="bt mt-5">
-      <button onclick="updateOfficeHours('Available')" id="update-office-hours-btn" class="bg-success"
+      <button onclick="generateSchedule('Available')" id="update-office-hours-btn" class="bg-success"
         style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
         type="button">Update Office Hours</button>
-      <button onclick="updateOfficeHours('Leave')" id="update-leave-btn" class="bg-secondary"
+
+      <button id="update-leave-btn" class="bg-secondary"
         style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
         type="button">Update Leave</button>
       <button id="clear-btn" class="bg-info"
@@ -257,6 +246,48 @@
         console.log(`Day of Week: ${dayOfWeek}`);
       });
     });
+
+    function generateSchedule(status) {
+      const data_id = new URLSearchParams(window.location.search).get('data_id'); // Fetch the data_id from the URL
+      const semester_id = document.getElementById('semester-select').value; // Fetch selected semester
+      const selectedTimeslots = [];
+
+      // Get all selected timeslots from the table
+      document.querySelectorAll('.bg-warning').forEach(function (cell) {
+        const timeslotId = cell.getAttribute('data-timeslots_id');
+        if (timeslotId) {
+          selectedTimeslots.push(timeslotId);
+        }
+      });
+
+      if (!semester_id || selectedTimeslots.length === 0) {
+        alert('Please select a semester and timeslots!');
+        return;
+      }
+
+      // Send data to server to generate schedules
+      fetch('/api/schedule/generate-schedules', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data_id: data_id,
+          semester_id: semester_id,
+          timeslots: selectedTimeslots,
+          status: status,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          alert('Schedule updated successfully!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
   </script>
 </body>
 

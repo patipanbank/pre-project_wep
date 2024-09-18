@@ -34,3 +34,10 @@
   vertical-align: top; /* จัดข้อความให้อยู่บนสุดของเซลล์แนวตั้ง */
 }
 
+.bg-success {
+  background-color: #28a745 !important; /* Available */
+}
+
+.bg-secondary {
+  background-color: #6c757d !important; /* Leave */
+}

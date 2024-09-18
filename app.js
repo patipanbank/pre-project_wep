@@ -13,7 +13,10 @@ const admin = require('./backend/routes/admin');
 const staff = require('./backend/routes/staff');
 const timeslotRoutes = require('./backend/routes/timeslot.routes');
 const Semester = require("./backend/model/semester");
-const semesterRoutes = require('./backend/routes/semester.routes'); 
+const Schedule = require("./backend/model/schedule");
+const semesterRoutes = require('./backend/routes/semester.routes');
+const scheduleRoutes = require('./backend/routes/schedule.routes');
+
 
 const app = express();
 
@@ -30,6 +33,28 @@ app.use(express.urlencoded({ extended: true }));
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
+app.get('/api/schedule/get-schedules', async (req, res) => {
+  const { semester_id, start_date, end_date } = req.query;
+
+  try {
+    // Fetch schedules from the database based on the parameters
+    const schedules = await Schedule.findAll({
+      where: {
+        semester_id: semester_id,
+        date: {
+          [Op.between]: [new Date(start_date), new Date(end_date)]
+        }
+      }
+    });
+
+    // Respond with JSON data
+    res.json(schedules);
+  } catch (error) {
+    console.error('Error fetching schedules:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 app.post('/import', upload.single('file'), async (req, res) => {
   try {
@@ -155,6 +180,26 @@ app.get('/semester/:id', async (req, res) => {
   }
 });
 
+app.get('/api/schedule', async (req, res) => {
+  const { semester_id, date } = req.query;
+
+  try {
+    const schedules = await Schedule.findAll({
+      where: {
+        semester_id,
+        date: date, // Fetch schedules matching the selected date
+      },
+      include: [{ model: Timeslot }]
+    });
+
+    res.json(schedules);
+  } catch (error) {
+    console.error('Error fetching schedules:', error);
+    res.status(500).json({ error: 'Failed to fetch schedules' });
+  }
+});
+
+
 
 app.get('/data/count/available', async (req, res) => {
   try {
@@ -210,6 +255,8 @@ app.use("/admin", admin);
 app.use("/staff", staff);
 app.use('/api/semesters', semesterRoutes);
 app.use('/api', timeslotRoutes);
+app.use('/api/schedule', scheduleRoutes);
+app.use('/api', scheduleRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
