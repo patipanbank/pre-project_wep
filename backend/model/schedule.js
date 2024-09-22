@@ -1,17 +1,15 @@
 const connection = require('../config/db');
-const { DataTypes } = require('sequelize');
+const { DataTypes, ENUM } = require('sequelize');
 const Data = require('./data')
 const Timeslot = require('./timeslot')
 const Semester = require('./semester')
+
+
 const Schedule = connection.define('Schedule', {
     schedules_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -24,12 +22,17 @@ const Schedule = connection.define('Schedule', {
       type: DataTypes.ENUM('Available', 'Unavailable', 'Waiting', 'Leave', 'Empty'),
       allowNull: false,
       defaultValue: 'Empty',
-    }
+    } ,semester_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,  // Or true, depending on your requirements
+  },
+
   }, {
     tableName: 'schedules', 
     timestamps: false,
   });
   
+
   // Associations
   Schedule.belongsTo(Data, { foreignKey: 'data_id' });
   Schedule.belongsTo(Timeslot, { foreignKey: 'timeslots_id' });

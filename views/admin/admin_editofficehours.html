@@ -1,294 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Edit OfficeHours</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/public/css/Admin/admin_editofficehours.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Edit OfficeHours</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="/public/css/Admin/admin_editofficehours.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <body>
+    <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt /></nav>
 
-  </style>
-</head>
-
-<body>
-  <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt /></nav>
-
-  <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" style="color: white" aria-current="page" href="/admin/homepage">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white" href="/admin/manage">MANAGE TEACHER</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white" href="/admin/officehours">OFFICE HOURS</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white;" href="/admin/semester">SEMESTER</a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-3">
-        <div style="text-align: center">
-          <img id="imgt" src alt="Profile Image"
-            style="width: 150px; display: block; margin-left: auto; margin-right: auto; margin-top: 20px;" />
-          <p id="prof-name" class="mt-2 mb-0 fs-6"></p>
-          <p id="prof-email" class="mt-2 mb-0 fs-6"></p>
-          <p id="prof-major" class="mt-2 mb-0 fs-6"></p>
-          <p id="prof-tel" class="mt-2 mb-0 fs-6"></p>
+    <nav
+      class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #253b6d"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                style="color: white"
+                aria-current="page"
+                href="/admin/homepage"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/manage"
+                >MANAGE TEACHER</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/officehours"
+                >OFFICE HOURS</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/semester"
+                >SEMESTER</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <button type="button" class="btn btn-danger" onclick="logout()">
+            Logout
+          </button>
         </div>
       </div>
-      <div class="col-md-9 coltable">
-        <div class="table-responsive mt-3">
-          <label for="semester-select">Select Semester:</label>
-          <select id="semester-select" class="form-control">
-            <option value>Select Semester</option>
-            <!-- Options will be populated by JavaScript -->
-          </select>
+    </nav>
 
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col" class="centered">Day/Time</th>
-                <!-- Time slots will be populated here -->
-              </tr>
-            </thead>
-            <tbody id="scheduleTableBody">
-              <!-- Rows will be populated by JavaScript -->
-            </tbody>
-          </table>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-3">
+          <div style="text-align: center">
+            <img
+              id="imgt"
+              src
+              alt="Profile Image"
+              style="
+                width: 150px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+              "
+            />
+            <p id="prof-name" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-email" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-major" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-tel" class="mt-2 mb-0 fs-6"></p>
+          </div>
+        </div>
+        <div class="col-md-9 coltable">
+          <div class="table-responsive mt-3">
+            <label for="semester-select">Select Semester:</label>
+            <select id="semester-select" class="form-control">
+              <option value>Select Semester</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col" class="centered">Day/Time</th>
+                  <!-- Time slots will be populated here -->
+                </tr>
+              </thead>
+              <tbody id="scheduleTableBody">
+                <!-- Rows will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+      <div class="bt mt-5">
+        <button
+          onclick="updateSchedule('Available')"
+          id="update-office-hours-btn"
+          class="bg-success"
+          style="
+            color: white;
+            border: none;
+            font-weight: bold;
+            border-radius: 5%;
+            height: 40px;
+            margin-right: 20px;
+          "
+          type="button"
+        >
+          Update Office Hours
+        </button>
+
+        <button
+          onclick="updateSchedule('Leave')"
+          id="update-leave-btn"
+          class="bg-secondary"
+          style="
+            color: white;
+            border: none;
+            font-weight: bold;
+            border-radius: 5%;
+            height: 40px;
+            margin-right: 20px;
+          "
+          type="button"
+        >
+          Update Leave
+        </button>
+        <button
+          onclick="updateSchedule('Empty')"
+          id="clear-btn"
+          class="bg-info"
+          style="
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            border: none;
+            border-radius: 5%;
+            height: 40px;
+            margin-right: 20px;
+          "
+          type="button"
+        >
+          Clear
+        </button>
+        <button
+        onclick="updateSchedule('clearall')"
+          id="clearall-btn"
+          class="bg-primary"
+          style="
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            border: none;
+            border-radius: 5%;
+            height: 40px;
+            margin-right: 20px;
+          "
+          type="button"
+        >
+          Clear All
+        </button>
+      </div>
     </div>
-    <div class="bt mt-5">
-      <button onclick="generateSchedule('Available')" id="update-office-hours-btn" class="bg-success"
-        style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
-        type="button">Update Office Hours</button>
 
-      <button id="update-leave-btn" class="bg-secondary"
-        style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
-        type="button">Update Leave</button>
-      <button id="clear-btn" class="bg-info"
-        style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
-        type="button">Clear</button>
-      <button id="clearall-btn" class="bg-primary"
-        style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
-        type="button">Clear All</button>
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      console.log("Document is ready");
-
-      const currentYear = new Date().getFullYear();
-
-      fetch('/semester/all')
-        .then(response => response.json())
-        .then(semesters => {
-          const semesterSelect = document.getElementById('semester-select');
-
-          // Sort semesters by year and term to ensure proper order
-          semesters.sort((a, b) => {
-            if (a.year !== b.year) {
-              return a.year - b.year;
-            } else {
-              return a.term - b.term;
-            }
-          });
-
-          let defaultOptionSelected = true;
-
-          semesters.forEach(semester => {
-            const option = document.createElement('option');
-            option.value = semester.semester_id;
-            option.textContent = `${semester.term}/${semester.year}`;
-            semesterSelect.appendChild(option);
-
-            // Set default option to Term 1 of the current year
-            if (!defaultOptionSelected && semester.term === '1' && semester.year === currentYear) {
-              option.selected = true;
-              defaultOptionSelected = true;
-            }
-          });
-
-          // If no Term 1 for current year is found, set the first semester as default
-          if (!defaultOptionSelected && semesters.length > 0) {
-            semesterSelect.options[0].selected = true;
-          }
-        })
-        .catch(error => console.error('Error fetching semesters:', error));
-    });
-
-    document.getElementById('semester-select').addEventListener('change', function () {
-      const selectedSemesterId = this.value;
-      fetch(`/semester/${selectedSemesterId}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(semester => {
-          console.log(`SemesterID: ${semester.semester_id}`);
-          console.log(`Term: ${semester.term}`);
-          console.log(`Year: ${semester.year}`);
-          console.log(`Start Date: ${semester.start_date}`);
-          console.log(`End Date: ${semester.end_date}`);
-        })
-        .catch(error => {
-          console.error('Error fetching semester details:', error);
-        });
-    });
-
-    $(document).ready(function () {
-      // Existing code for fetching and displaying profile data
-      const data_id = new URLSearchParams(window.location.search).get("data_id"); // Get data_id from URL
-
-      // Fetch profile data for the given data_id
-      fetch(`/data/images/${data_id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data) {
-            $("#imgt").attr("src", data.image);
-            $("#prof-name").text(data.name);
-            $("#prof-email").text(data.email);
-            $("#prof-major").text(data.major);
-            $("#prof-tel").text(data.tel);
-          }
-        })
-        .catch((error) => console.error("Error fetching profile data:", error));
-
-      // Fetch and display time slots
-      fetch('/api/timeslots')
-        .then(response => response.json())
-        .then(timeslots => {
-          const tableBody = $('#scheduleTableBody');
-          const thead = $('thead tr');
-
-          // Clear existing headers
-          thead.empty();
-          thead.append('<th scope="col">Day/Time</th>');
-
-          // Prepare headers and rows
-          const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-          let timeSlots = [];
-          timeslots.forEach(slot => {
-            const timeRange = `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}`;
-            if (!timeSlots.includes(timeRange)) {
-              timeSlots.push(timeRange);
-              thead.append(`<th scope="col">${timeRange}</th>`);
-            }
-          });
-
-          // Clear existing rows
-          tableBody.empty();
-
-          // Create rows for each day and add time slot data
-          daysOfWeek.forEach(day => {
-            let row = `<tr><th scope="row">${day}</th>`;
-            timeSlots.forEach(timeSlot => {
-              const slotData = timeslots.find(slot =>
-                slot.dayofweek === day &&
-                `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}` === timeSlot
-              );
-
-              if (slotData) {
-                row += `<td data-timeslots_id="${slotData.timeslots_id}" data-start_time="${slotData.start_time}" data-end_time="${slotData.end_time}" data-dayofweek="${slotData.dayofweek}"></td>`;
-              } else {
-                row += `<td></td>`;
-              }
-            });
-            row += '</tr>';
-            tableBody.append(row);
-          });
-        })
-        .catch((error) => console.error("Error fetching timeslots:", error));
-
-      // Helper function to format time
-      function formatTime(timeString) {
-        const [hours, minutes] = timeString.split(':');
-        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
-      }
-
-      // Add click event listener for table cells
-      $(document).on("click", "td", function () {
-        $(this).toggleClass("bg-warning");
-        const timeslotID = $(this).data("timeslots_id");
-        const startTime = $(this).data("start_time");
-        const endTime = $(this).data("end_time");
-        const dayOfWeek = $(this).data("dayofweek");
-        console.log(`Timeslot ID: ${timeslotID}`);
-        console.log(`Start Time: ${startTime}`);
-        console.log(`End Time: ${endTime}`);
-        console.log(`Day of Week: ${dayOfWeek}`);
-      });
-    });
-
-    function generateSchedule(status) {
-      const data_id = new URLSearchParams(window.location.search).get('data_id'); // Fetch the data_id from the URL
-      const semester_id = document.getElementById('semester-select').value; // Fetch selected semester
-      const selectedTimeslots = [];
-
-      // Get all selected timeslots from the table
-      document.querySelectorAll('.bg-warning').forEach(function (cell) {
-        const timeslotId = cell.getAttribute('data-timeslots_id');
-        if (timeslotId) {
-          selectedTimeslots.push(timeslotId);
-        }
-      });
-
-      if (!semester_id || selectedTimeslots.length === 0) {
-        alert('Please select a semester and timeslots!');
-        return;
-      }
-
-      // Send data to server to generate schedules
-      fetch('/api/schedule/generate-schedules', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          data_id: data_id,
-          semester_id: semester_id,
-          timeslots: selectedTimeslots,
-          status: status,
-        }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          alert('Schedule updated successfully!');
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-
-  </script>
-</body>
-
+    <script src="../../public/js/admin_editofficehours.js"></script>
+  </body>
 </html>
