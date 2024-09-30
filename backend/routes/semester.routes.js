@@ -27,7 +27,6 @@ const checkOverlappingDates = async (startDate, endDate, year, excludeId = null)
                 ]
             }
         });
-
         // หากพบช่วงเวลาที่ซ้อนทับกันให้ return true
         return overlappingSemesters.length > 0;
     } catch (error) {
@@ -35,7 +34,6 @@ const checkOverlappingDates = async (startDate, endDate, year, excludeId = null)
         throw new Error('Error checking overlapping dates: ' + error.message);
     }
 };
-
 
 // Create a new semester
 router.post('/create', async (req, res) => {
@@ -117,8 +115,6 @@ router.put('/update', async (req, res) => {
     }
 });
 
-
-
 // Get all years
 router.get('/years', async (req, res) => {
     try {
@@ -192,7 +188,6 @@ router.get('/semesters', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 // Delete semester based on year and term
 router.delete('/delete', async (req, res) => {

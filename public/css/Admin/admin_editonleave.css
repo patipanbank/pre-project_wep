@@ -1,0 +1,44 @@
+#imgnav {
+    max-width: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .container {
+    /* max-width: 1650px; */
+    justify-content: left;
+  }
+  
+  .coltable {
+    /* position: relative; */
+    height: 400px;
+    /* width: 1300px; */
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: space-between; */
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 3px 3px rgba(0, 0, 0, 0.5);
+    color: rgb(0, 0, 0);
+    margin-top: 20px;
+  }
+  
+  .bt {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    /* height: 550px; */
+  
+  }
+  
+  .table th, .table td {
+    text-align: left; /* จัดข้อความให้อยู่กลางแนวนอน */
+    vertical-align: top; /* จัดข้อความให้อยู่บนสุดของเซลล์แนวตั้ง */
+  }
+  
+  .bg-success {
+    background-color: #28a745 !important; /* Available */
+  }
+  
+  .bg-secondary {
+    background-color: #6c757d !important; /* Leave */
+  }
+  

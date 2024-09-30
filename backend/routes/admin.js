@@ -10,4 +10,6 @@ router.get("/manage", page.manage );
 router.get("/officehours", page.officehours );
 router.get("/outoffice", page.outoffice );
 router.get("/semester", page.semester );
+router.get("/addonleave", page.addonleave );
+router.get("/editonleave", page.editonleave );
 module.exports = router;

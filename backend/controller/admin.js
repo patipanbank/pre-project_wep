@@ -27,5 +27,11 @@ module.exports.outoffice = (req, res) => {
 module.exports.semester = (req, res) => {
     res.status(200).sendFile(path.join(__dirname, "../../views/admin/admin_semester.html"));
 }
+module.exports.addonleave = (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, "../../views/admin/admin_add_onleave.html"));
+}
+module.exports.editonleave = (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, "../../views/admin/admin_editonleave.html"));
+}
 
 
