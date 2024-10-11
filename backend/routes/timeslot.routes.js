@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const Timeslot = require('../model/timeslot');
-const {getSlotbydata_idController} = require('../controller/slot.controller')
+const {getSlotbydata_idController,leaveSlotController} = require('../controller/slot.controller')
 // Get all timeslots
 router.get('/timeslots', async (req, res) => {
   try {
@@ -17,5 +17,6 @@ router.get('/timeslots', async (req, res) => {
 });
 
 router.get('/timesclotsbydataid/:data_id/:semester_id',getSlotbydata_idController)
+router.get('/timesclotsbyleave/:data_id/:semester_id/:start_date/:end_date',leaveSlotController)
 
 module.exports = router;

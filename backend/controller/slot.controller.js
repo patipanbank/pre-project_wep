@@ -1,4 +1,5 @@
-const {getSlotbydata_id} = require('../service/slot.service');
+const {getSlotbydata_id,leaveSlot} = require('../service/slot.service');
+
 const getSlotbydata_idController = async (req,res) => {
     try {
         const {data_id,semester_id} = req.params;
@@ -10,4 +11,16 @@ const getSlotbydata_idController = async (req,res) => {
         res.status(500).send(error)
     }
 }
-module.exports = {getSlotbydata_idController}
+
+const leaveSlotController = async (req,res) => {
+    try {
+        const {data_id,semester_id,start_date,end_date} = req.params;
+        const result = await leaveSlot(data_id,semester_id,start_date,end_date);
+        
+        res.status(200).send(result);
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+module.exports = {getSlotbydata_idController,leaveSlotController}

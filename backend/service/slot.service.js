@@ -1,5 +1,7 @@
 const Schedule = require('../model/schedule');
 const Slot = require('../model/timeslot');
+const Leave = require('../model/leave');
+const { Op } = require('sequelize'); // Ensure Sequelize operators are imported
 
 const getSlotbydata_id = async (data_id,semester_id) => {
     try {
@@ -28,4 +30,35 @@ const getSlotbydata_id = async (data_id,semester_id) => {
     }
 }
 
-module.exports = {getSlotbydata_id}
+const leaveSlot = async (data_id, semester_id, start_date, end_date) => {
+  try {
+    const slots = await Slot.findAll();
+    const leaves = await Leave.findAll({
+      where: {
+        data_id: data_id,
+        semester_id: semester_id,
+        date: {
+          [Op.between]: [start_date, end_date], // Check if the `date` is between the provided range
+        }
+      }
+    });
+
+    const result = slots.map(slot => {
+        const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
+        return {
+            timeslots_id: slot.timeslots_id,
+            start_time: slot.start_time,
+            end_time: slot.end_time,
+            dayofweek: slot.dayofweek,
+            status: leave ? leave.status : 'Empty'
+        }
+    })
+    return result;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+module.exports = {getSlotbydata_id, leaveSlot}
