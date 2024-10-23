@@ -19,6 +19,7 @@
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <title>Admin Editonleave</title>
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
   </head>
 
   <body>
@@ -85,7 +86,8 @@
               <option value>Select Semester</option>
               <!-- Options will be populated by JavaScript -->
             </select>
-
+            <label for="multi-date-input">Select Multiple Dates:</label>
+            <input type="text" id="multi-date-input" />
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -101,16 +103,16 @@
         </div>
       </div>
       <div class="bt mt-5">
-        <button onclick="updateSchedule('Leave')" id="update-leave-btn"
+        <button onclick="updateLeave('Leave')" id="update-leave-btn"
           class="bg-secondary"
           style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;"
           type="button">Update Leave</button>
 
-        <button onclick="updateSchedule('Empty')" id="clear-btn" class="bg-info"
+        <button onclick="updateLeave('Empty')" id="clear-btn" class="bg-info"
           style=" color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
           type="button">Clear</button>
 
-        <button onclick="updateSchedule('clearall')" id="clearall-btn"
+        <button onclick="updateLeave('clearall')" id="clearall-btn"
           class="bg-primary"
           style="color: rgb(255, 255, 255); font-weight: bold; border: none; border-radius: 5%; height: 40px; margin-right: 20px;"
           type="button">Clear All</button>
@@ -118,6 +120,7 @@
     </div>
 
     <script src="../../public/js/admin_editonleave.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
          function logout() {
             fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed

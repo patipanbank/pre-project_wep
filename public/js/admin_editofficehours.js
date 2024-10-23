@@ -117,6 +117,8 @@ function formatTime(timeString) {
 
   // Add event listener for Update Office Hours button
   function updateSchedule(status) {
+    console.log(status);
+    
     const data_id = new URLSearchParams(window.location.search).get(
       "data_id"
     ); // Fetch the data_id from the URL

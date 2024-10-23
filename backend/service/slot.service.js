@@ -42,14 +42,17 @@ const leaveSlot = async (data_id, semester_id, start_date, end_date) => {
         }
       }
     });
-
+    console.log('leaves: ',leaves);
+    
     const result = slots.map(slot => {
         const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
+        // console.log(leave.status);
         return {
             timeslots_id: slot.timeslots_id,
             start_time: slot.start_time,
             end_time: slot.end_time,
             dayofweek: slot.dayofweek,
+            date: leave ? leave.date : null,
             status: leave ? leave.status : 'Empty'
         }
     })

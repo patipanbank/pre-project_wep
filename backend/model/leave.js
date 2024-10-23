@@ -3,7 +3,6 @@ const { DataTypes, ENUM } = require('sequelize');
 const Data = require('./data')
 const Timeslot = require('./timeslot')
 const Semester = require('./semester')
-const Schedule = require('./schedule')
 
 const Leave = connection.define('Leave', {
     leave_id: {
@@ -40,11 +39,9 @@ const Leave = connection.define('Leave', {
   Leave.belongsTo(Data, { foreignKey: 'data_id' });
   Leave.belongsTo(Timeslot, { foreignKey: 'timeslots_id' });
   Leave.belongsTo(Semester, { foreignKey: 'semester_id' });
-  Leave.belongsTo(Semester, { foreignKey: 'schedules_id' });
   
 Data.hasMany(Leave, { foreignKey: 'data_id' });
 Timeslot.hasMany(Leave, { foreignKey: 'timeslots_id' });
 Semester.hasMany(Leave, { foreignKey: 'semester_id' });
-Schedule.hasMany(Leave, { foreignKey: 'schedules_id' });
 
 module.exports = Leave;

@@ -15,6 +15,7 @@ const timeslotRoutes = require('./backend/routes/timeslot.routes');
 const Semester = require("./backend/model/semester");
 const Schedule = require("./backend/model/schedule");
 const semesterRoutes = require('./backend/routes/semester.routes');
+const leaveRoutes = require('./backend/routes/leave.route');
 const scheduleRoutes = require('./backend/routes/schedule.routes');
 
 
@@ -214,6 +215,7 @@ app.use("/staff", staff);
 app.use('/api/semesters', semesterRoutes);
 app.use('/api', timeslotRoutes);
 app.use('/api/schedule', scheduleRoutes);
+app.use('/api/leave', leaveRoutes);
 app.use('/api', scheduleRoutes);
 
 const PORT = process.env.PORT || 3001;
