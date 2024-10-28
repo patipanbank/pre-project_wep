@@ -1,131 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Student Appointment</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-            crossorigin="anonymous">
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-        <link rel="stylesheet"
-            href="/public/css/student/student_appointment.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link
-            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-            rel="stylesheet">
-    </head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Appointment</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous">
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+      href="/public/css/student/student_appointment.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+      rel="stylesheet">
+  </head>
 
-    <body>
-        <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png"
-                alt></nav>
+  <body>
+    <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png"
+        alt></nav>
 
-        <nav class="navbar navbar-light navbar-expand-lg"
-            style="background-color: #253b6d;">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" style="color: white;"
-                                aria-current="page"
-                                href="/student/homepage">HOME</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" style="color: white;"
-                                href="/student/statusappointment">STATUS
-                                APPOINTMENT</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-danger"
-                        onclick="logout()">Logout</button>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-3">
-                    <div style="text-align: center">
-                        <img id="imgt" src alt="Profile Image"
-                            style="width: 150px; display: block; margin-left: auto; margin-right: auto; margin-top: 20px;" />
-                        <p id="prof-name" class="mt-2 mb-0 fs-6"></p>
-                        <p id="prof-email" class="mt-2 mb-0 fs-6"></p>
-                        <p id="prof-major" class="mt-2 mb-0 fs-6"></p>
-                        <p id="prof-tel" class="mt-2 mb-0 fs-6"></p>
-                    </div>
-                </div>
-                <div class="col-md-9 coltable">
-                    <div class="table-responsive mt-3">
-                        <label for="semester-select">Select Semester:</label>
-                        <select id="semester-select" class="form-control">
-                            <option value>Select Semester</option>
-                            <!-- Options will be populated by JavaScript -->
-                        </select>
-                        <label for="multi-date-input">Select Multiple
-                            Dates:</label>
-                        <input type="text" id="multi-date-input" />
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col"
-                                        class="centered">Day/Time</th>
-                                    <!-- Time slots will be populated here -->
-                                </tr>
-                            </thead>
-                            <tbody id="scheduleTableBody">
-                                <!-- Rows will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="circlewraper">
-                <div class="rowcircle mt-5">
-                    <div class="circle bg-success">
-                    </div>
-                    <p
-                        style="font-weight: bold; margin-left: 5px;">Available</p>
-                </div>
-                <div class="rowcircle mt-5">
-                    <div class="circle bg-danger">
-                    </div>
-                    <p
-                        style="font-weight: bold; margin-left: 5px;">Unavailable</p>
-                </div>
-                <div class="rowcircle mt-5">
-                    <div class="circle bg-warning">
-                    </div>
-                    <p style="font-weight: bold; margin-left: 5px;">Waiting</p>
-                </div>
-                <div class="rowcircle mt-5">
-                    <div class="circle bg-secondary">
-                    </div>
-                    <p style="font-weight: bold; margin-left: 5px;">Leave</p>
-                </div>
-            </div>
+    <nav class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #253b6d;">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button"
+          data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" style="color: white;"
+                aria-current="page"
+                href="/student/homepage">HOME</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white;"
+                href="/student/statusappointment">STATUS
+                APPOINTMENT</a>
+            </li>
+          </ul>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script>
+        <div>
+          <button type="button" class="btn btn-danger"
+            onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
 
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-3">
+          <div style="text-align: center">
+            <img id="imgt" src alt="Profile Image"
+              style="width: 150px; display: block; margin-left: auto; margin-right: auto; margin-top: 20px;" />
+            <p id="prof-name" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-email" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-major" class="mt-2 mb-0 fs-6"></p>
+            <p id="prof-tel" class="mt-2 mb-0 fs-6"></p>
+          </div>
+        </div>
+        <div class="col-md-9 coltable">
+          <div class="table-responsive mt-3">
+            <label for="semester-select">Select Semester:</label>
+            <select id="semester-select" class="form-control">
+              <option value>Select Semester</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            <label for="multi-date-input">Select Multiple
+              Dates:</label>
+            <input type="text" id="multi-date-input" />
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col"
+                    class="centered">Day/Time</th>
+                  <!-- Time slots will be populated here -->
+                </tr>
+              </thead>
+              <tbody id="scheduleTableBody">
+                <!-- Rows will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="circlewraper">
+        <div class="rowcircle mt-5">
+          <div class="circle bg-success">
+          </div>
+          <p
+            style="font-weight: bold; margin-left: 5px;">Available</p>
+        </div>
+        <div class="rowcircle mt-5">
+          <div class="circle bg-danger">
+          </div>
+          <p
+            style="font-weight: bold; margin-left: 5px;">Unavailable</p>
+        </div>
+        <div class="rowcircle mt-5">
+          <div class="circle bg-warning">
+          </div>
+          <p style="font-weight: bold; margin-left: 5px;">Waiting</p>
+        </div>
+        <div class="rowcircle mt-5">
+          <div class="circle bg-secondary">
+          </div>
+          <p style="font-weight: bold; margin-left: 5px;">Leave</p>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+    <script>
         
 // loading image
 $(document).ready(function () {
@@ -279,6 +280,7 @@ $(document).ready(function () {
     }
 });
 
+
   function formatTime(timeString) {
     const [hours, minutes] = timeString.split(":");
     return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
@@ -296,7 +298,7 @@ $(document).ready(function () {
       return;
     }
 
-    fetch(`/api/timesclotsbyleave/${data_id}/${semester_id}/${start_date}/${end_date}`)
+    fetch(`/api/timesclotsbyleaveschedule/${data_id}/${semester_id}/${start_date}/${end_date}`)
       .then((response) => response.json())
       .then((timeslots) => {
         const tableBody = $("#scheduleTableBody");
@@ -334,6 +336,8 @@ $(document).ready(function () {
           if (!timeSlots.includes(timeRange)) {
             timeSlots.push(timeRange);
             thead.append(`<th scope="col">${timeRange}</th>`);
+            console.log(slot.status);
+            
           }
         });
 
@@ -344,7 +348,7 @@ $(document).ready(function () {
         daysOfWeek.forEach(({day, date}) => {
           let row = `<tr><th scope="row">${day}<br>${formatDate(date)}</th>`;
           // console.log('Date : ',date);
-          
+           let color = ''
           timeSlots.forEach((timeSlot) => {
             // Find timeslot data for the current day and time slot
             const slotData = timeslots.find(
@@ -352,7 +356,22 @@ $(document).ready(function () {
                 slot.dayofweek === day &&
                 `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}` === timeSlot
             );
-        
+            if (slotData) {
+              switch (slotData.status) {
+                case "Leave":
+                  color = 'bg-secondary'
+                  break;
+                case "Available":
+                  color = 'bg-success'
+                  break;
+                case "Waiting":
+                  color = 'bg-warning'
+                  break;
+                default:
+                  color=''  
+                  break;
+              }
+            }
             // Add cell for the time slot
             if (slotData) {
               row += `<td data-timeslots_id="${slotData.timeslots_id}" 
@@ -360,7 +379,9 @@ $(document).ready(function () {
                          data-end_time="${slotData.end_time}" 
                          data-dayofweek="${slotData.dayofweek}" 
                          data-status="${slotData.status}" 
-                         data-date="${date}"
+                         data-date="${date}"  
+                         class="${color}"
+                         onclick="bookAppointment(this)"
                          >
                      </td>`;
             } else {
@@ -382,8 +403,97 @@ $(document).ready(function () {
                 })
                 .catch(error => console.error('Error logging out:', error));
         }
+        
+
+
+      // Function to handle booking
+async function bookAppointment(cell) {
+    
+    // Get data from the cell attributes
+    const timeslots_id = cell.dataset.timeslots_id;
+    const date = new Date(cell.dataset.date);
+    const status = cell.dataset.status;
+    
+    // Only proceed if the status is Available or Empty
+    if (status !== 'Available' ) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Cannot Book',
+            text: 'This timeslot is not available for booking'
+        });
+        return;
+    }
+
+    // Prompt for booking details
+    const { value: detail } = await Swal.fire({
+        title: 'Enter Appointment Details',
+        input: 'textarea',
+        inputLabel: 'Details',
+        inputPlaceholder: 'Enter your appointment details here...',
+        showCancelButton: true,
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Please enter some details for your appointment';
+            }
+        }
+    });
+
+    if (detail) {
+        try {
+            const response = await fetch('/api/api/booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data_id: new URLSearchParams(window.location.search).get("data_id"),
+                    // users_id: getCookie("user_id"), // Get the user_id from the cookie
+                    timeslots_id: timeslots_id,
+                    semester_id: document.getElementById('semester-select').value,
+                    date: date.toISOString().split('T')[0],
+                    detail: detail
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Booked!',
+                    text: 'Your appointment has been booked successfully'
+                });
+                // Refresh the schedule display
+                const selectedDates = document.getElementById('multi-date-input')._flatpickr.selectedDates;
+                if (selectedDates.length > 0) {
+                    generateSlots(
+                        new URLSearchParams(window.location.search).get("data_id"),
+                        document.getElementById('semester-select').value,
+                        selectedDates[0],
+                        selectedDates[selectedDates.length - 1]
+                    );
+                }
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Booking Failed',
+                text: error.message || 'An error occurred while booking'
+            });
+        }
+    }
+}
+// Helper function to get cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
 
     </script>
-    </body>
+  </body>
 
 </html>

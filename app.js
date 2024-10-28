@@ -17,10 +17,11 @@ const Schedule = require("./backend/model/schedule");
 const semesterRoutes = require('./backend/routes/semester.routes');
 const leaveRoutes = require('./backend/routes/leave.route');
 const scheduleRoutes = require('./backend/routes/schedule.routes');
-
+const bookingRoutes = require('./backend/routes/booking.route');
+const cookieParser = require('cookie-parser');
 
 const app = express();
-
+app.use(cookieParser());
 const corsOptions = {
   origin: 'http://localhost:3001', // Replace with your frontend's origin
   credentials: true,
@@ -217,6 +218,7 @@ app.use('/api', timeslotRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api', scheduleRoutes);
+app.use('/api', bookingRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
