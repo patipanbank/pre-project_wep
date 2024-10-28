@@ -91,14 +91,20 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
     const result = slots.map(slot => {
       const schedule = schedules.find(schedule => schedule.timeslots_id === slot.timeslots_id);
       const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
-      console.log('leave: ',leave);
-      console.log('schedule: ',schedule);
+      // console.log('leave: ',leave);
+      // console.log('schedule: ',schedule);
+      let status = 'Available'
+      if (leave) {
+        if (leave.status !== 'Available' || leave.status !== 'Empty') {
+          status = 'Unavailable'
+        }
+      }
       return {
         timeslots_id: slot.timeslots_id,
         start_time: slot.start_time,
         end_time: slot.end_time,
         dayofweek: slot.dayofweek,
-        status: leave || schedule ? 'Unavailable' : 'Available'
+        status: status
       }
     });
     return result;
