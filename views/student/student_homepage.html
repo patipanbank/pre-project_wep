@@ -57,7 +57,6 @@
         </div>
     </div>
 
-
     <script>
 
         function updateCardStyle(id, available) {
@@ -103,7 +102,7 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input hide-switch" type="checkbox" id="available-${item.data_id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.data_id})">
                             </div>
-                            <button class="btn btn-primary" onclick="makeAppointment(${item.data_id})">Appointment</button>
+                            <button class="btn btn-primary" onclick="makeOfficehours(${item.data_id})">Appointment</button>
                         </div>
                     `;
 
@@ -115,9 +114,10 @@
                 .catch(error => console.error('Error fetching data:', error));
         });
 
-        function makeAppointment(id) {
-            // Redirect to the appointment page with the given ID
-            window.location.href = `/student/appointment`;
+        function makeOfficehours(id) {
+            // Redirect to the Officehours page with the given ID as a query parameter
+            window.location.href = `/student/appointment?data_id=${id}`;
+            console.log(id)
         }
 
         function searchTeachers() {
@@ -145,8 +145,8 @@
                 })
                 .catch(error => console.error('Error logging out:', error));
         }
-
     </script>
+
 </body>
 
 </html>
