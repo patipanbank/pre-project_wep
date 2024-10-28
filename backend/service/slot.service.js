@@ -42,11 +42,15 @@ const leaveSlot = async (data_id, semester_id, start_date, end_date) => {
         }
       }
     });
-    console.log('leaves: ',leaves);
+
+    // console.log('leaves: ',leaves);
     
     const result = slots.map(slot => {
         const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
-        // console.log(leave.status);
+        // console.log('leaveid: ',leave.data_id);
+        
+        // console.log('Output: ',leave);
+
         return {
             timeslots_id: slot.timeslots_id,
             start_time: slot.start_time,
@@ -55,13 +59,52 @@ const leaveSlot = async (data_id, semester_id, start_date, end_date) => {
             date: leave ? leave.date : null,
             status: leave ? leave.status : 'Empty'
         }
+
     })
     return result;
-
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-module.exports = {getSlotbydata_id, leaveSlot}
+const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => {
+  try {
+    const slots = await Slot.findAll();
+    console.log(data_id, semester_id, start_date, end_date);
+    const schedules = await Schedule.findAll({
+      where: {
+        data_id: data_id,
+        semester_id: semester_id,
+      }
+    });
+    console.log('schedules: ',schedules);
+    const leaves = await Leave.findAll({
+      where: {
+        data_id: data_id,
+        semester_id: semester_id,
+        date: {
+          [Op.between]: [start_date, end_date], // Check if the `date` is between the provided range
+        }
+      }
+    });
+    const result = slots.map(slot => {
+      const schedule = schedules.find(schedule => schedule.timeslots_id === slot.timeslots_id);
+      const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
+      console.log('leave: ',leave);
+      console.log('schedule: ',schedule);
+      return {
+        timeslots_id: slot.timeslots_id,
+        start_time: slot.start_time,
+        end_time: slot.end_time,
+        dayofweek: slot.dayofweek,
+        status: leave || schedule ? 'Unavailable' : 'Available'
+      }
+    });
+    return result;
+  } catch (error) {
+    
+  }
+}
+
+module.exports = {getSlotbydata_id, leaveSlot, leavescheduleSlot}

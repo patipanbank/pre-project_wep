@@ -83,6 +83,7 @@ $(document).ready(function () {
         minDate: new Date(startDate).toISOString().split('T')[0],
         maxDate: new Date(endDate).toISOString().split('T')[0],
         dateFormat: "Y-m-d",
+        timeZone: 'Asia/Bangkok',
         disable: [
           function(date) {
             return (date.getDay() === 6 || date.getDay() === 0); // Disable weekends
@@ -202,7 +203,7 @@ $(document).ready(function () {
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short' }; // e.g., "15 Jan"
+    const options = { day: 'numeric', month: 'short', timeZone: 'Asia/Bangkok' }; // "15 Jan" format
     return date.toLocaleDateString('en-GB', options);
   }
 
