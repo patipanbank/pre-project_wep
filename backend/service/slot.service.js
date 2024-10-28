@@ -78,7 +78,7 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
         semester_id: semester_id,
       }
     });
-    console.log('schedules: ',schedules);
+    // console.log('schedules: ',schedules);
     const leaves = await Leave.findAll({
       where: {
         data_id: data_id,
@@ -89,15 +89,22 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
       }
     });
     const result = slots.map(slot => {
+      // const schedule73 = schedules.find(schedule => schedule.timeslots_id === 73);
       const schedule = schedules.find(schedule => schedule.timeslots_id === slot.timeslots_id);
       const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
       // console.log('leave: ',leave);
-      // console.log('schedule: ',schedule);
-      let status = 'Available'
-      if (leave) {
-        if (leave.status !== 'Available' || leave.status !== 'Empty') {
-          status = 'Unavailable'
+      // console.log('schedule: ',schedule73);
+      
+      let status = 'Empty';
+      if (schedule) {
+        if (schedule.status === "Available") {
+          // console.log('Available',slot.timeslots_id);
+          status = schedule.status;
         }
+        
+      }
+      if (leave) {
+        status = leave.status;
       }
       return {
         timeslots_id: slot.timeslots_id,
