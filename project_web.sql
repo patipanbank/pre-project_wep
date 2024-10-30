@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2024 at 01:26 PM
+-- Generation Time: Oct 30, 2024 at 10:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,6 +37,15 @@ CREATE TABLE `data` (
   `data_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `data`
+--
+
+INSERT INTO `data` (`name`, `email`, `tel`, `image`, `major`, `available`, `data_id`) VALUES
+('Asst.Prof.Teeravisit  Laohapensaeng, PhD', 'teeravisit.lao@mfu.ac.th', '053-916744', 'https://mfu.ac.th/fileadmin/School_of_IT_file_/staff/%E0%B8%94%E0%B8%A3.%E0%B8%98%E0%B8%B5%E0%B8%A3%E0%B8%A7%E0%B8%B4%E0%B8%A8%E0%B8%B4%E0%B8%8F%E0%B8%90%E0%B9%8C_01.jpg', 'Electrical Engineering', 'on', 1),
+('Asst. Prof. Worasak Rueangsirarak, PhD', 'worasak.rue@mfu.ac.th', '053-917198', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/mit_56.jpg', 'Computer Science', 'on', 2),
+('Asst. Prof. Pattaramon Vuttipittayamongkol, PhD', 'pattaramon.vut@mfu.ac.th', '053-916762', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/ice_26.jpg', 'Data Science', 'on', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -51,8 +60,24 @@ CREATE TABLE `leave` (
   `data_id` int(11) DEFAULT NULL,
   `timeslots_id` int(11) DEFAULT NULL,
   `status` enum('Available','Unavailable','Waiting','Leave','Empty') NOT NULL DEFAULT 'Empty',
-  `semester_id` int(11) NOT NULL
+  `semester_id` int(11) NOT NULL,
+  `detail` varchar(256) DEFAULT NULL,
+  `users_id` int(11) NOT NULL,
+  `feedback` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `leave`
+--
+
+INSERT INTO `leave` (`leave_id`, `date`, `created_at`, `updated_at`, `data_id`, `timeslots_id`, `status`, `semester_id`, `detail`, `users_id`, `feedback`) VALUES
+(95, '2024-10-28 17:00:00', '2024-10-30 07:43:28', NULL, 1, 1, 'Leave', 16, NULL, 0, NULL),
+(96, '2024-10-28 17:00:00', '2024-10-30 07:43:28', NULL, 1, 8, 'Leave', 16, NULL, 0, NULL),
+(97, '2024-10-28 17:00:00', '2024-10-30 07:43:28', NULL, 1, 9, 'Leave', 16, NULL, 0, NULL),
+(98, '2024-10-28 17:00:00', '2024-10-30 07:43:28', NULL, 1, 2, 'Leave', 16, NULL, 0, NULL),
+(100, '2024-10-30 00:00:00', '2024-10-30 07:47:11', '2024-10-30 07:47:11', 1, 38, 'Waiting', 16, 'azaaa', 20, NULL),
+(102, '2024-11-01 00:00:00', '2024-10-30 07:47:56', '2024-10-30 07:47:56', 1, 73, 'Waiting', 16, 'aaaa', 20, NULL),
+(103, '2024-10-10 00:00:00', '2024-10-30 08:43:44', '2024-10-30 08:43:44', 2, 58, 'Waiting', 16, 'ggggggez', 20, NULL);
 
 -- --------------------------------------------------------
 
@@ -70,6 +95,16 @@ CREATE TABLE `schedules` (
   `semester_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `schedules`
+--
+
+INSERT INTO `schedules` (`schedules_id`, `created_at`, `updated_at`, `data_id`, `timeslots_id`, `status`, `semester_id`) VALUES
+(16277, '2024-10-27 09:14:08', NULL, 1, 38, 'Available', 16),
+(16278, '2024-10-28 15:25:55', NULL, 1, 73, 'Available', 16),
+(16279, '2024-10-28 15:26:51', NULL, 1, 20, 'Available', 17),
+(16280, '2024-10-30 08:43:28', NULL, 2, 58, 'Available', 16);
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +120,14 @@ CREATE TABLE `semester` (
   `updated_at` datetime DEFAULT NULL,
   `year` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `semester`
+--
+
+INSERT INTO `semester` (`semester_id`, `start_date`, `end_date`, `term`, `created_at`, `updated_at`, `year`) VALUES
+(16, '2024-08-15 00:00:00', '2024-12-10 00:00:00', '1', '2024-10-27 09:11:22', NULL, 2024),
+(17, '2025-01-06 00:00:00', '2025-04-25 00:00:00', '2', '2024-10-28 15:26:39', NULL, 2024);
 
 -- --------------------------------------------------------
 
@@ -211,6 +254,15 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`users_id`, `name`, `email`, `role`, `createdAt`, `updatedAt`) VALUES
+(19, 'PATIPAN RACHAYA', '6431501061@lamduan.mfu.ac.th', 2, '2024-10-28 07:03:11', '2024-10-28 07:03:11'),
+(20, 'THANAPORN THIMTHUEAN', '6332402130@lamduan.mfu.ac.th', 0, '2024-10-28 10:22:14', '2024-10-28 10:22:14'),
+(21, 'WORAWUT KHUMNOI', '6431501102@lamduan.mfu.ac.th', 0, '2024-10-28 10:51:30', '2024-10-28 10:51:30');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -243,7 +295,8 @@ ALTER TABLE `data`
 ALTER TABLE `leave`
   ADD PRIMARY KEY (`leave_id`),
   ADD KEY `data_id` (`data_id`),
-  ADD KEY `timeslots_id` (`timeslots_id`);
+  ADD KEY `timeslots_id` (`timeslots_id`),
+  ADD KEY `users_id` (`users_id`);
 
 --
 -- Indexes for table `schedules`
@@ -349,19 +402,19 @@ ALTER TABLE `data`
 -- AUTO_INCREMENT for table `leave`
 --
 ALTER TABLE `leave`
-  MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `schedules_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16277;
+  MODIFY `schedules_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16281;
 
 --
 -- AUTO_INCREMENT for table `semester`
 --
 ALTER TABLE `semester`
-  MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `timeslots`
@@ -373,7 +426,7 @@ ALTER TABLE `timeslots`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `users_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
