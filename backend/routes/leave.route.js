@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.post('/createLeave',createLeaveController);
 
-router.get('/informationAppointment', getInformationAppointment);
+router.get('/informationAppointment/:users_id', getInformationAppointment);
+
 
 module.exports = router

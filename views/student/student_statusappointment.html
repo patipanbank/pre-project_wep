@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +11,6 @@
     <title>Student Status Appointment</title>
     <link rel="stylesheet" href="/public/css/student/student_statusappointment.css">
 </head>
-
 <body>
 
     <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
@@ -40,43 +38,75 @@
             </div>
         </div>
     </nav>
-    <div class="control-width">
 
-        <div class="card2 mt-5" onclick="toggleDetails(this)">
-            <div>
-                <h2>teacher_name: teacher.name</h2>
-                <h3>day data time</h3>
-                <p>Click more details</p>
-                <div class="details" style="display: none;">
-                    <p>Student:detail</p>
-                    <p>Teacher:feedback</p>
-                </div>
-            </div>
-            <div>
-                <span class="badge bg-warning" style="color: black;">Waiting</span>
-            </div>
-        </div>
+    <div class="control-width" id="appointmentsContainer"></div>
 
-        <script>
-            function toggleDetails(card) {
-                var details = card.querySelector(".details");
-                if (details.style.display === "none") {
-                    details.style.display = "block";
-                } else {
-                    details.style.display = "none";
-                }
+    <script>
+        async function fetchAppointments(users_id) {
+            try {
+                const response = await fetch(`/api/leave/informationAppointment/${users_id}`);
+                if (!response.ok) throw new Error("Failed to fetch appointments");
+
+                const appointments = await response.json();
+                const container = document.getElementById("appointmentsContainer");
+
+                container.innerHTML = '';
+
+                appointments.forEach(appointment => {
+                    const appointmentCard = document.createElement("div");
+                    appointmentCard.className = "card2 mt-5";
+                    appointmentCard.onclick = () => toggleDetails(appointmentCard);
+
+                    // Determine the badge class and color based on the status
+                    let badgeClass = "bg-warning";
+                    let textColor = "black";
+                    if (appointment.status === "Approved") {
+                        badgeClass = "bg-success";
+                        textColor = "white";
+                    } else if (appointment.status === "Reject") {
+                        badgeClass = "bg-danger";
+                        textColor = "white";
+                    }
+
+                    appointmentCard.innerHTML = `
+                        <div>
+                            <h2>Teacher: ${appointment.teacher_name}</h2>
+                            <h3>${appointment.day} ${appointment.date} ${appointment.time}</h3>
+                            <p>Click for more details</p>
+                            <div class="details" style="display: none;">
+                                <p>Student Detail: ${appointment.detail}</p>
+                                <p>Teacher Feedback: ${appointment.feedback || "N/A"}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge ${badgeClass}" style="color: ${textColor};">${appointment.status}</span>
+                        </div>
+                    `;
+                    container.appendChild(appointmentCard);
+                });
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
             }
+        }
 
-            function logout() {
-                fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
-                    .then(() => {
-                        window.location.href = '/login'; // Redirect to login after logout
-                    })
-                    .catch(error => console.error('Error logging out:', error));
-            }
+        function toggleDetails(card) {
+            const details = card.querySelector(".details");
+            details.style.display = details.style.display === "none" ? "block" : "none";
+        }
 
-        </script>
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/login';
+                })
+                .catch(error => console.error('Error logging out:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const users_id = 20; // Replace with dynamic value as needed
+            fetchAppointments(users_id);
+        });
+    </script>
 
 </body>
-
 </html>

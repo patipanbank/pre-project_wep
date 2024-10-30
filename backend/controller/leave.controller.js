@@ -15,17 +15,13 @@ const createLeaveController = async (req, res) => {
 
 const getInformationAppointment = async (req, res) => {
     try {
-        const {
-            users_id,
-        } = req.body;
-
+        const users_id = req.params.users_id;
         const result = await getLeaveByUserID(users_id);
         res.status(200).send(result);
-
     } catch (error) {
-        res.status(500).send(err);
-        
+        res.status(500).send({ error: 'Failed to fetch appointments' });
     }
 }
+
 
 module.exports = {createLeaveController,getInformationAppointment}
