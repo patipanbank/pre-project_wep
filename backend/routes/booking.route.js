@@ -14,7 +14,7 @@ router.post('/api/booking', async (req, res) => {
             date,
             detail
         } = req.body;
-        
+
         // Retrieve the user_id from cookies
         const users_id = req.cookies.user_id;
 
@@ -35,42 +35,22 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // Check for existing leave record with status
-        const existingLeave = await Leave.findOne({
+        // Check for existing conflicting leave records for the same timeslot
+        const conflictingLeave = await Leave.findOne({
             where: {
                 data_id,
                 timeslots_id,
                 semester_id,
-                date: new Date(date)
+                date: new Date(date),
+                status: ['Available', 'Waiting', 'Leave']
             }
         });
 
-        // If no leave record exists, create a new one
-        if (!existingLeave) {
-            const newLeave = await Leave.create({
-                data_id,
-                timeslots_id,
-                semester_id,
-                date: new Date(date),
-                status: 'Waiting',
-                users_id,
-                detail: detail || null,
-                created_at: new Date(),
-                updated_at: new Date()
-            });
-
-            return res.status(200).json({
-                success: true,
-                message: 'Booking successful',
-                data: newLeave
-            });
-        }
-
-        // Check if the existing leave record is available for booking
-        if (existingLeave.status !== 'Available' && existingLeave.status !== 'Empty') {
+        // Block booking if a conflict is found with an unavailable timeslot
+        if (conflictingLeave && conflictingLeave.status !== 'Available' && conflictingLeave.status !== 'Empty') {
             return res.status(400).json({
                 success: false,
-                message: `This timeslot is not available for booking. Current status: ${existingLeave.status}`
+                message: `This timeslot is not available for booking. Current status: ${conflictingLeave.status}`
             });
         }
 
@@ -91,19 +71,26 @@ router.post('/api/booking', async (req, res) => {
                 message: 'Teacher not found'
             });
         }
-
-        // Update the existing leave record
-        const updatedLeave = await existingLeave.update({
+        const dates = new Date(date);
+        // console.log(`Dates: ${date}`);
+        dates.setDate(dates.getDate()+1)
+        // Create a new leave record for this user
+        const newLeave = await Leave.create({
+            data_id,
+            timeslots_id,
+            semester_id,
+            date: dates,
             status: 'Waiting',
-            users_id: users_id,
+            users_id,
             detail: detail || null,
+            created_at: new Date(),
             updated_at: new Date()
         });
 
         return res.status(200).json({
             success: true,
             message: 'Booking successful',
-            data: updatedLeave
+            data: newLeave
         });
 
     } catch (error) {

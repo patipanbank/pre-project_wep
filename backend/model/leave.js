@@ -32,6 +32,14 @@ const Leave = connection.define('Leave', {
     detail: {
       type: DataTypes.STRING(256),
       allowNull: true
+    },
+    feedback: {
+      type: DataTypes.STRING(256),
+      allowNull: true
+    },
+    users_id: {
+      type: DataTypes.INTEGER,
+
     }
   }, {
     tableName: 'leave', 
@@ -43,12 +51,12 @@ const Leave = connection.define('Leave', {
   Leave.belongsTo(Data, { foreignKey: 'data_id' });
   Leave.belongsTo(Timeslot, { foreignKey: 'timeslots_id' });
   Leave.belongsTo(Semester, { foreignKey: 'semester_id' });
-  Leave.belongsTo(User, { foreignKey: 'users_id' });
+
 
   
 Data.hasMany(Leave, { foreignKey: 'data_id' });
 Timeslot.hasMany(Leave, { foreignKey: 'timeslots_id' });
 Semester.hasMany(Leave, { foreignKey: 'semester_id' });
-User.hasMany(Leave, { foreignKey: 'users_id' });
+
 
 module.exports = Leave;

@@ -1,4 +1,4 @@
-const { createMultipleLeave } = require("../service/leave.service");
+const { createMultipleLeave, getLeaveByUserID } = require("../service/leave.service");
 
 const createLeaveController = async (req, res) => {
     try {
@@ -12,4 +12,20 @@ const createLeaveController = async (req, res) => {
         res.status(500).send(err);
     }
 };
-module.exports = {createLeaveController}
+
+const getInformationAppointment = async (req, res) => {
+    try {
+        const {
+            users_id,
+        } = req.body;
+
+        const result = await getLeaveByUserID(users_id);
+        res.status(200).send(result);
+
+    } catch (error) {
+        res.status(500).send(err);
+        
+    }
+}
+
+module.exports = {createLeaveController,getInformationAppointment}
