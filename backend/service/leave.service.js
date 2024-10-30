@@ -83,7 +83,7 @@ const getLeaveByUserID = async (users_id) => {
             return {
                 users_id: appointment.users_id,
                 timeslots_id: slot.timeslots_id,
-                data: appointmentDate,
+                date: appointmentDate,
                 day: day,
                 time: `${slot.start_time} - ${slot.end_time}`,
                 status: appointment.status,
