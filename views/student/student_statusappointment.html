@@ -33,8 +33,11 @@
                     </li>
                 </ul>
             </div>
-            <div>
-                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+            <div class="d-flex align-items-center">
+                <span id="userName"
+                    style="color: white; margin-right: 15px; font-size: 16px;"></span>
+                <button type="button" class="btn btn-danger"
+                    onclick="logout()">Logout</button>
             </div>
         </div>
     </nav>
@@ -42,6 +45,56 @@
     <div class="control-width" id="appointmentsContainer"></div>
 
     <script>
+
+        // Function to get cookie value by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        console.log('Cookie user_id:', getCookie('user_id'));
+
+        async function fetchUserData() {
+    try {
+        const userId = getCookie('user_id');
+        console.log('Current user_id from cookie:', userId); // เพิ่ม logging
+
+        if (!userId) {
+            console.error('No user_id cookie found - redirecting to login');
+            window.location.href = '/login';
+            return;
+        }
+
+        const response = await fetch(`/api/user/${userId}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData); // เพิ่ม logging
+
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = `${userData.name}`;
+        } else {
+            console.error('userName element not found in DOM');
+        }
+    } catch (error) {
+        console.error('Error in fetchUserData:', error);
+        // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
+        window.location.href = '/login';
+    }
+}
+
+// เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
+document.addEventListener('DOMContentLoaded', fetchUserData);
         async function fetchAppointments(users_id) {
             try {
                 const response = await fetch(`/api/leave/informationAppointment/${users_id}`);

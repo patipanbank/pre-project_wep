@@ -19,6 +19,7 @@ const leaveRoutes = require('./backend/routes/leave.route');
 const scheduleRoutes = require('./backend/routes/schedule.routes');
 const bookingRoutes = require('./backend/routes/booking.route');
 const cookieParser = require('cookie-parser');
+const loginRoute = require('./backend/routes/login');
 
 const app = express();
 app.use(cookieParser());
@@ -219,6 +220,7 @@ app.use('/api/schedule', scheduleRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api', scheduleRoutes);
 app.use('/api', bookingRoutes);
+app.use('/api/login', loginRoute);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
