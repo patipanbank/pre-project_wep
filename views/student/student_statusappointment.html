@@ -191,9 +191,7 @@
                             </div>
                         </div>
                         <div>
-                            <span class="badge ${badgeClass}" style="color: ${textColor};">${
-              appointment.status
-            }</span>
+                            <span class="status-badge status-badge-${appointment.status.toLowerCase()}">${appointment.status}</span>
                         </div>
                     `;
             container.appendChild(appointmentCard);

@@ -25,3 +25,41 @@
     width: 300px;
     
 }
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .status-badge-approved {
+    color: #fff;
+    background-color: #28a745;
+  }
+  
+  .status-badge-rejected {
+    color: #fff;
+    background-color: #dc3545;
+  }
+  
+  .status-badge-waiting {
+    color: #212529;
+    background-color: #ffc107;
+  }
+  
+  .status-badge:hover {
+    cursor: pointer;
+  }
