@@ -83,7 +83,6 @@ $(document).ready(function () {
         minDate: new Date(startDate).toISOString().split('T')[0],
         maxDate: new Date(endDate).toISOString().split('T')[0],
         dateFormat: "Y-m-d",
-        timeZone: 'Asia/Bangkok',
         disable: [
           function(date) {
             return (date.getDay() === 6 || date.getDay() === 0); // Disable weekends
@@ -95,7 +94,7 @@ $(document).ready(function () {
             currentWeekDates = [];
             return;
           }
-  
+    
           // Get the most recently selected date
           const selectedDate = new Date(selectedDates[selectedDates.length - 1]);
           
@@ -107,7 +106,7 @@ $(document).ready(function () {
           const day = monday.getDay();
           const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
           monday.setDate(diff);
-  
+    
           // Generate array of weekdays (Mon-Fri)
           const weekDays = [];
           for (let i = 0; i < 5; i++) {
@@ -115,46 +114,59 @@ $(document).ready(function () {
             currentDate.setDate(monday.getDate() + i);
             weekDays.push(currentDate);
           }
-          // console.log(weekDays);
           
-          // Check if days are within allowed range
+          // Check if days are within semester date range
           const minDate = new Date(instance.config.minDate);
           const maxDate = new Date(instance.config.maxDate);
-          // console.log(maxDate);
           
-          const validWeekDays = weekDays.filter((day)=> {
-            return day >= minDate && day <= maxDate; 
-          }
-          );
-          // console.log(validWeekDays.map(day => day.toDateString()));
-          
-          // If the selected dates are from the current week, clear them all
-          if (currentWeekDates.length > 0 && 
-              weekDays[0].toDateString().split('T')[0] === currentWeekDates[0]) {
+          // Filter only dates that fall within the semester range
+          const validWeekDays = weekDays.filter(day => {
+            const dayTime = day.getTime();
+            return dayTime >= minDate.getTime() && dayTime <= maxDate.getTime();
+          });
+    
+          // If no valid days in the selected week
+          if (validWeekDays.length === 0) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Invalid Selection',
+              text: 'Please select dates within the current semester'
+            });
             instance.clear();
-            currentWeekDates = [];
-          } else {
-            // Set all valid weekdays for the selected week
-            // console.log(validWeekDays);
-            
-            instance.setDate(validWeekDays);
-            
-            currentWeekDates = validWeekDays.map(date => date.toDateString().split('T'));
-            
-            if (currentWeekDates.length > 0) {
-              // console.log(currentWeekDates);
-              
-              generateSlots(data_id, semester_id, currentWeekDates[0], currentWeekDates[currentWeekDates.length-1]);
-            }
+            return;
+          }
+    
+          // Display the actual selected dates to the user
+          const formattedDates = validWeekDays.map(date => 
+            date.toLocaleDateString('en-GB', { 
+              year: 'numeric', 
+              month: '2-digit', 
+              day: '2-digit' 
+            })
+          ).join(' to ');
+    
+          // Update the input to show only valid dates
+          instance.setDate(validWeekDays);
+          
+          // Store the valid dates for table generation
+          currentWeekDates = validWeekDays.map(date => {
+            const adjustedDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+            return adjustedDate.toISOString().split('T')[0];
+          });
+    
+          // Generate slots if we have valid dates
+          if (currentWeekDates.length > 0) {
+            generateSlots(
+              new URLSearchParams(window.location.search).get("data_id"), 
+              semester_id, 
+              currentWeekDates[0], 
+              currentWeekDates[currentWeekDates.length - 1]
+            );
           }
         }
       });
     }
-    // console.log(currentWeekDates);
-      // generate slots function
-  
     
-     
       // Add click event listener for table cells
       $(document).on("click", "td", function () {
         const status = $(this).data("status");
@@ -203,14 +215,14 @@ $(document).ready(function () {
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short', timeZone: 'Asia/Bangkok' }; // "15 Jan" format
+    const options = { day: 'numeric', month: 'short' }; // e.g., "15 Jan"
     return date.toLocaleDateString('en-GB', options);
   }
 
   function generateSlots(data_id, semester_id, start_date, end_date) {
     if (!data_id || !semester_id) {
-      console.error("Error: Missing data_id or semester_id");
-      return;
+        console.error("Error: Missing data_id or semester_id");
+        return;
     }
 
     fetch(`/api/timesclotsbyleave/${data_id}/${semester_id}/${start_date}/${end_date}`)
@@ -223,75 +235,85 @@ $(document).ready(function () {
         thead.empty();
         thead.append('<th scope="col">Day/Time</th>');
 
-        // Create array of dates for the selected week
-        const startDate = new Date(start_date);
-        console.log(startDate);
+       // สร้าง array เก็บวันที่จากวันที่เลือก
+       const selectedStartDate = new Date(start_date);
+       const dates = [];
+       
+       // ปรับให้เริ่มต้นจากวันที่เลือกจริงๆ
+       for (let i = 0; i < 5; i++) {
+           const currentDate = new Date(selectedStartDate);
+           currentDate.setDate(selectedStartDate.getDate() + i);
+           dates.push(new Date(currentDate));
+       }
         
-        const dates = [];
-        for (let i = 0; i < 5; i++) {
-          const currentDate = new Date(startDate);
-          currentDate.setDate(startDate.getDate() + i);
-          dates.push(currentDate);
-        }
-        console.log(dates);
-        
-        // Map days to their corresponding dates
-        const daysOfWeek = [
-          { day: "Monday", date: dates[0] },
-          { day: "Tuesday", date: dates[1] },
-          { day: "Wednesday", date: dates[2] },
-          { day: "Thursday", date: dates[3] },
-          { day: "Friday", date: dates[4] }
-        ];
-
-        // Prepare time slots array and headers
-        let timeSlots = [];
-        timeslots.forEach((slot) => {
-          const timeRange = `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}`;
-          if (!timeSlots.includes(timeRange)) {
-            timeSlots.push(timeRange);
-            thead.append(`<th scope="col">${timeRange}</th>`);
-          }
-        });
+        // สร้าง map ของวันในสัปดาห์
+        const dayMap = {
+          0: "Sunday",
+          1: "Monday",
+          2: "Tuesday",
+          3: "Wednesday",
+          4: "Thursday",
+          5: "Friday",
+          6: "Saturday"
+      };
+// สร้าง array ของวันพร้อมวันที่
+const daysOfWeek = dates.map(date => ({
+  day: dayMap[date.getDay()],
+  date: date
+}));
+         // Prepare time slots array and headers
+         let timeSlots = [];
+         timeslots.forEach((slot) => {
+             const timeRange = `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}`;
+             if (!timeSlots.includes(timeRange)) {
+                 timeSlots.push(timeRange);
+                 thead.append(`<th scope="col">${timeRange}</th>`);
+             }
+         });
 
         // Clear existing rows
         tableBody.empty();
 
         // Create rows for each day with dates and add time slot data
         daysOfWeek.forEach(({day, date}) => {
-          let row = `<tr><th scope="row">${day}<br>${formatDate(date)}</th>`;
-          // console.log('Date : ',date);
-          
-          timeSlots.forEach((timeSlot) => {
-            // Find timeslot data for the current day and time slot
-            const slotData = timeslots.find(
-              (slot) =>
-                slot.dayofweek === day &&
-                `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}` === timeSlot
-            );
-        
-            // Add cell for the time slot
-            if (slotData) {
-              row += `<td data-timeslots_id="${slotData.timeslots_id}" 
-                         data-start_time="${slotData.start_time}" 
-                         data-end_time="${slotData.end_time}" 
-                         data-dayofweek="${slotData.dayofweek}" 
-                         data-status="${slotData.status}" 
-                         data-date="${date}"
-                         class="${slotData.status === "Leave" ? "bg-secondary" : ""}">
-                     </td>`;
-            } else {
-              // If there's no data for the time slot, add an empty cell
-              row += `<td></td>`;
-            }
-          });
-        
-          row += "</tr>";
-          tableBody.append(row);
-        });
-      })
-      .catch((error) => console.error("Error fetching timeslots:", error));
-  }
+          // ข้ามวันเสาร์-อาทิตย์
+          if (day !== "Saturday" && day !== "Sunday") {
+              let row = `<tr><th scope="row">${day}<br>${formatDate(date)}</th>`;
+              
+              timeSlots.forEach((timeSlot) => {
+                  const slotData = timeslots.find(
+                      (slot) =>
+                          slot.dayofweek === day &&
+                          `${formatTime(slot.start_time)}-${formatTime(slot.end_time)}` === timeSlot
+                  );
+                  let color = '';
+                  if (slotData) {
+                      switch (slotData.status) {
+                          case "Leave":
+                              color = 'bg-secondary';
+                              break;
+                      }
+                      row += `<td data-timeslots_id="${slotData.timeslots_id}" 
+                                 data-start_time="${slotData.start_time}" 
+                                 data-end_time="${slotData.end_time}" 
+                                 data-dayofweek="${slotData.dayofweek}" 
+                                 data-status="${slotData.status}" 
+                                 data-date="${date.toISOString().split('T')[0]}"  
+                                 class="${color}"
+                                 onclick="bookAppointment(this)"
+                             ></td>`;
+                  } else {
+                      row += '<td></td>';
+                  }
+              });
+              
+              row += "</tr>";
+              tableBody.append(row);
+          }
+      });
+  })
+  .catch((error) => console.error("Error fetching timeslots:", error));
+}
 
   function updateLeave(status) {
     console.log(status);
@@ -343,10 +365,7 @@ $(document).ready(function () {
       }
       return;
     }
-    // console.log(selectedTimeslots.find((timeslots_id)=>timeslots_id));
-    // selectedTimeslots
     postLeave(data_id,semester_id,selectedTimeslots,status);    
-  
   }
 
   function postLeave(data_id,semester_id,selectedTimeslots,status) {
