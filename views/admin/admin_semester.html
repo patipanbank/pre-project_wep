@@ -378,11 +378,8 @@ async function loadTermsForYearForDelete(year) {
     console.error('Error loading terms for delete:', error);
   }
 }
-
 // Load delete semester options on page load
 loadDeleteSemesterOptions();
-
-
     function logout() {
             fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
                 .then(() => {

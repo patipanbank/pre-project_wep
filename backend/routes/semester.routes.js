@@ -4,24 +4,19 @@ const router = express.Router();
 const Semester = require('../model/semester');
 
 // Helper function to check overlapping dates within the same academic year
-const checkOverlappingDates = async (startDate, endDate, year, excludeId = null) => {
+const checkOverlappingDates = async (startDate, endDate, year, term) => {
     try {
         const overlappingSemesters = await Semester.findAll({
             where: {
                 year: year,  // ตรวจสอบให้ปีตรงกัน
-                [Op.and]: [
-                    // เช็คว่าถ้า excludeId ถูกส่งมา ก็จะไม่นับ semester_id นั้น
-                    excludeId ? { [Op.not]: [{ semester_id: excludeId }] } : {},
+                term: { [Op.ne]: term }, // ไม่เช็คกับ semester ที่กำลังอัพเดท
+                [Op.or]: [
+                    { start_date: { [Op.between]: [startDate, endDate] } },
+                    { end_date: { [Op.between]: [startDate, endDate] } },
                     {
-                        [Op.or]: [
-                            { start_date: { [Op.between]: [startDate, endDate] } },
-                            { end_date: { [Op.between]: [startDate, endDate] } },
-                            {
-                                [Op.and]: [
-                                    { start_date: { [Op.lte]: startDate } },
-                                    { end_date: { [Op.gte]: endDate } }
-                                ]
-                            }
+                        [Op.and]: [
+                            { start_date: { [Op.lte]: startDate } },
+                            { end_date: { [Op.gte]: endDate } }
                         ]
                     }
                 ]
@@ -58,7 +53,7 @@ router.post('/create', async (req, res) => {
         }
 
         // ตรวจสอบการซ้อนทับของวันที่
-        const isOverlapping = await checkOverlappingDates(start_date, end_date, year);
+        const isOverlapping = await checkOverlappingDates(start_date, end_date, year, term);
 
         if (isOverlapping) {
             return res.status(400).json({ message: 'The dates overlap with an existing semester in the same academic year.' });
@@ -91,14 +86,26 @@ router.put('/update', async (req, res) => {
     }
 
     try {
-        // ตรวจสอบการซ้อนทับของวันที่เมื่ออัปเดต
-        const isOverlapping = await checkOverlappingDates(start_date, end_date, year);
+        // ตรวจสอบว่า semester ที่จะอัพเดทมีอยู่จริง
+        const existingSemester = await Semester.findOne({
+            where: {
+                term: term,
+                year: year,
+            },
+        });
 
-        if (isOverlapping) {
-            return res.status(400).json({ message: 'The dates overlap with an existing semester in the same academic year.' });
+        if (!existingSemester) {
+            return res.status(404).json({ message: 'Semester not found for the given year and term' });
         }
 
-        // อัปเดต semester
+        // ตรวจสอบการซ้อนทับของวันที่กับ semester อื่น (ไม่รวมตัวเอง)
+        const isOverlapping = await checkOverlappingDates(start_date, end_date, year, term);
+
+        if (isOverlapping) {
+            return res.status(400).json({ message: 'The dates overlap with another semester in the same academic year.' });
+        }
+
+        // อัพเดท semester
         const [updated] = await Semester.update(
             { start_date, end_date },
             { where: { term, year } }
@@ -107,7 +114,7 @@ router.put('/update', async (req, res) => {
         if (updated) {
             res.json({ message: 'Semester updated successfully!' });
         } else {
-            res.status(404).json({ message: 'Semester not found for the given year and term' });
+            res.status(404).json({ message: 'Failed to update semester' });
         }
     } catch (error) {
         console.error('Error updating semester:', error);
