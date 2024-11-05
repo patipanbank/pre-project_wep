@@ -192,9 +192,7 @@ function formatTime(timeString) {
         console.error("Error:", error);
       });
   }
-
   
-
   // generate slots function
   function generateSlots({ data_id, semester_id }) {
     //console.log('data_id :>> ', data_id);

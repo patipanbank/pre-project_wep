@@ -19,6 +19,7 @@ const leaveRoutes = require('./backend/routes/leave.route');
 const scheduleRoutes = require('./backend/routes/schedule.routes');
 const bookingRoutes = require('./backend/routes/booking.route');
 const cookieParser = require('cookie-parser');
+const loginRoute = require('./backend/routes/login');
 
 const app = express();
 app.use(cookieParser());
@@ -88,6 +89,65 @@ app.post('/import', upload.single('file'), async (req, res) => {
   } catch (error) {
     console.error('Error importing data:', error);
     res.status(500).json({ message: 'Error importing data: ' + error.message });
+  }
+});
+
+
+// แก้ไข endpoint download-template ในไฟล์ server.js
+app.get('/download-template', async (req, res) => {
+  try {
+    // ดึงข้อมูลทั้งหมดจาก database
+    const teachers = await Datas.findAll({
+      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available']
+    });
+
+    // แปลงข้อมูลจาก Sequelize model เป็น plain object
+    const templateData = teachers.map(teacher => ({
+      data_id: teacher.data_id,
+      name: teacher.name,
+      email: teacher.email,
+      tel: teacher.tel,
+      image: teacher.image,
+      major: teacher.major,
+      available: teacher.available
+    }));
+
+    // สร้าง workbook ใหม่
+    const wb = xlsx.utils.book_new();
+    
+    // สร้าง worksheet จากข้อมูลจริง
+    const ws = xlsx.utils.json_to_sheet(templateData);
+
+    // ปรับความกว้างคอลัมน์ให้เหมาะสม
+    const colWidths = {
+      A: 10,  // data_id
+      B: 30,  // name
+      C: 30,  // email
+      D: 15,  // tel
+      E: 50,  // image
+      F: 25,  // major
+      G: 10   // available
+    };
+
+    ws['!cols'] = Object.keys(colWidths).map(key => ({
+      wch: colWidths[key]
+    }));
+    
+    // เพิ่ม worksheet ลงใน workbook
+    xlsx.utils.book_append_sheet(wb, ws, "Teachers Data");
+    
+    // สร้าง buffer
+    const buf = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    
+    // ตั้งค่า headers สำหรับการดาวน์โหลด
+    res.setHeader('Content-Disposition', 'attachment; filename=teachers_data.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    
+    // ส่ง file
+    res.send(buf);
+  } catch (error) {
+    console.error('Error creating template with data:', error);
+    res.status(500).json({ message: 'Error creating template file: ' + error.message });
   }
 });
 
@@ -219,6 +279,7 @@ app.use('/api/schedule', scheduleRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api', scheduleRoutes);
 app.use('/api', bookingRoutes);
+app.use('/api/login', loginRoute);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {

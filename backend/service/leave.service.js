@@ -5,8 +5,6 @@ const Datas = require("../model/data");
 const User = require("../model/user");
 
 const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
-    // console.log(timeslots);
-    // console.log("data_id: " + data_id);
     try {
         // Use map to return promises inside Promise.all
         const results = await Promise.all(timeslots.map(async ({timeslots_id,dates}) => {
@@ -14,8 +12,7 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
             console.log(`date: ${dates}`);
             
             const date = new Date(dates);
-            // console.log(`Dates: ${date}`);
-           date.setDate(date.getDate()+1)
+            
             const findSchedule = await Leave.findOne({
                 where: {
                     data_id: data_id,
@@ -41,9 +38,6 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
                 semester_id: semester_id,
                 date:date
             });
-
-            
-
             console.log(`Date ${res.date}`);
             
             return res ? { message: `Schedule with data_id: ${data_id} created successfully` } : null;
@@ -60,26 +54,34 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
 
 const getLeaveByUserID = async (users_id) => {
     try {
-        console.log(users_id);
+        console.log('Fetching appointments for user:', users_id);
         
         const appointment = await Leave.findAll({
             where: {
-                users_id
-            }
+                users_id: users_id
+            },
+            order: [['date', 'DESC']] // Sort by date descending
         });
-        const result = await Promise.all( appointment.map( async appointment =>  {
-            // const schedule73 = schedules.find(schedule => schedule.timeslots_id === 73);
-            const slot = await Slot.findByPk(appointment.timeslots_id)
-            const teacher = await Datas.findByPk(appointment.data_id)
-            const user = await User.findByPk(users_id)
-            // console.log('leave: ',leave);
-            // console.log('schedule: ',schedule73);
-             // Convert appointment.date to a Date object
-             const appointmentDate = new Date(appointment.date);
+
+        console.log(`Found ${appointment.length} appointments`);
+        
+        const result = await Promise.all(appointment.map(async appointment => {
+            const slot = await Slot.findByPk(appointment.timeslots_id);
+            const teacher = await Datas.findByPk(appointment.data_id);
+            const user = await User.findByPk(users_id);
             
-             // Get the day of the week as a string (e.g., "Monday")
-             const day = appointmentDate.toLocaleDateString('en-US', { weekday: 'long' });
-         
+            if (!slot || !teacher || !user) {
+                console.log('Missing related data:', {
+                    slot: !!slot,
+                    teacher: !!teacher,
+                    user: !!user
+                });
+                return null;
+            }
+
+            const appointmentDate = new Date(appointment.date);
+            const day = appointmentDate.toLocaleDateString('en-US', { weekday: 'long' });
+            
             return {
                 users_id: appointment.users_id,
                 timeslots_id: slot.timeslots_id,
@@ -93,14 +95,18 @@ const getLeaveByUserID = async (users_id) => {
                 teacher_name: teacher.name,
                 username: user.name,
                 useremail: user.email
-            }
-          })
-        )
-        return result
+            };
+        }));
 
+        // Filter out any null results from missing data
+        const filteredResult = result.filter(item => item !== null);
+        console.log(`Returning ${filteredResult.length} valid appointments`);
+        
+        return filteredResult;
     } catch (error) {
-        console.error(error);
+        console.error('Error in getLeaveByUserID:', error);
+        throw error;
     }
-}
+};
 
 module.exports = {createMultipleLeave, getLeaveByUserID}

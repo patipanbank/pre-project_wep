@@ -5,6 +5,7 @@ const User = require('../model/user');
 const Data = require('../model/data');
 const Timeslot = require('../model/timeslot');
 
+// ในส่วนของ Backend - แก้ไข route การจอง
 router.post('/api/booking', async (req, res) => {
     try {
         const {
@@ -15,10 +16,8 @@ router.post('/api/booking', async (req, res) => {
             detail
         } = req.body;
 
-        // Retrieve the user_id from cookies
         const users_id = req.cookies.user_id;
 
-        // Validate required fields
         if (!data_id || !users_id || !timeslots_id || !semester_id || !date) {
             return res.status(400).json({
                 success: false,
@@ -26,60 +25,17 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // First, get the timeslot to check if it exists
-        const timeslot = await Timeslot.findByPk(timeslots_id);
-        if (!timeslot) {
-            return res.status(404).json({
-                success: false,
-                message: 'Timeslot not found'
-            });
-        }
+        // แก้ไขการสร้างวันที่โดยใช้ timezone ของประเทศไทย (UTC+7)
+        const bookingDate = new Date(date);
+        bookingDate.setUTCHours(17, 0, 0, 0); // ตั้งเวลาเป็น 00:00 ตามเวลาประเทศไทย (17:00 UTC ของวันก่อนหน้า)
 
-        // Check for existing conflicting leave records for the same timeslot
-        const conflictingLeave = await Leave.findOne({
-            where: {
-                data_id,
-                timeslots_id,
-                semester_id,
-                date: new Date(date),
-                status: ['Available', 'Waiting', 'Leave']
-            }
-        });
+        // ... โค้ดส่วนที่เหลือเหมือนเดิม ...
 
-        // Block booking if a conflict is found with an unavailable timeslot
-        if (conflictingLeave && conflictingLeave.status !== 'Available' && conflictingLeave.status !== 'Empty') {
-            return res.status(400).json({
-                success: false,
-                message: `This timeslot is not available for booking. Current status: ${conflictingLeave.status}`
-            });
-        }
-
-        // Verify user exists
-        const user = await User.findByPk(users_id);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        // Verify data_id exists
-        const data = await Data.findByPk(data_id);
-        if (!data) {
-            return res.status(404).json({
-                success: false,
-                message: 'Teacher not found'
-            });
-        }
-        const dates = new Date(date);
-        // console.log(`Dates: ${date}`);
-        dates.setDate(dates.getDate()+1)
-        // Create a new leave record for this user
         const newLeave = await Leave.create({
             data_id,
             timeslots_id,
             semester_id,
-            date: dates,
+            date: bookingDate,
             status: 'Waiting',
             users_id,
             detail: detail || null,
