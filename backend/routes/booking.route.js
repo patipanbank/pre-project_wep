@@ -4,7 +4,7 @@ const Leave = require('../model/leave');
 const User = require('../model/user');
 const Data = require('../model/data');
 const Timeslot = require('../model/timeslot');
-
+const {getLeaveByDataIDContoller,editLeavestatusController,getallstatusLeaveByDataIdContoller} = require('../controller/leave.controller');
 // ในส่วนของ Backend - แก้ไข route การจอง
 router.post('/api/booking', async (req, res) => {
     try {
@@ -14,6 +14,7 @@ router.post('/api/booking', async (req, res) => {
             semester_id,
             date,
             detail
+        
         } = req.body;
 
         const users_id = req.cookies.user_id;
@@ -58,5 +59,10 @@ router.post('/api/booking', async (req, res) => {
         });
     }
 });
+
+router.put('/booking/changestatus',editLeavestatusController);
+
+router.get('/booking/:data_id/:status', getLeaveByDataIDContoller)
+router.get('/booking/status/:data_id/:status', getallstatusLeaveByDataIdContoller)
 
 module.exports = router;

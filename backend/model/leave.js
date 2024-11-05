@@ -22,7 +22,7 @@ const Leave = connection.define('Leave', {
       type: DataTypes.DATE,
     },
     status: {
-      type: DataTypes.ENUM('Available', 'Unavailable', 'Waiting', 'Leave', 'Empty'),
+      type: DataTypes.ENUM('Available', 'Unavailable', 'Waiting', 'Leave', 'Empty','Approved','Reject'),
       allowNull: false,
       defaultValue: 'Empty',
     } ,semester_id: {
@@ -39,7 +39,6 @@ const Leave = connection.define('Leave', {
     },
     users_id: {
       type: DataTypes.INTEGER,
-
     }
   }, {
     tableName: 'leave', 
