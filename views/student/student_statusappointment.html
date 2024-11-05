@@ -45,65 +45,73 @@
     <div class="control-width" id="appointmentsContainer"></div>
 
     <script>
-
         // Function to get cookie value by name
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
-        console.log('Cookie user_id:', getCookie('user_id'));
 
+        // Add the missing fetchUserData function
         async function fetchUserData() {
-    try {
-        const userId = getCookie('user_id');
-        console.log('Current user_id from cookie:', userId); // เพิ่ม logging
-
-        if (!userId) {
-            console.error('No user_id cookie found - redirecting to login');
-            window.location.href = '/login';
-            return;
-        }
-
-        const response = await fetch(`/api/user/${userId}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch user data: ${response.status}`);
-        }
-
-        const userData = await response.json();
-        console.log('Fetched user data:', userData); // เพิ่ม logging
-
-        const userNameElement = document.getElementById('userName');
-        if (userNameElement) {
-            userNameElement.textContent = `${userData.name}`;
-        } else {
-            console.error('userName element not found in DOM');
-        }
-    } catch (error) {
-        console.error('Error in fetchUserData:', error);
-        // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
-        window.location.href = '/login';
-    }
-}
-
-// เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
-document.addEventListener('DOMContentLoaded', fetchUserData);
-        async function fetchAppointments(users_id) {
             try {
-                const response = await fetch(`/api/leave/informationAppointment/${users_id}`);
+                const userId = getCookie('user_id');
+                console.log('Current user_id from cookie:', userId);
+
+                if (!userId) {
+                    console.error('No user_id cookie found - redirecting to login');
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const response = await fetch(`/api/user/${userId}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch user data: ${response.status}`);
+                }
+
+                const userData = await response.json();
+                console.log('Fetched user data:', userData);
+
+                const userNameElement = document.getElementById('userName');
+                if (userNameElement) {
+                    userNameElement.textContent = `${userData.name}`;
+                } else {
+                    console.error('userName element not found in DOM');
+                }
+            } catch (error) {
+                console.error('Error in fetchUserData:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        async function fetchAppointments() {
+            try {
+                const userId = getCookie('user_id');
+                if (!userId) {
+                    console.error('No user_id found in cookies');
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const response = await fetch(`/api/leave/informationAppointment/${userId}`);
                 if (!response.ok) throw new Error("Failed to fetch appointments");
 
                 const appointments = await response.json();
                 const container = document.getElementById("appointmentsContainer");
 
                 container.innerHTML = '';
+
+                if (appointments.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info mt-5">No appointments found.</div>';
+                    return;
+                }
 
                 appointments.forEach(appointment => {
                     const appointmentCard = document.createElement("div");
@@ -119,16 +127,25 @@ document.addEventListener('DOMContentLoaded', fetchUserData);
                     } else if (appointment.status === "Reject") {
                         badgeClass = "bg-danger";
                         textColor = "white";
+                    } else if (appointment.status === "waiting") {
+                        badgeClass = "bg-warning";
+                        textColor = "black";
                     }
+
+                    const formattedDate = new Date(appointment.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
 
                     appointmentCard.innerHTML = `
                         <div>
                             <h2>Teacher: ${appointment.teacher_name}</h2>
-                            <h3>${appointment.day} ${appointment.date} ${appointment.time}</h3>
+                            <h3>${appointment.day} ${formattedDate} ${appointment.time}</h3>
                             <p>Click for more details</p>
                             <div class="details" style="display: none;">
-                                <p>Student Detail: ${appointment.detail}</p>
-                                <p>Teacher Feedback: ${appointment.feedback || "N/A"}</p>
+                                <p>Student Detail: ${appointment.detail || "No details provided"}</p>
+                                <p>Teacher Feedback: ${appointment.feedback || "No feedback yet"}</p>
                             </div>
                         </div>
                         <div>
@@ -139,6 +156,8 @@ document.addEventListener('DOMContentLoaded', fetchUserData);
                 });
             } catch (error) {
                 console.error("Error fetching appointments:", error);
+                document.getElementById("appointmentsContainer").innerHTML = 
+                    '<div class="alert alert-danger mt-5">Error loading appointments. Please try again later.</div>';
             }
         }
 
@@ -155,9 +174,10 @@ document.addEventListener('DOMContentLoaded', fetchUserData);
                 .catch(error => console.error('Error logging out:', error));
         }
 
+        // Call fetchUserData and fetchAppointments when page loads
         document.addEventListener("DOMContentLoaded", () => {
-            const users_id = 20; // Replace with dynamic value as needed
-            fetchAppointments(users_id);
+            fetchUserData();
+            fetchAppointments();
         });
     </script>
 
