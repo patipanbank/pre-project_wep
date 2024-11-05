@@ -40,6 +40,11 @@ router.post('/create', async (req, res) => {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
+        // ตรวจสอบว่าวันที่เริ่มต้นต้องไม่เกินวันที่สิ้นสุด
+        if (start_date > end_date) {
+            return res.status(400).json({ message: 'Start date must be earlier than end date.' });
+        }
+
         // ตรวจสอบการมีอยู่ของ semester ที่มี term และ year เดียวกัน
         const existingSemester = await Semester.findOne({
             where: {
@@ -83,6 +88,11 @@ router.put('/update', async (req, res) => {
 
     if (!start_date || !end_date || !term || !year) {
         return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // ตรวจสอบว่าวันที่เริ่มต้นต้องไม่เกินวันที่สิ้นสุด
+    if (start_date > end_date) {
+        return res.status(400).json({ message: 'Start date must be earlier than end date.' });
     }
 
     try {
