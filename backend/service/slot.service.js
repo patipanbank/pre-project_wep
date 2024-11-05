@@ -94,18 +94,22 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
       const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
       // console.log('leave: ',leave);
       // console.log('schedule: ',schedule73);
-      
+ 
       let status = 'Empty';
       if (schedule) {
         if (schedule.status === "Available") {
           // console.log('Available',slot.timeslots_id);
+          console.log(`time:${slot.start_time}-${	slot.end_time} dayofweek: ${slot.dayofweek}, status: ${schedule.status}`);
           status = schedule.status;
         }
         
       }
       if (leave) {
+        console.log(`time:${slot.start_time}-${	slot.end_time} dayofweek: ${slot.dayofweek}, status: ${schedule.status}`);
+
         status = leave.status;
       }
+      console.log(`dayofweek: ${slot.dayofweek}, status: ${status}`);
       return {
         timeslots_id: slot.timeslots_id,
         start_time: slot.start_time,
