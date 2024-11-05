@@ -1,216 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <title>Student Homepage</title>
+    <link rel="stylesheet" href="/public/css/student/student_hompage.css" />
+  </head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-            crossorigin="anonymous">
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-        <title>Student Homepage</title>
-        <link rel="stylesheet" href="/public/css/student/student_hompage.css">
-    </head>
+  <body>
+    <nav>
+      <img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt />
+    </nav>
 
-    <body>
-        <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png"
-                alt></nav>
-
-        <nav class="navbar navbar-light navbar-expand-lg"
-            style="background-color: #253b6d;">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" style="color: white;"
-                                aria-current="page"
-                                href="/student/homepage">HOME</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" style="color: white;"
-                                href="/student/statusappointment">STATUS
-                                APPOINTMENT</a>
-                        </li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <span id="userName"
-                            style="color: white; margin-right: 15px; font-size: 16px;"></span>
-                        <button type="button" class="btn btn-danger"
-                            onclick="logout()">Logout</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="row sandim">
-            <div class="col-md-2">
-                <div class="mt-2 float-start" style="margin-left: 10px;">
-                    <form action="#" method="GET" id="searchForm">
-                        <input type="text" id="searchInput"
-                            onkeyup="searchTeachers()" placeholder="Search...">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
-            </div>
+    <nav
+      class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #253b6d"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                style="color: white"
+                aria-current="page"
+                href="/student/homepage"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                style="color: white"
+                href="/student/statusappointment"
+                >STATUS APPOINTMENT</a
+              >
+            </li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <span
+              id="userName"
+              style="color: white; margin-right: 15px; font-size: 16px"
+            ></span>
+            <button type="button" class="btn btn-danger" onclick="logout()">
+              Logout
+            </button>
+          </div>
         </div>
+      </div>
+    </nav>
 
-        <div class="container my-4">
-            <div class="card-container" id="cardContainer">
-                <!-- Cards will be added dynamically here -->
-            </div>
+    <div class="row sandim">
+      <div class="col-md-2">
+        <div class="mt-2 float-start" style="margin-left: 10px">
+          <form action="#" method="GET" id="searchForm">
+            <input
+              type="text"
+              id="searchInput"
+              onkeyup="searchTeachers()"
+              placeholder="Search..."
+            />
+            <button type="submit">Search</button>
+            <div id="current-date" class=""></div>
+          </form>
         </div>
+      </div>
+    </div>
 
-        <script>
+    <div class="container my-4">
+      <div class="card-container" id="cardContainer">
+        <!-- Cards will be added dynamically here -->
+      </div>
+    </div>
 
-        // Function to get cookie value by name
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-        console.log('Cookie user_id:', getCookie('user_id'));
+    <script>
+      const currentDate = new Date().toLocaleDateString();
+      document.getElementById(
+        "current-date"
+      ).textContent = `Today's date: ${currentDate}`;
 
-        async function fetchUserData() {
-    try {
-        const userId = getCookie('user_id');
-        console.log('Current user_id from cookie:', userId); // เพิ่ม logging
+      // Function to get cookie value by name
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+      console.log("Cookie user_id:", getCookie("user_id"));
 
-        if (!userId) {
-            console.error('No user_id cookie found - redirecting to login');
-            window.location.href = '/login';
+      async function fetchUserData() {
+        try {
+          const userId = getCookie("user_id");
+          console.log("Current user_id from cookie:", userId); // เพิ่ม logging
+
+          if (!userId) {
+            console.error("No user_id cookie found - redirecting to login");
+            window.location.href = "/login";
             return;
-        }
+          }
 
-        const response = await fetch(`/api/user/${userId}`, {
-            method: 'GET',
-            credentials: 'include',
+          const response = await fetch(`/api/user/${userId}`, {
+            method: "GET",
+            credentials: "include",
             headers: {
-                'Accept': 'application/json'
-            }
+              Accept: "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch user data: ${response.status}`);
+          }
+
+          const userData = await response.json();
+          console.log("Fetched user data:", userData); // เพิ่ม logging
+
+          const userNameElement = document.getElementById("userName");
+          if (userNameElement) {
+            userNameElement.textContent = `${userData.name}`;
+          } else {
+            console.error("userName element not found in DOM");
+          }
+        } catch (error) {
+          console.error("Error in fetchUserData:", error);
+          // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
+          window.location.href = "/login";
+        }
+      }
+
+      // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
+      document.addEventListener("DOMContentLoaded", fetchUserData);
+
+      function updateCardStyle(id, available) {
+        const card = document.getElementById(`card-${id}`);
+        if (available === "off") {
+          card.style.opacity = "0.5";
+        } else {
+          card.style.opacity = "1";
+        }
+      }
+
+      function reorderCards() {
+        const cardContainer = document.getElementById("cardContainer");
+        const cards = Array.from(cardContainer.getElementsByClassName("card"));
+
+        cards.sort((a, b) => {
+          const availableA = a.querySelector(".form-check-input").checked
+            ? 0
+            : 1;
+          const availableB = b.querySelector(".form-check-input").checked
+            ? 0
+            : 1;
+          return availableA - availableB;
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch user data: ${response.status}`);
-        }
+        cards.forEach((card) => cardContainer.appendChild(card));
+      }
 
-        const userData = await response.json();
-        console.log('Fetched user data:', userData); // เพิ่ม logging
-
-        const userNameElement = document.getElementById('userName');
-        if (userNameElement) {
-            userNameElement.textContent = `${userData.name}`;
-        } else {
-            console.error('userName element not found in DOM');
-        }
-    } catch (error) {
-        console.error('Error in fetchUserData:', error);
-        // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
-        window.location.href = '/login';
-    }
-}
-
-// เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
-document.addEventListener('DOMContentLoaded', fetchUserData);
-
-        function updateCardStyle(id, available) {
-            const card = document.getElementById(`card-${id}`);
-            if (available === 'off') {
-                card.style.opacity = '0.5';
-            } else {
-                card.style.opacity = '1';
-            }
-        }
-
-        function reorderCards() {
-            const cardContainer = document.getElementById('cardContainer');
-            const cards = Array.from(cardContainer.getElementsByClassName('card'));
-
-            cards.sort((a, b) => {
-                const availableA = a.querySelector('.form-check-input').checked ? 0 : 1;
-                const availableB = b.querySelector('.form-check-input').checked ? 0 : 1;
-                return availableA - availableB;
-            });
-
-            cards.forEach(card => cardContainer.appendChild(card));
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('/data/images')
-                .then(response => response.json())
-                .then(data => {
-                    const cardContainer = document.getElementById('cardContainer');
-                    // Filter data to only include items with available status 'on'
-                    const filteredData = data.filter(item => item.available === 'on');
-                    filteredData.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.id = `card-${item.data_id}`;
-                        card.innerHTML = `
-                        <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/data/images")
+          .then((response) => response.json())
+          .then((data) => {
+            const cardContainer = document.getElementById("cardContainer");
+            // Filter data to only include items with available status 'on'
+            const filteredData = data.filter((item) => item.available === "on");
+            filteredData.forEach((item) => {
+              const card = document.createElement("div");
+              card.className = "card";
+              card.id = `card-${item.data_id}`;
+              card.innerHTML = `
+                        <img src="${
+                          item.image || "https://via.placeholder.com/150"
+                        }" class="card-img-top" alt="Image">
                         <div class="card-body">
-                            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+                            <h5 class="card-title" style="font-size: 17px;">${
+                              item.name
+                            }</h5>
                             <p class="card-text">Major: ${item.major}</p>
                             <p class="card-text">Email: ${item.email}</p>
                             <p class="card-text">Tel: ${item.tel}</p>
                             <div class="form-check form-switch">
-                                <input class="form-check-input hide-switch" type="checkbox" id="available-${item.data_id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.data_id})">
+                                <input class="form-check-input hide-switch" type="checkbox" id="available-${
+                                  item.data_id
+                                }" ${
+                item.available === "on" ? "checked" : ""
+              } onchange="toggleAvailability(${item.data_id})">
                             </div>
-                            <button class="btn btn-primary" onclick="makeOfficehours(${item.data_id})">Appointment</button>
+                            <button class="btn btn-primary" onclick="makeOfficehours(${
+                              item.data_id
+                            })">Appointment</button>
                         </div>
                     `;
 
-                        cardContainer.appendChild(card);
-                        updateCardStyle(item.data_id, item.available); // Set initial card style
-                    });
-                    reorderCards(); // Reorder cards initially
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+              cardContainer.appendChild(card);
+              updateCardStyle(item.data_id, item.available); // Set initial card style
+            });
+            reorderCards(); // Reorder cards initially
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      });
 
-        function makeOfficehours(id) {
-            // Redirect to the Officehours page with the given ID as a query parameter
-            window.location.href = `/student/appointment?data_id=${id}`;
-            console.log(id)
+      function makeOfficehours(id) {
+        // Redirect to the Officehours page with the given ID as a query parameter
+        window.location.href = `/student/appointment?data_id=${id}`;
+        console.log(id);
+      }
+
+      function searchTeachers() {
+        var input, filter, cardContainer, cards, cardBody, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toLowerCase();
+        cardContainer = document.getElementById("cardContainer");
+        cards = cardContainer.getElementsByClassName("card");
+
+        for (i = 0; i < cards.length; i++) {
+          cardBody = cards[i].getElementsByClassName("card-body")[0];
+          txtValue = cardBody.textContent || cardBody.innerText;
+          if (txtValue.toLowerCase().indexOf(filter) > -1) {
+            cards[i].style.display = "";
+          } else {
+            cards[i].style.display = "none";
+          }
         }
+      }
 
-        function searchTeachers() {
-            var input, filter, cardContainer, cards, cardBody, i, txtValue;
-            input = document.getElementById('searchInput');
-            filter = input.value.toLowerCase();
-            cardContainer = document.getElementById('cardContainer');
-            cards = cardContainer.getElementsByClassName('card');
-
-            for (i = 0; i < cards.length; i++) {
-                cardBody = cards[i].getElementsByClassName('card-body')[0];
-                txtValue = cardBody.textContent || cardBody.innerText;
-                if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
-        }
-
-        function logout() {
-            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
-                .then(() => {
-                    window.location.href = '/login'; // Redirect to login after logout
-                })
-                .catch(error => console.error('Error logging out:', error));
-        }
+      function logout() {
+        fetch("/logout", { method: "POST" }) // Adjust the logout endpoint as needed
+          .then(() => {
+            window.location.href = "/login"; // Redirect to login after logout
+          })
+          .catch((error) => console.error("Error logging out:", error));
+      }
     </script>
-
-    </body>
-
+  </body>
 </html>

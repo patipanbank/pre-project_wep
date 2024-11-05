@@ -33,6 +33,28 @@
     /* width: 100%; */
 }
 
+.row.sandim {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .row.sandim .col-md-2 {
+    flex: 0 0 auto;
+    width: auto;
+  }
+  
+  .row.sandim form {
+    display: flex;
+    align-items: center;
+  }
+  
+  .row.sandim input,
+  .row.sandim button {
+    margin-right: 10px;
+  }
+
 .card-container {
     padding: 10px;
     display: grid;
