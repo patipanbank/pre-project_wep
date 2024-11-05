@@ -41,3 +41,11 @@
     display: flex;
     margin: 50px;
   }
+
+  .bg-success {
+    background-color: #28a745 !important; /* Available */
+  }
+
+  .bg-secondary {
+    background-color: #6c757d !important; /* Leave */
+  }
