@@ -61,6 +61,9 @@
         <div class="col mt-2">
             <button type="button" class="float-start" id="importBt" data-bs-toggle="modal"
                 data-bs-target="#importModal">Import</button>
+            <button type="button" class="float-start ms-2" id="downloadTemplateBt" onclick="downloadTemplate()">
+                Download Template
+            </button>
         </div>
     </div>
     <!-- Modal -->
@@ -90,6 +93,27 @@
     </div>
 
     <script>
+
+
+function downloadTemplate() {
+    fetch('/download-template')
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'teacher_template.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error downloading template:', error);
+            alert('Error downloading template file');
+        });
+}
+
         function toggleAvailability(id) {
             const checkbox = document.getElementById(`available-${id}`);
             const available = checkbox.checked ? 'on' : 'off';
