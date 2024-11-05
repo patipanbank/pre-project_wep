@@ -12,8 +12,7 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
             console.log(`date: ${dates}`);
             
             const date = new Date(dates);
-            // console.log(`Dates: ${date}`);
-           date.setDate(date.getDate()+1)
+            
             const findSchedule = await Leave.findOne({
                 where: {
                     data_id: data_id,
