@@ -5,8 +5,6 @@ const Datas = require("../model/data");
 const User = require("../model/user");
 
 const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
-    // console.log(timeslots);
-    // console.log("data_id: " + data_id);
     try {
         // Use map to return promises inside Promise.all
         const results = await Promise.all(timeslots.map(async ({timeslots_id,dates}) => {
@@ -41,9 +39,6 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
                 semester_id: semester_id,
                 date:date
             });
-
-            
-
             console.log(`Date ${res.date}`);
             
             return res ? { message: `Schedule with data_id: ${data_id} created successfully` } : null;

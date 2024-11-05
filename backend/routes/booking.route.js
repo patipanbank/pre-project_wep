@@ -5,6 +5,7 @@ const User = require('../model/user');
 const Data = require('../model/data');
 const Timeslot = require('../model/timeslot');
 
+// ในส่วนของ Backend - แก้ไข route การจอง
 router.post('/api/booking', async (req, res) => {
     try {
         const {
@@ -15,10 +16,8 @@ router.post('/api/booking', async (req, res) => {
             detail
         } = req.body;
 
-        // Retrieve the user_id from cookies
         const users_id = req.cookies.user_id;
 
-        // Validate required fields
         if (!data_id || !users_id || !timeslots_id || !semester_id || !date) {
             return res.status(400).json({
                 success: false,
@@ -26,7 +25,10 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // First, get the timeslot to check if it exists
+        // สร้างวันที่โดยไม่ปรับ timezone
+        const bookingDate = new Date(date);
+        bookingDate.setHours(0, 0, 0, 0);
+
         const timeslot = await Timeslot.findByPk(timeslots_id);
         if (!timeslot) {
             return res.status(404).json({
@@ -35,18 +37,16 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // Check for existing conflicting leave records for the same timeslot
         const conflictingLeave = await Leave.findOne({
             where: {
                 data_id,
                 timeslots_id,
                 semester_id,
-                date: new Date(date),
+                date: bookingDate,
                 status: ['Available', 'Waiting', 'Leave']
             }
         });
 
-        // Block booking if a conflict is found with an unavailable timeslot
         if (conflictingLeave && conflictingLeave.status !== 'Available' && conflictingLeave.status !== 'Empty') {
             return res.status(400).json({
                 success: false,
@@ -54,7 +54,6 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // Verify user exists
         const user = await User.findByPk(users_id);
         if (!user) {
             return res.status(404).json({
@@ -63,7 +62,6 @@ router.post('/api/booking', async (req, res) => {
             });
         }
 
-        // Verify data_id exists
         const data = await Data.findByPk(data_id);
         if (!data) {
             return res.status(404).json({
@@ -71,15 +69,12 @@ router.post('/api/booking', async (req, res) => {
                 message: 'Teacher not found'
             });
         }
-        const dates = new Date(date);
-        // console.log(`Dates: ${date}`);
-        dates.setDate(dates.getDate()+1)
-        // Create a new leave record for this user
+
         const newLeave = await Leave.create({
             data_id,
             timeslots_id,
             semester_id,
-            date: dates,
+            date: bookingDate,
             status: 'Waiting',
             users_id,
             detail: detail || null,
