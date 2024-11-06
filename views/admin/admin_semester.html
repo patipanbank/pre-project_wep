@@ -1,394 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Manage Semester</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/css/Admin/admin_semester.css" />
+  </head>
+  <body>
+    <nav>
+      <img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt />
+    </nav>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Manage Semester</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/public/css/Admin/admin_semester.css">
-</head>
-
-<body>
-  <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt></nav>
-
-  <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" style="color: white;" aria-current="page" href="/admin/homepage">HOME</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE TEACHER</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE HOURS</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white;" href="/admin/addonleave">ADD ON LEAVE</a>
-        </li>
-          <li class="nav-item">
-            <a class="nav-link" style="color: white;" href="/admin/semester">SEMESTER</a>
-          </li>
-        </ul>
+    <nav
+      class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #253b6d"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                style="color: white"
+                href="/admin/homepage"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/manage"
+                >MANAGE TEACHER</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/officehours"
+                >OFFICE HOURS</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/addonleave"
+                >ADD ON LEAVE</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/semester"
+                >SEMESTER</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <button type="button" class="btn btn-danger" onclick="logout()">
+            Logout
+          </button>
+        </div>
       </div>
-      <div>
-        <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-  <div class="container2">
-    <div class="row">
-      <!-- Create Semester Form -->
-      <div class="col">
-        <h2>Create Semester</h2>
-        <form id="createSemesterForm">
-          <div class="mb-3">
-            <label for="year" class="form-label">Year</label>
-            <input type="number" class="form-control" id="year" required>
-          </div>
-          <div class="mb-3">
-            <label for="term" class="form-label">Term</label>
-            <select class="form-select" id="term" required>
-              <option value>Select Term</option>
-              <option value="1">Term 1</option>
-              <option value="2">Term 2</option>
-              <option value="3">Term 3</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="start_date" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="start_date" required>
-          </div>
-          <div class="mb-3">
-            <label for="end_date" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="end_date" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Create
-            Semester</button>
-        </form>
-      </div>
-
-      <!-- Update Semester Form -->
-      <div class="col">
-        <h2>Update Semester</h2>
-        <form id="updateSemesterForm">
-          <div class="mb-3">
-            <label for="update_select_year" class="form-label">Year</label>
-            <select class="form-select" id="update_select_year" required>
-              <option value>Select Year</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="update_select_term" class="form-label">Term</label>
-            <select class="form-select" id="update_select_term" required>
-              <option value>Select Term</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="update_start_date" class="form-label">Start
-              Date</label>
-            <input type="date" class="form-control" id="update_start_date" required>
-          </div>
-          <div class="mb-3">
-            <label for="update_end_date" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="update_end_date" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Update
-            Semester</button>
-        </form>
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>Semester Management</h2>
+        <button
+          class="btn btn-primary action-button"
+          onclick="showCreateModal()"
+        >
+          + Create Semester
+        </button>
       </div>
 
-      <!-- Delete Semester Form -->
-      <div class="col">
-        <h2>Delete Semester</h2>
-        <form id="deleteSemesterForm">
-          <div class="mb-3">
-            <label for="delete_select_year" class="form-label">Year</label>
-            <select class="form-select" id="delete_select_year" required>
-              <option value>Select Year</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="delete_select_term" class="form-label">Term</label>
-            <select class="form-select" id="delete_select_term" required>
-              <option value>Select Term</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-danger">Delete
-            Semester</button>
-        </form>
+      <div class="semester-container" id="semesterList">
+        <!-- Semesters will be displayed here -->
       </div>
     </div>
-  </div>
 
-  <script>
-    // Handle Create Semester Form Submission
-document.getElementById('createSemesterForm').addEventListener('submit', async function (event) {
-  event.preventDefault();
-  const start_date = document.getElementById('start_date').value;
-  const end_date = document.getElementById('end_date').value;
-  const term = document.getElementById('term').value;
-  const year = document.getElementById('year').value;
+    <!-- Create Semester Modal -->
+    <div class="modal fade" id="createSemesterModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create New Semester</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="createSemesterForm">
+              <div class="mb-3">
+                <label for="year" class="form-label">Year</label>
+                <input type="number" class="form-control" id="year" required />
+              </div>
+              <div class="mb-3">
+                <label for="term" class="form-label">Term</label>
+                <select class="form-select" id="term" required>
+                  <option value="">Select Term</option>
+                  <option value="1">Term 1</option>
+                  <option value="2">Term 2</option>
+                  <option value="3">Term 3</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="start_date" class="form-label">Start Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="start_date"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="end_date" class="form-label">End Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="end_date"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="createSemester()"
+            >
+              Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  try {
-    const response = await fetch('/api/semesters/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ start_date, end_date, term, year })
-    });
-    const result = await response.json();
-    if (response.ok) {
-      alert('Semester created successfully!');
-      // Reset the form after successful creation
-      document.getElementById('createSemesterForm').reset();
-      // Optionally reload options
-      loadSemesterOptions();
-    } else {
-      alert('Error creating semester: ' + result.message);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Error creating semester: ' + error.message);
-  }
-});
+    <!-- Update Semester Modal -->
+    <div class="modal fade" id="updateSemesterModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update Semester</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="updateSemesterForm">
+              <input type="hidden" id="update_year" />
+              <input type="hidden" id="update_term" />
+              <div class="mb-3">
+                <label for="update_start_date" class="form-label"
+                  >Start Date</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  id="update_start_date"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="update_end_date" class="form-label">End Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="update_end_date"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="updateSemester()"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-// Handle Update Semester Form Submission
-document.getElementById('updateSemesterForm').addEventListener('submit', async function (event) {
-  event.preventDefault();
-  const start_date = document.getElementById('update_start_date').value;
-  const end_date = document.getElementById('update_end_date').value;
-  const term = document.getElementById('update_select_term').value;
-  const year = document.getElementById('update_select_year').value;
+    <script>
+      let createModal;
+      let updateModal;
 
-  try {
-    const response = await fetch('/api/semesters/update', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ start_date, end_date, term, year })
-    });
-    const result = await response.json();
-    if (response.ok) {
-      alert('Semester updated successfully!');
-      document.getElementById('updateSemesterForm').reset();
-      loadSemesterOptions();
-    } else {
-      alert('Error updating semester: ' + result.message);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Error updating semester: ' + error.message);
-  }
-});
-
-// Populate year and term dropdowns
-async function loadSemesterOptions() {
-  try {
-    const yearResponse = await fetch('/api/semesters/years');
-    const years = await yearResponse.json();
-    const termResponse = await fetch('/api/semesters/terms');
-    const terms = await termResponse.json();
-    if (!Array.isArray(years) || !Array.isArray(terms)) {
-      throw new Error('Received data is not an array');
-    }
-    const updateYearSelect = document.getElementById('update_select_year');
-    const updateTermSelect = document.getElementById('update_select_term');
-    const deleteYearSelect = document.getElementById('delete_select_year');
-    const deleteTermSelect = document.getElementById('delete_select_term');
-
-    updateYearSelect.innerHTML = '<option value>Select Year</option>';
-    deleteYearSelect.innerHTML = '<option value>Select Year</option>';
-    years.forEach(year => {
-      updateYearSelect.innerHTML += `<option value="${year}">${year}</option>`;
-      deleteYearSelect.innerHTML += `<option value="${year}">${year}</option>`;
-    });
-
-    updateTermSelect.innerHTML = '<option value>Select Term</option>';
-    deleteTermSelect.innerHTML = '<option value>Select Term</option>';
-    terms.forEach(term => {
-      updateTermSelect.innerHTML += `<option value="${term}">Term ${term}</option>`;
-      deleteTermSelect.innerHTML += `<option value="${term}">Term ${term}</option>`;
-    });
-  } catch (error) {
-    console.error('Error loading semester options:', error);
-    alert('Error loading semester options: ' + error.message);
-  }
-}
-
-// Load start and end dates based on selected year and term
-document.getElementById('update_select_year').addEventListener('change', async function () {
-  const year = this.value;
-  if (year) {
-    await loadTermsForYear(year);
-  } else {
-    document.getElementById('update_select_term').innerHTML = '<option value>Select Term</option>';
-  }
-});
-
-async function loadTermsForYear(year) {
-  try {
-    const termResponse = await fetch(`/api/semesters/terms/byYear?year=${year}`);
-    const terms = await termResponse.json();
-    const updateTermSelect = document.getElementById('update_select_term');
-    updateTermSelect.innerHTML = '<option value>Select Term</option>';
-    if (terms.length === 0) {
-      updateTermSelect.innerHTML = '<option value>Select Term</option>';
-    } else {
-      terms.forEach(term => {
-        const option = document.createElement('option');
-        option.value = term;
-        option.textContent = `Term ${term}`;
-        updateTermSelect.appendChild(option);
+      document.addEventListener("DOMContentLoaded", function () {
+        createModal = new bootstrap.Modal(
+          document.getElementById("createSemesterModal")
+        );
+        updateModal = new bootstrap.Modal(
+          document.getElementById("updateSemesterModal")
+        );
+        loadSemesters();
       });
-    }
-  } catch (error) {
-    console.error('Error loading terms for update:', error);
-  }
-}
 
-async function loadSemesterDates() {
-  const year = document.getElementById('update_select_year').value;
-  const term = document.getElementById('update_select_term').value;
-  if (year && term) {
-    try {
-      const response = await fetch(`/api/semesters/semesters?year=${year}&term=${term}`);
-      const semesters = await response.json();
-      if (Array.isArray(semesters) && semesters.length > 0) {
-        const semester = semesters[0];
-
-        const formattedStartDate = formatDate(semester.start_date);
-        const formattedEndDate = formatDate(semester.end_date);
-
-        document.getElementById('update_start_date').value = formattedStartDate || '';
-        document.getElementById('update_end_date').value = formattedEndDate || '';
-      } else {
-        document.getElementById('update_start_date').value = '';
-        document.getElementById('update_end_date').value = '';
-        alert('No semester found for the selected year and term. Please select a valid combination.');
+      function showCreateModal() {
+        document.getElementById("createSemesterForm").reset();
+        createModal.show();
       }
-    } catch (error) {
-      console.error('Error loading semester dates:', error);
-      alert('Error loading semester dates: ' + error.message);
-    }
-  } else {
-    document.getElementById('update_start_date').value = '';
-    document.getElementById('update_end_date').value = '';
-  }
-}
 
-document.getElementById('update_select_term').addEventListener('change', loadSemesterDates);
+      async function loadSemesters() {
+        try {
+          // First, get the years
+          const yearResponse = await fetch("/api/semesters/years");
+          const years = await yearResponse.json();
 
-// Helper function to format the date to yyyy-MM-dd
-function formatDate(isoString) {
-  const date = new Date(isoString);
-  return date.toISOString().split('T')[0]; // Convert to yyyy-MM-dd
-}
+          const semesterList = document.getElementById("semesterList");
+          semesterList.innerHTML = "";
 
-// Load semester options on page load
-loadSemesterOptions();
+          // For each year, get its terms
+          for (const year of years) {
+            const termResponse = await fetch(
+              `/api/semesters/terms/byYear?year=${year}`
+            );
+            const terms = await termResponse.json();
 
-// Handle Delete Semester Form Submission
-document.getElementById('deleteSemesterForm').addEventListener('submit', async function (event) {
-  event.preventDefault();
-  const year = document.getElementById('delete_select_year').value;
-  const term = document.getElementById('delete_select_term').value;
+            // For each term in this year, get the semester details
+            for (const term of terms) {
+              const semesterResponse = await fetch(
+                `/api/semesters/semesters?year=${year}&term=${term}`
+              );
+              const semesterData = await semesterResponse.json();
 
-  if (confirm('Are you sure you want to delete this semester? This action cannot be undone.')) {
-    try {
-      const response = await fetch('/api/semesters/delete', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ year, term })
-      });
-      const result = await response.json();
-      if (response.ok) {
-        alert('Semester deleted successfully!');
-        document.getElementById('deleteSemesterForm').reset();
-        loadDeleteSemesterOptions();
-      } else {
-        alert('Error deleting semester: ' + result.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error deleting semester: ' + error.message);
-    }
-  }
-});
+              if (Array.isArray(semesterData) && semesterData.length > 0) {
+                const semester = semesterData[0]; // Get the first semester object
 
-// Populate year and term dropdowns for delete semester form
-async function loadDeleteSemesterOptions() {
-  try {
-    const yearResponse = await fetch('/api/semesters/years');
-    const years = await yearResponse.json();
-    const deleteYearSelect = document.getElementById('delete_select_year');
-    deleteYearSelect.innerHTML = '<option value>Select Year</option>';
-    years.forEach(year => {
-      const option = document.createElement('option');
-      option.value = year;
-      option.textContent = year;
-      deleteYearSelect.appendChild(option);
-    });
-
-    deleteYearSelect.addEventListener('change', async function () {
-      const year = this.value;
-      if (year) {
-        await loadTermsForYearForDelete(year);
-      } else {
-        document.getElementById('delete_select_term').innerHTML = '<option value>Select Term</option>';
-      }
-    });
-  } catch (error) {
-    console.error('Error loading delete semester options:', error);
-  }
-}
-
-async function loadTermsForYearForDelete(year) {
-  try {
-    const termResponse = await fetch(`/api/semesters/terms/byYear?year=${year}`);
-    const terms = await termResponse.json();
-    const deleteTermSelect = document.getElementById('delete_select_term');
-    deleteTermSelect.innerHTML = '<option value>Select Term</option>';
-    if (terms.length === 0) {
-      deleteTermSelect.innerHTML = '<option value>Select Term</option>';
-    } else {
-      terms.forEach(term => {
-        const option = document.createElement('option');
-        option.value = term;
-        option.textContent = `Term ${term}`;
-        deleteTermSelect.appendChild(option);
-      });
-    }
-  } catch (error) {
-    console.error('Error loading terms for delete:', error);
-  }
-}
-// Load delete semester options on page load
-loadDeleteSemesterOptions();
-    function logout() {
-            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
-                .then(() => {
-                    window.location.href = '/login'; // Redirect to login after logout
-                })
-                .catch(error => console.error('Error logging out:', error));
+                const card = document.createElement("div");
+                card.className = "semester-card";
+                card.innerHTML = `
+                                <div><p class="headtext">Year ${semester.year}<p class="discription">Term ${
+                  semester.term
+                }</p></p></div>
+                                <div><p class="headtext">Start Date<p class="discription">${formatDate(
+                                  semester.start_date
+                                )}</p></p></div>
+                                <div><p class="headtext">End Date<p class="discription">${formatDate(
+                                  semester.end_date
+                                )}</p></p></div>
+                                <div class="d-flex flex-column justify-content-end">
+                                <button class="btn btn-success action-button2 mb-2 w-full sm:w-auto" onclick="showUpdateModal('${
+                                    semester.year
+                                }', '${semester.term}', '${semester.start_date}', '${semester.end_date}')">
+                                    Update
+                                </button>
+                                <button class="btn btn-danger action-button2 w-full sm:w-auto" onclick="deleteSemester('${semester.year}', '${semester.term}')">
+                                    Delete
+                                </button>
+                            </div>
+                            `;
+                semesterList.appendChild(card);
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error loading semesters:", error);
+          alert("Error loading semesters: " + error.message);
         }
-  </script>
-  
-</body>
+      }
 
+      async function createSemester() {
+        const formData = {
+          year: document.getElementById("year").value,
+          term: document.getElementById("term").value,
+          start_date: document.getElementById("start_date").value,
+          end_date: document.getElementById("end_date").value,
+        };
+
+        try {
+          const response = await fetch("/api/semesters/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (response.ok) {
+            alert("Semester created successfully!");
+            createModal.hide();
+            loadSemesters();
+          } else {
+            const error = await response.json();
+            alert("Error creating semester: " + error.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error creating semester: " + error.message);
+        }
+      }
+
+      function showUpdateModal(year, term, startDate, endDate) {
+        document.getElementById("update_year").value = year;
+        document.getElementById("update_term").value = term;
+        document.getElementById("update_start_date").value =
+          formatDate(startDate);
+        document.getElementById("update_end_date").value = formatDate(endDate);
+        updateModal.show();
+      }
+
+      async function updateSemester() {
+        const formData = {
+          year: document.getElementById("update_year").value,
+          term: document.getElementById("update_term").value,
+          start_date: document.getElementById("update_start_date").value,
+          end_date: document.getElementById("update_end_date").value,
+        };
+
+        try {
+          const response = await fetch("/api/semesters/update", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (response.ok) {
+            alert("Semester updated successfully!");
+            updateModal.hide();
+            loadSemesters();
+          } else {
+            const error = await response.json();
+            alert("Error updating semester: " + error.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error updating semester: " + error.message);
+        }
+      }
+
+      async function deleteSemester(year, term) {
+        if (
+          confirm(
+            "Are you sure you want to delete this semester? This action cannot be undone."
+          )
+        ) {
+          try {
+            const response = await fetch("/api/semesters/delete", {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ year, term }),
+            });
+
+            if (response.ok) {
+              alert("Semester deleted successfully!");
+              loadSemesters();
+            } else {
+              const error = await response.json();
+              alert("Error deleting semester: " + error.message);
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Error deleting semester: " + error.message);
+          }
+        }
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toISOString().split("T")[0];
+      }
+
+      function logout() {
+        fetch("/logout", { method: "POST" })
+          .then(() => {
+            window.location.href = "/login";
+          })
+          .catch((error) => console.error("Error logging out:", error));
+      }
+    </script>
+  </body>
 </html>

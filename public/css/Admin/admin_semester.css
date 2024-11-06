@@ -1,20 +1,7 @@
 .container {
-    max-width: 1650px;
+    max-width: 1400px;
     /* เพิ่มความกว้างสูงสุดของ container */
 }
-
-.container2 {
-    display: flex;
-    justify-content: center; /* จัดกึ่งกลางแนวนอน */
-    gap: 100px; /* ระยะห่างระหว่าง col */
-    padding: 50px;
-}
-
-.col {
-    flex: 0 0 30%; /* ควบคุมขนาดของคอลัมน์ ให้แต่ละ col มีขนาด 30% ของพื้นที่ */
-    /* max-width: 1800px; กำหนดขนาดความกว้างสูงสุด */
-}
-
 
 #imgnav {
     max-width: 100%;
@@ -38,21 +25,43 @@ select {
     margin-bottom: 15px;
 }
 
-button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.message {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
+.headtext {
+    font-size: 20px;
     font-weight: bold;
 }
+
+.discription {
+    font-size: 20px;
+}
+
+.semester-card {
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 8px;
+    padding: 15px; /* ลด padding ด้านบนล่างเหลือ 8px แต่คงด้านซ้ายขวาไว้ที่ 15px */
+    margin: 12px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .action-button {
+    width: fit-content;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* height: 50px; */
+    /* border-radius: 25px; */
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+  }
+  #semesterList {
+    margin-top: 20px;
+  }
+  .action-button2{
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.19);
+  }

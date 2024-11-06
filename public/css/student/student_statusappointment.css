@@ -1,11 +1,15 @@
 
 
 .card2 {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+  0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: 0.3s;
-    border-radius: 10px;
+    border-radius: 8px;
     margin: auto;
-    width: 70%;
+    width: 60%;
+    border: 2px solid #ddd;
+    padding: 15px;
+    background-color: white;
 }
 
 .card2:hover { box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
@@ -63,3 +67,5 @@
   .status-badge:hover {
     cursor: pointer;
   }
+
+ 
