@@ -70,7 +70,7 @@
             <div class="col">
                 <div class="d-flex">
                     <div class="text-white">
-                        <h1 id="inofs">4</h1>
+                        <h1 id="inofs">0</h1>
                         <h6>In Office</h6>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
             <div class="col">
                 <div class="d-flex">
                     <div class="text-white">
-                        <h1 id="outofs">4</h1>
+                        <h1 id="outofs">0</h1>
                         <h6>Out Office</h6>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
             <div class="col">
                 <div class="d-flex">
                     <div class="text-white">
-                        <h1 id="leaves">4</h1>
+                        <h1 id="leaves">0</h1>
                         <h6>Leave</h6>
                     </div>
                 </div>
@@ -107,11 +107,79 @@
         </div>
     </div>
     <div class="container">
-        <canvas id="myChart" height="145"></canvas>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        let myChart; // Declare chart variable globally
+
+        // Function to fetch the count and update both widget and chart
+        function fetchAllCount() {
+            fetch('/data/count/available')
+                .then(response => response.json())
+                .then(data => {
+                    // Update widget
+                    document.getElementById('alls').innerText = data.count;
+                    // Update chart
+                    updateChart(data.count);
+                })
+                .catch(error => console.error('Error fetching all count:', error));
+        }
+
+        // Function to create/update the chart
+        function updateChart(allCount) {
+            const chartData = {
+                labels: ['All', 'In Office', 'Out Office', 'Leave'],
+                datasets: [{
+                    label: 'Number of Teachers',
+                    data: [allCount, 0, 0, 0],
+                    backgroundColor: [
+                        'yellow',
+                        'green',
+                        'red',
+                        'gray'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            // If chart exists, destroy it before creating a new one
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch the count when the page loads
+        document.addEventListener('DOMContentLoaded', fetchAllCount);
+
+        // Add window resize event listener to handle responsive sizing
+        window.addEventListener('resize', () => {
+            if (myChart) {
+                myChart.resize();
+            }
+        });
+
         function redirectToPage(widgetId) {
             if (widgetId === 'all') {
                 window.location.href = "/admin/all";
@@ -124,51 +192,10 @@
             }
         }
 
-        // Function to fetch the count and update the widget
-        function fetchAllCount() {
-            fetch('/data/count/available')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('alls').innerText = data.count;
-                })
-                .catch(error => console.error('Error fetching all count:', error));
-        }
-
-        var data = {
-            labels: ['All', 'In Office', 'Out Office', 'Leave'],
-            datasets: [{
-                label: 'Number of Teachers',
-                data: [12, 4, 4, 4], // Placeholder data, can be updated dynamically as needed
-                backgroundColor: [
-                    'yellow',
-                    'green',
-                    'red',
-                    'gray'
-                ],
-                borderWidth: 1
-            }]
-        };
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Fetch the count when the page loads
-        document.addEventListener('DOMContentLoaded', fetchAllCount);
-
         function logout() {
-            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
+            fetch('/logout', { method: 'POST' })
                 .then(() => {
-                    window.location.href = '/login'; // Redirect to login after logout
+                    window.location.href = '/login';
                 })
                 .catch(error => console.error('Error logging out:', error));
         }
