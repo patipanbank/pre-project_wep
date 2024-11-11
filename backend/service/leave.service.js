@@ -23,7 +23,7 @@ const createMultipleLeave = async (data_id, semester_id, timeslots, status) => {
         });
 
         if (findSchedule && findSchedule.status === status) {
-          return { message: `Schedule is ${status} already` }; // Exit the current iteration of the loop
+          return { message: `Schedule is ${status} already` };
         }
 
         if (findSchedule && findSchedule.status !== status) {
@@ -326,10 +326,8 @@ const getLeaveByEmail = async (email, status) => {
   }
 };
 
-
 const getLeavestatusByUserID = async (id, status) => {
   try {
-
     const user = await User.findOne({
       where: {
         users_id: id,
@@ -558,7 +556,7 @@ const getallstatusLeaveByUserid = async (user_id, status) => {
     }
     const data = await Datas.findOne({
       where: {
-       email: targetUser.email
+        email: targetUser.email,
       },
     });
     if (!data) {
@@ -595,7 +593,7 @@ const getallstatusLeaveByUserid = async (user_id, status) => {
         }
         console.log(leave.feedback);
         console.log(user.email);
-        
+
         return {
           timeslots_id: leave.timeslots_id,
           start_time: leave.Timeslot.start_time,
@@ -672,15 +670,15 @@ const editLeavebyuseridStatus = async (
     const user = await User.findOne({
       where: {
         users_id: user_id,
-      }
-    })
+      },
+    });
     const data = await Datas.findOne({
       where: {
-        email: user.email
+        email: user.email,
       },
-    })
+    });
     console.log(data.data_id);
-    
+
     if (!data) {
       throw new Error(`Data with user_id: ${user_id} not found`);
     }
@@ -723,5 +721,5 @@ module.exports = {
   getallstatusLeaveByEmail,
   getLeavestatusByUserID,
   editLeavebyuseridStatus,
-  getallstatusLeaveByUserid
+  getallstatusLeaveByUserid,
 };

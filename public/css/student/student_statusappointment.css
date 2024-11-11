@@ -51,12 +51,12 @@
   
   .status-badge-approved {
     color: #fff;
-    background-color: #28a745;
+    background-color: #26f156;
   }
   
   .status-badge-reject {
     color: #fff;
-    background-color: #dc3545;
+    background-color: red;
   }
   
   .status-badge-waiting {

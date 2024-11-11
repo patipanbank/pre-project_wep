@@ -30,3 +30,15 @@
     width: 300px;
     
 }
+
+.bg-success {
+    background-color: #26f156 !important; /* Available */
+  }
+
+  .bg-secondary {
+    background-color: #6c757d !important; /* Leave */
+  }
+  
+  .bg-danger {
+    background-color: red !important; 
+  }

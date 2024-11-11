@@ -34,7 +34,7 @@
   }
   
   .bg-success {
-    background-color: #28a745 !important; /* Available */
+    background-color: #26f156 !important; /* Available */
   }
   
   .bg-secondary {
@@ -42,11 +42,11 @@
   }
 
   .bg-primary {
-    background-color: #dc3545;
+    background-color: red;
   }
   
   .bg-danger {
     color: #fff;
-    background-color: #28a745;
+    background-color: #26f156;
   }
   

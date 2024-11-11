@@ -27,3 +27,14 @@
     max-width: 800px;
 }
 
+.btn-success {
+    background-color: #26f156 !important; /* Available */
+  }
+
+  .btn-secondary {
+    background-color: #6c757d !important; /* Leave */
+  }
+  
+  .btn-danger {
+    background-color: red !important; 
+  }

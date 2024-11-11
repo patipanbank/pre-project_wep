@@ -192,42 +192,61 @@ document.addEventListener("DOMContentLoaded", function () {
       // กรณีเป็น Leave
       if ($(this).hasClass("bg-secondary")) {
         // เปลี่ยนเป็น "Warning" (สีเหลือง)
-        $(this).removeClass("bg-secondary").addClass("bg-warning");
-      } else if ($(this).hasClass("bg-warning")) {
+        $(this).removeClass("bg-secondary").addClass("bg-primary");
+      } else if ($(this).hasClass("bg-primary")) {
         // เปลี่ยนกลับเป็น "Available" (สีเขียว)
-        $(this).removeClass("bg-warning").addClass("bg-secondary");
+        $(this).removeClass("bg-primary").addClass("bg-secondary");
       } else {
         // ถ้าไม่มี class ใดเลย ให้เปลี่ยนเป็น "Warning"
-        $(this).addClass("bg-warning");
+        $(this).addClass("bg-primary");
       }
     } else if (status === "Available") {
       // กรณีเป็น Available ให้เปลี่ยนเป็น "Warning" (สีเหลือง)
       if ($(this).hasClass("bg-success")) {
-        $(this).removeClass("bg-success").addClass("bg-warning");
-      } else if ($(this).hasClass("bg-warning")) {
-        $(this).removeClass("bg-warning").addClass("bg-success");
+        $(this).removeClass("bg-success").addClass("bg-primary");
+      } else if ($(this).hasClass("bg-primary")) {
+        $(this).removeClass("bg-primary").addClass("bg-success");
       } else {
-        $(this).addClass("bg-warning");
+        $(this).addClass("bg-primary");
       }
-    }
-    else if (status === "Reject") {
+    } else if (status === "Reject") {
       // กรณีเป็น Available ให้เปลี่ยนเป็น "Warning" (สีเหลือง)
       if ($(this).hasClass("bg-success")) {
-        $(this).removeClass("bg-success").addClass("bg-warning");
-      } else if ($(this).hasClass("bg-warning")) {
-        $(this).removeClass("bg-warning").addClass("bg-success");
+        $(this).removeClass("bg-success").addClass("bg-primary");
+      } else if ($(this).hasClass("bg-primary")) {
+        $(this).removeClass("bg-primary").addClass("bg-success");
       } else {
-        $(this).addClass("bg-warning");
+        $(this).addClass("bg-primary");
+      }
+    } 
+    else if (status === "Approved") {
+      // กรณีเป็น Available ให้เปลี่ยนเป็น "Warning" (สีเหลือง)
+      if ($(this).hasClass("bg-danger")) {
+        $(this).removeClass("bg-danger").addClass("bg-primary");
+      } else if ($(this).hasClass("bg-primary")) {
+        $(this).removeClass("bg-primary").addClass("bg-danger");
+      } else {
+        $(this).addClass("bg-primary");
       }
     }
-     else {
-      // ถ้า status ไม่ใช่ "Leave" หรือ "Available"
+    else if (status === "Waiting") {
+      // กรณีเป็น Available ให้เปลี่ยนเป็น "Warning" (สีเหลือง)
       if ($(this).hasClass("bg-warning")) {
+        $(this).removeClass("bg-warning").addClass("bg-primary");
+      } else if ($(this).hasClass("bg-primary")) {
+        $(this).removeClass("bg-primary").addClass("bg-warning");
+      } else {
+        $(this).addClass("bg-primary");
+      }
+    }
+    else {
+      // ถ้า status ไม่ใช่ "Leave" หรือ "Available"
+      if ($(this).hasClass("bg-primary")) {
         // ลบสี "Warning"
-        $(this).removeClass("bg-warning");
+        $(this).removeClass("bg-primary");
       } else {
         // เปลี่ยนเป็น "Warning"
-        $(this).addClass("bg-warning");
+        $(this).addClass("bg-primary");
       }
     }
     const timeslotID = $(this).data("timeslots_id");
@@ -369,7 +388,7 @@ function updateLeave(status) {
   const selectedTimeslots = [];
 
   // Get all selected timeslots from the table
-  document.querySelectorAll(".bg-warning").forEach(function (cell) {
+  document.querySelectorAll(".bg-primary").forEach(function (cell) {
     const timeslotId = cell.getAttribute("data-timeslots_id");
     const date = cell.getAttribute("data-date");
     console.log("date in cell : ", date);
@@ -438,7 +457,7 @@ function deleteSelectedLeaves(data_id, semester_id, selectedTimeslots) {
           `td[data-timeslots_id="${timeslots_id}"]`
         );
         if (cell) {
-          cell.classList.remove("bg-warning", "bg-secondary");
+          cell.classList.remove("bg-primary", "bg-secondary");
           cell.setAttribute("data-status", "null");
         }
       });
@@ -457,47 +476,45 @@ function deleteSelectedLeaves(data_id, semester_id, selectedTimeslots) {
     });
 }
 
-function deleteAllLeaves(data_id, semester_id) {
-  fetch("/api/leave/deleteAll", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      data_id: data_id,
-      semester_id: semester_id,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-      alert("All schedules deleted successfully!");
+// function deleteAllLeaves(data_id, semester_id) {
+//   fetch("/api/leave/deleteAll", {
+//     method: "DELETE",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       data_id: data_id,
+//       semester_id: semester_id,
+//     }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("Success:", data);
+//       alert("All schedules deleted successfully!");
 
-      // Remove highlighting from all cells
-      document.querySelectorAll("[data-status]").forEach((cell) => {
-        if (cell.getAttribute("data-status") !== "null") {
-          cell.classList.remove("bg-warning", "bg-secondary");
-          cell.setAttribute("data-status", "null");
-        }
-      });
+//       // Remove highlighting from all cells
+//       document.querySelectorAll("[data-status]").forEach((cell) => {
+//         if (cell.getAttribute("data-status") !== "null") {
+//           cell.classList.remove("bg-primary", "bg-secondary");
+//           cell.setAttribute("data-status", "null");
+//         }
+//       });
 
-      // Refresh the schedule display
-      generateSlots(
-        data_id,
-        semester_id,
-        currentWeekDates[0],
-        currentWeekDates[currentWeekDates.length - 1]
-      );
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to delete all schedules. Please try again.");
-    });
-}
+//       // Refresh the schedule display
+//       generateSlots(
+//         data_id,
+//         semester_id,
+//         currentWeekDates[0],
+//         currentWeekDates[currentWeekDates.length - 1]
+//       );
+//     })
+//     .catch((error) => {
+//       console.error("Error:", error);
+//       alert("Failed to delete all schedules. Please try again.");
+//     });
+// }
 
 function postLeave(data_id, semester_id, selectedTimeslots, status) {
-  console.log();
-
   fetch("/api/leave/createLeave", {
     method: "POST",
     headers: {
@@ -513,23 +530,30 @@ function postLeave(data_id, semester_id, selectedTimeslots, status) {
     .then((response) => response.json())
     .then((data) => {
       console.log("Success:", data);
-      alert("Schedule updated successfully!");
+
+      // รอให้ response กลับมาก่อนแล้วค่อยอัพเดท UI ครั้งเดียว
       selectedTimeslots.forEach(({ timeslots_id }) => {
         const cell = document.querySelector(
           `td[data-timeslots_id="${timeslots_id}"]`
         );
-        if (status === "Leave") {
-          cell.classList.remove("bg-warning");
-          cell.classList.add("bg-secondary");
+        if (cell) {
+          cell.classList.remove("bg-primary");
+          if (status === "Leave") {
+            cell.classList.add("bg-secondary");
+          }
+          cell.setAttribute("data-status", status);
         }
-
-        generateSlots(
-          data_id,
-          semester_id,
-          currentWeekDates[0],
-          currentWeekDates[currentWeekDates.length - 1]
-        );
       });
+
+      // เรียก generateSlots ครั้งเดียวหลังจากอัพเดท UI เสร็จ
+      generateSlots(
+        data_id,
+        semester_id,
+        currentWeekDates[0],
+        currentWeekDates[currentWeekDates.length - 1]
+      );
+
+      alert("Schedule updated successfully!");
     })
     .catch((error) => {
       console.error("Error:", error);
