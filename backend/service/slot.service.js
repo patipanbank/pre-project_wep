@@ -78,37 +78,34 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
         semester_id: semester_id,
       }
     });
-    // console.log('schedules: ',schedules);
+    
     const leaves = await Leave.findAll({
       where: {
         data_id: data_id,
         semester_id: semester_id,
         date: {
-          [Op.between]: [start_date, end_date], // Check if the `date` is between the provided range
+          [Op.between]: [start_date, end_date],
         }
       }
     });
+    
     const result = slots.map(slot => {
-      // const schedule73 = schedules.find(schedule => schedule.timeslots_id === 73);
       const schedule = schedules.find(schedule => schedule.timeslots_id === slot.timeslots_id);
       const leave = leaves.find(leave => leave.timeslots_id === slot.timeslots_id);
-      // console.log('leave: ',leave);
-      // console.log('schedule: ',schedule73);
- 
       let status = 'Empty';
+      
       if (schedule) {
         if (schedule.status === "Available") {
-          // console.log('Available',slot.timeslots_id);
-          console.log(`time:${slot.start_time}-${	slot.end_time} dayofweek: ${slot.dayofweek}, status: ${schedule.status}`);
+          console.log(`time:${slot.start_time}-${slot.end_time} dayofweek: ${slot.dayofweek}, status: ${schedule.status}`);
           status = schedule.status;
         }
-        
       }
+      
       if (leave) {
-        console.log(`time:${slot.start_time}-${	slot.end_time} dayofweek: ${slot.dayofweek}, status: ${schedule.status}`);
-
-        status = leave.status;
+        console.log(`time:${slot.start_time}-${slot.end_time} dayofweek: ${slot.dayofweek}, status: ${leave.status}`);
+        status = leave.status; // Use leave.status directly to get Approved/Reject status
       }
+      
       console.log(`dayofweek: ${slot.dayofweek}, status: ${status}`);
       return {
         timeslots_id: slot.timeslots_id,
@@ -120,7 +117,8 @@ const leavescheduleSlot = async (data_id, semester_id, start_date, end_date) => 
     });
     return result;
   } catch (error) {
-    
+    console.error("Error in leavescheduleSlot:", error);
+    throw error;
   }
 }
 

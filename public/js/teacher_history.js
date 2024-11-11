@@ -1,4 +1,9 @@
-const data_id = 1;
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+}
+const user_id = getCookie("user_id");
 function toggleDetails(card) {
     var details = card.querySelector(".details");
     if (details.style.display === "none") {
@@ -33,7 +38,8 @@ function generateCards(data) {
         // console.log(item.status);
         card.innerHTML = `
             <div class="p-4">
-                <h2>${item.student}</h2>
+                <h2>${item.studentName}</h2>
+                <p  >${item.studentEmail}</p>
                 <h3>${item.dayofweek} ${new Date(item.date).toLocaleDateString()} ${item.start_time} - ${item.end_time}</h3>
                 <p>Click for more details</p>
                 <div class="details" style="display: none;">
@@ -51,7 +57,7 @@ function generateCards(data) {
 
 async function fetchData() {
     try {
-        const response = await fetch(`http://localhost:3001/api/booking/status/${data_id}/Waiting`);
+        const response = await fetch(`http://localhost:3001/api/booking/status/userid/${user_id}/Waiting`);
         if (!response.ok) throw new Error("Failed to fetch data");
         const data = await response.json();
         generateCards(data);

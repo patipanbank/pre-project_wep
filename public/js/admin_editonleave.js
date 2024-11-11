@@ -209,7 +209,18 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         $(this).addClass("bg-warning");
       }
-    } else {
+    }
+    else if (status === "Reject") {
+      // กรณีเป็น Available ให้เปลี่ยนเป็น "Warning" (สีเหลือง)
+      if ($(this).hasClass("bg-success")) {
+        $(this).removeClass("bg-success").addClass("bg-warning");
+      } else if ($(this).hasClass("bg-warning")) {
+        $(this).removeClass("bg-warning").addClass("bg-success");
+      } else {
+        $(this).addClass("bg-warning");
+      }
+    }
+     else {
       // ถ้า status ไม่ใช่ "Leave" หรือ "Available"
       if ($(this).hasClass("bg-warning")) {
         // ลบสี "Warning"
@@ -259,18 +270,15 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
       thead.empty();
       thead.append('<th scope="col">Day/Time</th>');
 
-      // สร้าง array เก็บวันที่จากวันที่เลือก
       const selectedStartDate = new Date(start_date);
       const dates = [];
 
-      // ปรับให้เริ่มต้นจากวันที่เลือกจริงๆ
       for (let i = 0; i < 5; i++) {
         const currentDate = new Date(selectedStartDate);
         currentDate.setDate(selectedStartDate.getDate() + i);
         dates.push(new Date(currentDate));
       }
 
-      // สร้าง map ของวันในสัปดาห์
       const dayMap = {
         0: "Sunday",
         1: "Monday",
@@ -280,12 +288,12 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
         5: "Friday",
         6: "Saturday",
       };
-      // สร้าง array ของวันพร้อมวันที่
+
       const daysOfWeek = dates.map((date) => ({
         day: dayMap[date.getDay()],
         date: date,
       }));
-      // Prepare time slots array and headers
+
       let timeSlots = [];
       timeslots.forEach((slot) => {
         const timeRange = `${formatTime(slot.start_time)}-${formatTime(
@@ -297,12 +305,9 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
         }
       });
 
-      // Clear existing rows
       tableBody.empty();
 
-      // Create rows for each day with dates and add time slot data
       daysOfWeek.forEach(({ day, date }) => {
-        // ข้ามวันเสาร์-อาทิตย์
         if (day !== "Saturday" && day !== "Sunday") {
           let row = `<tr><th scope="row">${day}<br>${formatDate(date)}</th>`;
 
@@ -314,6 +319,7 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
                   slot.end_time
                 )}` === timeSlot
             );
+
             let color = "";
             if (slotData) {
               switch (slotData.status) {
@@ -323,17 +329,22 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
                 case "Available":
                   color = "bg-success";
                   break;
+                case "Approved":
+                  color = "bg-danger";
+                  break;
+                case "Reject":
+                  color = "bg-success";
+                  break;
               }
+
               row += `<td data-timeslots_id="${slotData.timeslots_id}" 
-                                 data-start_time="${slotData.start_time}" 
-                                 data-end_time="${slotData.end_time}" 
-                                 data-dayofweek="${slotData.dayofweek}" 
-                                 data-status="${slotData.status}" 
-                                 data-date="${
-                                   date.toISOString().split("T")[0]
-                                 }"  
-                                 class="${color}"
-                             ></td>`;
+                         data-start_time="${slotData.start_time}" 
+                         data-end_time="${slotData.end_time}" 
+                         data-dayofweek="${slotData.dayofweek}" 
+                         data-status="${slotData.status}" 
+                         data-date="${date.toISOString().split("T")[0]}"  
+                         class="${color}"
+                     </td>`; // Added status text display
             } else {
               row += "<td></td>";
             }
