@@ -20,6 +20,17 @@ function logout() {
         })
         .catch(error => console.error('Error logging out:', error));
 }
+
+// Format date helper function
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
 // Generate cards from data
 function generateCards(data) {
     const container = document.getElementById('cardContainer');
@@ -38,13 +49,13 @@ function generateCards(data) {
         // console.log(item.status);
         card.innerHTML = `
             <div class="p-4">
-                <h2>${item.studentName}</h2>
-                <p  >${item.studentEmail}</p>
-                <h3>${item.dayofweek} ${new Date(item.date).toLocaleDateString()} ${item.start_time} - ${item.end_time}</h3>
+                <h2>Student: ${item.studentName}</h2>
+                <p class="text-gray-600">Email: ${item.studentEmail}</p>
+                <h3>${formatDate(item.date)} ${item.start_time} - ${item.end_time}</h3>
                 <p>Click for more details</p>
                 <div class="details" style="display: none;">
-                    <p>Student: ${item.detail}</p>
-                    <p>Teacher: ${item.feedback}</p>
+                    <p>Student Detail: ${item.detail}</p>
+                    <p>Teacher Feedback: ${item.feedback}</p>
                 </div>
                 <div>
                 <span class="badge ${item.status === 'Approved' ? 'bg-success' : 'bg-danger'}  " style="color: rgb(255, 255, 255);">${item.status}</span>

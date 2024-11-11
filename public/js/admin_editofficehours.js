@@ -5,7 +5,7 @@ function formatTime(timeString) {
 
   // create semester select dropdown and fetch timeslots
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("Document is ready");
+    // console.log("Document is ready");
     const data_id = new URLSearchParams(window.location.search).get(
       "data_id"
     ); // Get data_id from URL
@@ -49,8 +49,8 @@ function formatTime(timeString) {
             semester_id: selectedSemesterId,
           });
         } else {
-          console.error("No semester selected");
-          alert("Error: No semester selected. Please select a semester.");
+          console.error();
+          // alert("Error: No semester selected. Please select a semester.");
         }
         // If no Term 1 for current year is found, set the first semester as default
         if (!defaultOptionSelected && semesters.length > 0) {

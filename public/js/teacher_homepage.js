@@ -9,6 +9,19 @@ function toggleDetails(card) {
     details.style.display = details.style.display === "none" ? "block" : "none";
 }
 
+
+// Format date helper function
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+
 // Generate cards from data
 function generateCards(data) {
     const container = document.getElementById('cardContainer');
@@ -28,12 +41,12 @@ function generateCards(data) {
         card.onclick = () => toggleDetails(card);
         card.innerHTML = `
             <div class="p-4">
-                <h2>${item.studentName}</h2>
+                <h2>Student:${item.studentName}</h2>
                 <p class="text-gray-600">Email: ${item.studentEmail}</p>
-                <h3>${item.dayofweek} ${new Date(item.date).toLocaleDateString()} ${item.start_time} - ${item.end_time}</h3>
+                <h3>${formatDate(item.date)} ${item.start_time} - ${item.end_time}</h3>
                 <p>Click for more details</p>
                 <div class="details" style="display: none;">
-                    <p>Detail: ${item.detail}</p>
+                    <p>Student Detail: ${item.detail}</p>
                 </div>
                 <button class="btn btn-success" onclick="approveRequest(event, ${item.semester_id}, ${item.timeslots_id})">Approve</button>
                 <button class="btn btn-danger" onclick="rejectRequest(event, ${item.semester_id}, ${item.timeslots_id})">Reject</button>

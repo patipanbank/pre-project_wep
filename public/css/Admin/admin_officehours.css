@@ -115,3 +115,15 @@
 .hide-switch {
     display: none;
   }
+
+  .btn-success {
+    background-color: #32df5a !important; /* Available */
+  }
+
+  .btn-secondary {
+    background-color: #6c757d !important; /* Leave */
+  }
+  
+  .btn-danger {
+    background-color: red !important; 
+  }

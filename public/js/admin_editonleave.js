@@ -476,43 +476,6 @@ function deleteSelectedLeaves(data_id, semester_id, selectedTimeslots) {
     });
 }
 
-// function deleteAllLeaves(data_id, semester_id) {
-//   fetch("/api/leave/deleteAll", {
-//     method: "DELETE",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       data_id: data_id,
-//       semester_id: semester_id,
-//     }),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log("Success:", data);
-//       alert("All schedules deleted successfully!");
-
-//       // Remove highlighting from all cells
-//       document.querySelectorAll("[data-status]").forEach((cell) => {
-//         if (cell.getAttribute("data-status") !== "null") {
-//           cell.classList.remove("bg-primary", "bg-secondary");
-//           cell.setAttribute("data-status", "null");
-//         }
-//       });
-
-//       // Refresh the schedule display
-//       generateSlots(
-//         data_id,
-//         semester_id,
-//         currentWeekDates[0],
-//         currentWeekDates[currentWeekDates.length - 1]
-//       );
-//     })
-//     .catch((error) => {
-//       console.error("Error:", error);
-//       alert("Failed to delete all schedules. Please try again.");
-//     });
-// }
 
 function postLeave(data_id, semester_id, selectedTimeslots, status) {
   fetch("/api/leave/createLeave", {
