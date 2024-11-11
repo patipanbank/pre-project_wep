@@ -335,6 +335,9 @@ function generateSlots(data_id, semester_id, start_date, end_date) {
                 case "Reject":
                   color = "bg-success";
                   break;
+                case "Waiting":
+                  color = "bg-warning";
+                  break;
               }
 
               row += `<td data-timeslots_id="${slotData.timeslots_id}" 

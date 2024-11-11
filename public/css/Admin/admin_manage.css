@@ -81,6 +81,7 @@
 .card-img-top {
     height: 280px;
     width: 200px;
+    object-fit: cover;
 }
 
 .card-body {
