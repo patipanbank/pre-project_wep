@@ -119,43 +119,117 @@ function formatTime(timeString) {
   function updateSchedule(status) {
     console.log(status);
     
-    const data_id = new URLSearchParams(window.location.search).get(
-      "data_id"
-    ); // Fetch the data_id from the URL
-    const semester_id = document.getElementById("semester-select").value; // Fetch selected semester
+    const data_id = new URLSearchParams(window.location.search).get("data_id");
+    const semester_id = document.getElementById("semester-select").value;
     const selectedTimeslots = [];
 
-    // Get all selected timeslots from the table
-    document.querySelectorAll(".bg-warning").forEach(function (cell) {
-      const timeslotId = cell.getAttribute("data-timeslots_id");
-      if (timeslotId) {
-        selectedTimeslots.push(timeslotId);
-      }
-    });
+    // กรณี Clear ที่เลือก
+    if (status === "Clearselect") {
+        // รวบรวมช่องที่ถูกเลือก
+        document.querySelectorAll(".bg-warning").forEach(function (cell) {
+            const timeslotId = cell.getAttribute("data-timeslots_id");
+            if (timeslotId) {
+                selectedTimeslots.push(timeslotId);
+            }
+        });
 
-    if (!semester_id || selectedTimeslots.length === 0 && status !== "clearall") {
-      alert("Please select a semester and timeslots!");
-      return;
+        if (selectedTimeslots.length === 0) {
+            alert("Plese select cell to clear!");
+            return;
+        }
+
+        const result = confirm(`Are you sure to clear ${selectedTimeslots.length} list?`);
+        if (result) {
+            deleteSelectedSchedules(data_id, semester_id, selectedTimeslots);
+        }
+        return;
+    } 
+    // กรณี Clear All
+    else if (status === "clearall") {
+        const result = confirm("Are you sure to clear all?");
+        const allTimeslots = [];
+        if (result) {
+            document.querySelectorAll("[data-status]").forEach(function (cell) {
+                if (cell.getAttribute("data-status") !== "null" && 
+                    (cell.getAttribute("data-status") === "Available" || 
+                     cell.getAttribute("data-status") === "Leave")) {
+                    allTimeslots.push(cell.getAttribute("data-timeslots_id"));
+                }
+            });
+            deleteSchedule(data_id, semester_id, allTimeslots);
+        }
+        return;
     }
+    // กรณีอัพเดทปกติ (Available)
+    else {
+        document.querySelectorAll(".bg-warning").forEach(function (cell) {
+            const timeslotId = cell.getAttribute("data-timeslots_id");
+            if (timeslotId) {
+                selectedTimeslots.push(timeslotId);
+            }
+        });
 
-    if (status === "clearall") {
-      const result = confirm("Are you sure you want to clear all schedules?");
-      const allTimeslots = [];
-      if (result) {
-        document.querySelectorAll("[data-status]").forEach(function (cell) {
-          // console.log(cell);
-          if (cell.getAttribute("data-status") !== "null" && cell.getAttribute("data-status") === "Available" || cell.getAttribute("data-status") === "Leave") {
-            console.log(cell.getAttribute("data-status"));
-            allTimeslots.push(cell.getAttribute("data-timeslots_id"));
-          }
+        if (!semester_id || selectedTimeslots.length === 0) {
+            alert("Please select a semester and timeslots!");
+            return;
+        }
+        
+        postSchedule(data_id, semester_id, selectedTimeslots, status);    
+    }
+}
+
+function deleteSelectedSchedules(data_id, semester_id, timeslots) {
+    fetch('/api/schedule/removeSelectedSchedules', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data_id: data_id,
+            semester_id: semester_id,
+            timeslots: timeslots
         })
-        // console.log(allTimeslots);
-        postSchedule(data_id,semester_id,allTimeslots,'Empty');    
-      }
-      return;
-    }
-     postSchedule(data_id,semester_id,selectedTimeslots,status);    
-  
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Clear schedules (${data.deletedCount} list)`);
+            location.reload();
+        } else {
+            alert(data.message || "Error for clear");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Error connect to server");
+    });
+}
+
+function deleteSchedule(data_id, semester_id, timeslots) {
+    fetch('/api/schedule/removeSchedule', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data_id: data_id,
+            semester_id: semester_id,
+            timeslots: timeslots
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.length > 0) {
+            alert("Clear success");
+            location.reload();
+        } else {
+            alert("No find data to clear");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Error connect to server");
+    });
   }
 
   function postSchedule(data_id,semester_id,selectedTimeslots,status) {

@@ -110,4 +110,69 @@ const getLeaveByUserID = async (users_id) => {
     }
 };
 
-module.exports = {createMultipleLeave, getLeaveByUserID}
+const deleteMultipleLeave = async (data_id, semester_id, timeslots) => {
+    try {
+        // Use map to return promises inside Promise.all for deletion
+        const results = await Promise.all(timeslots.map(async ({timeslots_id, dates}) => {
+            const date = new Date(dates);
+            date.setHours(0, 0, 0, 0);
+            
+            const findSchedule = await Leave.findOne({
+                where: {
+                    data_id: data_id,
+                    timeslots_id: timeslots_id,
+                    semester_id: semester_id,
+                    date: date
+                }
+            });
+            
+            if (!findSchedule) {
+                return { 
+                    success: false,
+                    message: `Schedule not found for timeslot: ${timeslots_id} on date: ${dates}`
+                };
+            }
+
+            // Delete the schedule
+            await findSchedule.destroy();
+            return { 
+                success: true,
+                message: `Schedule with timeslot: ${timeslots_id} deleted successfully`
+            };
+        }));
+        
+        // Log results and return successful deletions
+        results.forEach(result => console.log(result.message));
+        return {
+            success: true,
+            deletedCount: results.filter(r => r.success).length,
+            results: results
+        };
+    } catch (err) {
+        console.error('Error in deleteMultipleLeave:', err);
+        throw err;
+    }
+};
+
+const deleteAllLeave = async (data_id, semester_id) => {
+    try {
+        // Delete all leaves matching the criteria
+        const result = await Leave.destroy({
+            where: {
+                data_id: data_id,
+                semester_id: semester_id
+            }
+        });
+        
+        return {
+            success: true,
+            message: `Successfully deleted ${result} schedules`,
+            deletedCount: result
+        };
+    } catch (err) {
+        console.error('Error in deleteAllLeave:', err);
+        throw err;
+    }
+};
+
+module.exports = {createMultipleLeave, getLeaveByUserID, deleteAllLeave, deleteMultipleLeave}

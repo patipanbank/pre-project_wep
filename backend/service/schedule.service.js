@@ -1,4 +1,5 @@
 const Schedule = require('../model/schedule');
+const { Op } = require('sequelize');
 
 const getSchedulebydata_id = async (data_id,semester_id) => {
     try {
@@ -31,6 +32,7 @@ const editMultipleSchedules = async (schedules) => {
       throw err;
   }
 };
+
 
 const createMultipleSchedules = async (data_id, semester_id, timeslots, status) => {
     console.log(timeslots);
@@ -69,24 +71,54 @@ const createMultipleSchedules = async (data_id, semester_id, timeslots, status) 
     }
 };
 
-const removeMutipleSchedule = async (data_id, semester_id,timeslots) => {
+const removeMutipleSchedule = async (data_id, semester_id, timeslots) => {
     try {
-
-        const result = await Promise.all(timeslots.map(async (timeslot) => {
-            const res = await Schedule.destroy({
+        const results = await Promise.all(timeslots.map(async (timeslot) => {
+            const deletedCount = await Schedule.destroy({
                 where: {
                     data_id: data_id,
                     timeslots_id: timeslot,
                     semester_id: semester_id
                 }
             });
-            return res ? { message: `Schedule with data_id: ${data_id} removed successfully` } : null;
+            return {
+                timeslot_id: timeslot,
+                success: deletedCount > 0,
+                message: deletedCount > 0 
+                    ? `Schedule with timeslot ${timeslot} removed successfully` 
+                    : `No schedule found for timeslot ${timeslot}`
+            };
         }));
-        return result;
+        
+        return results.filter(result => result.success); // ส่งกลับเฉพาะรายการที่ลบสำเร็จ
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error('Error in removeMutipleSchedule:', error);
+        throw new Error('Failed to remove schedules');
+        
     }
 }
 
-module.exports = {  editMultipleSchedules,createMultipleSchedules,getSchedulebydata_id,removeMutipleSchedule };
+const removeSelectedSchedules = async (data_id, semester_id, timeslots) => {
+    try {
+        const deletedSchedules = await Schedule.destroy({
+            where: {
+                data_id: data_id,
+                semester_id: semester_id,
+                timeslots_id: {
+                    [Op.in]: timeslots
+                }
+            }
+        });
+
+        return {
+            success: true,
+            deletedCount: deletedSchedules,
+            message: `ลบข้อมูลสำเร็จ ${deletedSchedules} รายการ`
+        };
+    } catch (error) {
+        console.error('Error in removeSelectedSchedules:', error);
+        throw new Error('Failed to remove selected schedules');
+    }
+};
+
+module.exports = {  editMultipleSchedules,createMultipleSchedules,getSchedulebydata_id,removeMutipleSchedule,removeSelectedSchedules };
