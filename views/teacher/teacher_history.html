@@ -43,10 +43,10 @@
         </div>
     </nav>
 
-    <div class="control-width">
+    <div class="control-width" id="cardContainer">
 
 
-        <div class="card2 mt-5" onclick="toggleDetails(this)">
+        <!-- <div class="card2 mt-5" onclick="toggleDetails(this)">
             <div>
                 <h2>Jhon Carther 6431501...</h2>
                 <h3>Monday 4/4/2567 14:00-14:30</h3>
@@ -72,27 +72,12 @@
             </div>
             <div>
                 <span class="badge bg-danger" style="color: rgb(255, 255, 255);">Reject</span>
-            </div>
-        </div>
+            </div> -->
+    </div>
 
 
-        <script>
-            function toggleDetails(card) {
-                var details = card.querySelector(".details");
-                if (details.style.display === "none") {
-                    details.style.display = "block";
-                } else {
-                    details.style.display = "none";
-                }
-            }
-
-            function logout() {
-                fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
-                    .then(() => {
-                        window.location.href = '/login'; // Redirect to login after logout
-                    })
-                    .catch(error => console.error('Error logging out:', error));
-            }
+        <script src="/public/js/teacher_history.js">
+          
             
         </script>
 </body>
