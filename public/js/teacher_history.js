@@ -39,14 +39,24 @@ function generateCards(data) {
     if (data.length === 0) {
         const card = document.createElement('div');
         card.className = 'card2 mt-5 p-4';
-        card.innerHTML = '<h2 >ไม่มีประวัติการยืนยันหรือปฏิเสธคำข้อร้องใด ๆ</h2>';
+        card.innerHTML = '<h2>ไม่มีประวัติการยืนยันหรือปฏิเสธการนัดหมาย</h2>';
         container.appendChild(card);
     }
     data.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card2 mt-5';
         card.onclick = () => toggleDetails(card);
-        // console.log(item.status);
+        
+        // กำหนด badge class ตาม status
+        let badgeClass = '';
+        if (item.status === 'Approved') {
+            badgeClass = 'bg-success';
+        } else if (item.status === 'Leave') {
+            badgeClass = 'bg-secondary';
+        } else {
+            badgeClass = 'bg-danger';
+        }
+
         card.innerHTML = `
             <div class="p-4">
                 <h2>Student: ${item.studentName}</h2>
@@ -58,7 +68,7 @@ function generateCards(data) {
                     <p>Teacher Feedback: ${item.feedback}</p>
                 </div>
                 <div>
-                <span class="badge ${item.status === 'Approved' ? 'bg-success' : 'bg-danger'}  " style="color: rgb(255, 255, 255);">${item.status}</span>
+                <span class="badge ${badgeClass}" style="color: rgb(255, 255, 255);">${item.status}</span>
                 </div>
             </div>
         `;

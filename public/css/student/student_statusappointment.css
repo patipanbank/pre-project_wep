@@ -64,6 +64,11 @@
     background-color: #ffc107;
   }
   
+  .status-badge-leave {
+    background-color: #6c757d !important; /* Leave */
+    color: white;
+  }
+
   .status-badge:hover {
     cursor: pointer;
   }
