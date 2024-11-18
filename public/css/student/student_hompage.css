@@ -33,23 +33,23 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
-  }
-  
-  .row.sandim .col-md-2 {
+}
+
+.row.sandim .col-md-2 {
     flex: 0 0 auto;
     width: auto;
-  }
-  
-  .row.sandim form {
+}
+
+.row.sandim form {
     display: flex;
     align-items: center;
-  }
-  
-  .row.sandim input,
-  .row.sandim button {
+}
+
+.row.sandim input,
+.row.sandim button {
     margin-right: 10px;
-  }
-  
+}
+
 .switch-btn {
     height: 20px;
     /* width: 100%; */
@@ -80,6 +80,7 @@
 }
 
 .card-img-top {
+    margin-top: 20px;
     height: 280px;
     width: 200px;
     object-fit: cover;
@@ -115,4 +116,26 @@
 
 .hide-switch {
     display: none;
-  }
+}
+
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 200px; */
+    overflow: hidden;
+}
+
+.card-status {
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: rgb(185, 183, 183);
+}
+
+
+.current-time{
+    font-weight: bold;
+    font-size: 20px;
+}

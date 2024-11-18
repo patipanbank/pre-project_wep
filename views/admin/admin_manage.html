@@ -94,7 +94,6 @@
 
     <script>
 
-
 function downloadTemplate() {
     fetch('/download-template')
         .then(response => response.blob())
@@ -160,34 +159,123 @@ function downloadTemplate() {
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            fetch('/data/images')
-                .then(response => response.json())
-                .then(data => {
-                    const cardContainer = document.getElementById('cardContainer');
-                    data.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.id = `card-${item.data_id}`;
-                        card.innerHTML = `
+    fetch('/data/images')
+        .then(response => response.json())
+        .then(data => {
+            const cardContainer = document.getElementById('cardContainer');
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card text-center'; // เพิ่ม text-center เพื่อจัดกลางเนื้อหาทั้งหมด
+                card.id = `card-${item.data_id}`;
+                card.innerHTML = ` 
+                    <div class="card-header p-2"> <!-- เพิ่ม card-header สำหรับ dropdown -->
+                        <select class="form-select form-select-sm mx-auto" style="width: 150px;" 
+                                onchange="updateStatus(${item.data_id}, this.value)" 
+                                id="status-${item.data_id}">
+                            <option value="in_office" ${item.status === 'in_office' ? 'selected' : ''}>In Office</option>
+                            <option value="out_office" ${item.status === 'out_office' ? 'selected' : ''}>Out Office</option>
+                            <option value="Leave" ${item.status === 'Leave' ? 'selected' : ''}>Leave</option>
+                        </select>
+                    </div>
+                    <div class="image-container"> <!-- เพิ่ม container สำหรับรูปภาพ -->
                         <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
-                        <div class="card-body">
-                            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
-                            <p class="card-text">Major: ${item.major}</p>
-                            <p class="card-text">Email: ${item.email}</p>
-                            <p class="card-text">Tel: ${item.tel}</p>
-                            <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="available-${item.data_id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.data_id})">
+                    </div>
+                    <div class="card-body d-flex flex-column align-items-center"> <!-- จัดการ card-body ให้อยู่กึ่งกลาง -->
+                        <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+                        <p class="card-text mb-1">Major: ${item.major}</p>
+                        <p class="card-text mb-1">Email: ${item.email}</p>
+                        <p class="card-text mb-2">Tel: ${item.tel}</p>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="available-${item.data_id}" 
+                                ${item.available === 'on' ? 'checked' : ''} 
+                                onchange="toggleAvailability(${item.data_id})">
                             <label class="form-check-label" for="available-${item.data_id}">Available</label>
-                            </div>
                         </div>
-                        `;
-                        cardContainer.appendChild(card);
-                        updateCardStyle(item.data_id, item.available); // Set initial card style
-                    });
-                    reorderCards(); // Reorder cards initially
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+                    </div>
+                `;
+                cardContainer.appendChild(card);
+
+                // เรียกใช้ updateCardStatusStyle เพื่ออัปเดตสีของการ์ดตามสถานะ
+                updateCardStatusStyle(item.data_id, item.status);
+
+                updateCardStyle(item.data_id, item.available);
+            });
+            reorderCards();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+});
+
+function updateStatus(id, status) {
+    fetch(`/data/${id}/status`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // อัพเดทสีของการ์ดตามสถานะ
+            updateCardStatusStyle(id, status);
+        } else {
+            alert('Error updating status: ' + data.message);
+            // Reset dropdown to previous value if failed
+            document.getElementById(`status-${id}`).value = data.currentStatus;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status');
+    });
+}
+
+// ฟังก์ชันสำหรับอัปเดตสีของการ์ด, dropdown และรูปภาพตามสถานะ
+function updateCardStatusStyle(id, status) {
+    const card = document.getElementById(`card-${id}`);
+    const select = document.getElementById(`status-${id}`);
+    const imageContainer = card.querySelector('.image-container');
+
+    // ลบ class เดิมทั้งหมด
+    card.classList.remove('status-in-office', 'status-out-office', 'status-leave');
+    
+    // เพิ่ม class ใหม่ตามสถานะ
+    card.classList.add(`status-${status.toLowerCase()}`);
+
+    // เปลี่ยนสีพื้นหลังของ card ตามสถานะ
+    switch(status) {
+        case 'in_office':
+            card.style.backgroundColor = 'rgb(98, 245, 98)'; // สีเขียวอ่อนสำหรับ In Office
+            break;
+        case 'out_office':
+            card.style.backgroundColor = 'rgb(211, 102, 102)'; // สีแดงอ่อนสำหรับ Out Office
+            break;
+        case 'Leave':
+            card.style.backgroundColor = 'rgb(185, 183, 183)'; // สีเหลืองอ่อนสำหรับ Leave
+            break;
+    }
+
+    // เปลี่ยนสีพื้นหลังของ dropdown
+    select.style.backgroundColor = getBackgroundColorByStatus(status);
+
+    // เปลี่ยนสีพื้นหลังของรูปภาพ
+    if (imageContainer) {
+        imageContainer.style.backgroundColor = getBackgroundColorByStatus(status);
+    }
+}
+
+function getBackgroundColorByStatus(status) {
+    switch (status) {
+        case 'in_office':
+            return 'rgb(98, 245, 98)'; // สีเขียวอ่อนสำหรับ In Office
+        case 'out_office':
+            return 'rgb(211, 102, 102)'; // สีแดงอ่อนสำหรับ Out Office
+        case 'Leave':
+            return 'rgb(185, 183, 183)'; // สีเหลืองอ่อนสำหรับ Leave
+        default:
+            return ''; // ไม่มีการเปลี่ยนแปลง
+    }
+}
 
         function searchTeachers() {
             var input, filter, cardContainer, cards, cardBody, i, txtValue;

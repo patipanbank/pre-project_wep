@@ -1,205 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/public/css/Admin/admin_homepage.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/public/css/Admin/admin_homepage.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
     <title>Admin Homepage</title>
-</head>
+  </head>
 
-<body>
-    <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
+  <body>
+    <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt="" /></nav>
 
-    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" style="color: white;" aria-current="page"
-                            href="/admin/homepage">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
-                            TEACHER</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE HOURS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/admin/addonleave">ADD ON LEAVE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" style="color: white;" href="/admin/semester">SEMESTER</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
-            </div>
+    <nav
+      class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #253b6d"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                style="color: white"
+                aria-current="page"
+                href="/admin/homepage"
+                >HOME</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/manage"
+                >MANAGE TEACHER</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/officehours"
+                >OFFICE HOURS</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/addonleave"
+                >ADD ON LEAVE</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: white" href="/admin/semester"
+                >SEMESTER</a
+              >
+            </li>
+          </ul>
         </div>
+        <div>
+          <button type="button" class="btn btn-danger" onclick="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
     </nav>
 
-
     <div class="container text-center">
-        <div class="widget" id="all" onclick="redirectToPage('all')">
-            <div class="col">
-                <div class="d-flex">
-                    <div class="text-white">
-                        <h1 id="alls">0</h1>
-                        <h6>All</h6>
-                    </div>
-                </div>
-                <div class="icons">
-                    <i class="fa fa-download"></i>
-                </div>
+      <div class="widget" id="all" onclick="redirectToPage('all')">
+        <div class="col">
+          <div class="d-flex">
+            <div class="text-white">
+              <h1 id="alls">0</h1>
+              <h6>All</h6>
             </div>
+          </div>
+          <div class="icons">
+            <i class="fa fa-download"></i>
+          </div>
         </div>
-        <div class="widget" id="inof" onclick="redirectToPage('inof')">
-            <div class="col">
-                <div class="d-flex">
-                    <div class="text-white">
-                        <h1 id="inofs">0</h1>
-                        <h6>In Office</h6>
-                    </div>
-                </div>
-                <div class="icons">
-                    <i class="fa fa-sign-in"></i>
-                </div>
+      </div>
+      <div class="widget" id="inof" onclick="redirectToPage('inof')">
+        <div class="col">
+          <div class="d-flex">
+            <div class="text-white">
+              <h1 id="inofs">0</h1>
+              <h6>In Office</h6>
             </div>
+          </div>
+          <div class="icons">
+            <i class="fa fa-sign-in"></i>
+          </div>
         </div>
-        <div class="widget" id="outof" onclick="redirectToPage('outof')">
-            <div class="col">
-                <div class="d-flex">
-                    <div class="text-white">
-                        <h1 id="outofs">0</h1>
-                        <h6>Out Office</h6>
-                    </div>
-                </div>
-                <div class="icons">
-                    <i class="fa fa-sign-out"></i>
-                </div>
+      </div>
+      <div class="widget" id="outof" onclick="redirectToPage('outof')">
+        <div class="col">
+          <div class="d-flex">
+            <div class="text-white">
+              <h1 id="outofs">0</h1>
+              <h6>Out Office</h6>
             </div>
+          </div>
+          <div class="icons">
+            <i class="fa fa-sign-out"></i>
+          </div>
         </div>
-        <div class="widget" id="leave" onclick="redirectToPage('leave')">
-            <div class="col">
-                <div class="d-flex">
-                    <div class="text-white">
-                        <h1 id="leaves">0</h1>
-                        <h6>Leave</h6>
-                    </div>
-                </div>
-                <div class="icons">
-                    <i class="fa fa-envelope-open"></i>
-                </div>
+      </div>
+      <div class="widget" id="leave" onclick="redirectToPage('leave')">
+        <div class="col">
+          <div class="d-flex">
+            <div class="text-white">
+              <h1 id="leaves">0</h1>
+              <h6>Leave</h6>
             </div>
+          </div>
+          <div class="icons">
+            <i class="fa fa-envelope-open"></i>
+          </div>
         </div>
+      </div>
     </div>
     <div class="container">
-        <div class="chart-container">
-            <canvas id="myChart"></canvas>
-        </div>
+      <div class="chart-container">
+        <canvas id="myChart"></canvas>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        let myChart; // Declare chart variable globally
+        
+      let myChart; // ประกาศตัวแปร chart
 
-        // Function to fetch the count and update both widget and chart
-        function fetchAllCount() {
-            fetch('/data/count/available')
-                .then(response => response.json())
-                .then(data => {
-                    // Update widget
-                    document.getElementById('alls').innerText = data.count;
-                    // Update chart
-                    updateChart(data.count);
-                })
-                .catch(error => console.error('Error fetching all count:', error));
-        }
+      // ฟังก์ชันเพื่อดึงข้อมูลและอัพเดท widget และกราฟ
+      function fetchDataAndUpdateChart() {
+        const statuses = ["all", "in_office", "out_office", "Leave"];
+        const countData = {}; // เก็บข้อมูลที่ได้จาก API
 
-        // Function to create/update the chart
-        function updateChart(allCount) {
-            const chartData = {
-                labels: ['All', 'In Office', 'Out Office', 'Leave'],
-                datasets: [{
-                    label: 'Number of Teachers',
-                    data: [allCount, 0, 0, 0],
-                    backgroundColor: [
-                        'yellow',
-                        'green',
-                        'red',
-                        'gray'
-                    ],
-                    borderWidth: 1
-                }]
-            };
+        // ดึงข้อมูลจากทุก status
+        Promise.all(
+          statuses.map((status) => {
+            return fetch(`/data/count/${status}/available`)
+              .then((response) => response.json())
+              .then((data) => {
+                countData[status] = data.count;
+              })
+              .catch((error) => {
+                console.error(`Error fetching data for ${status}:`, error);
+                countData[status] = 0; // กรณีไม่สามารถดึงข้อมูลได้
+              });
+          })
+        ).then(() => {
+          // อัพเดท widget
+          document.getElementById("alls").innerText = countData.all || 0;
+          document.getElementById("inofs").innerText = countData.in_office || 0;
+          document.getElementById("outofs").innerText =
+            countData.out_office || 0;
+          document.getElementById("leaves").innerText = countData.Leave || 0;
 
-            // If chart exists, destroy it before creating a new one
-            if (myChart) {
-                myChart.destroy();
-            }
-
-            const ctx = document.getElementById('myChart').getContext('2d');
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Fetch the count when the page loads
-        document.addEventListener('DOMContentLoaded', fetchAllCount);
-
-        // Add window resize event listener to handle responsive sizing
-        window.addEventListener('resize', () => {
-            if (myChart) {
-                myChart.resize();
-            }
+          // อัพเดทกราฟ
+          updateChart(countData);
         });
+      }
 
-        function redirectToPage(widgetId) {
-            if (widgetId === 'all') {
-                window.location.href = "/admin/all";
-            } if (widgetId === 'inof') {
-                window.location.href = "/admin/inoffice";
-            } if (widgetId === 'outof') {
-                window.location.href = "/admin/outoffice";
-            } if (widgetId === 'leave') {
-                window.location.href = "/admin/leave";
-            }
+      // ฟังก์ชันในการอัพเดทกราฟ
+      function updateChart(countData) {
+        const chartData = {
+          labels: ["All", "In Office", "Out Office", "Leave"],
+          datasets: [
+            {
+              label: "Number of Teachers",
+              data: [
+                countData.all || 0,
+                countData.in_office || 0,
+                countData.out_office || 0,
+                countData.Leave || 0,
+              ],
+              backgroundColor: ["yellow", "green", "red", "gray"],
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        // หากมี chart อยู่แล้ว, ให้ทำลายก่อน
+        if (myChart) {
+          myChart.destroy();
         }
 
-        function logout() {
-            fetch('/logout', { method: 'POST' })
-                .then(() => {
-                    window.location.href = '/login';
-                })
-                .catch(error => console.error('Error logging out:', error));
+        const ctx = document.getElementById("myChart").getContext("2d");
+        myChart = new Chart(ctx, {
+          type: "bar",
+          data: chartData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // ดึงข้อมูลและอัพเดทกราฟเมื่อหน้าโหลด
+      document.addEventListener("DOMContentLoaded", fetchDataAndUpdateChart);
+
+      // เพิ่ม event listener เมื่อหน้าจอเปลี่ยนขนาด
+      window.addEventListener("resize", () => {
+        if (myChart) {
+          myChart.resize();
         }
+      });
+
+      function redirectToPage(widgetId) {
+        if (widgetId === "all") {
+          window.location.href = "/admin/all";
+        }
+        if (widgetId === "inof") {
+          window.location.href = "/admin/inoffice";
+        }
+        if (widgetId === "outof") {
+          window.location.href = "/admin/outoffice";
+        }
+        if (widgetId === "leave") {
+          window.location.href = "/admin/leave";
+        }
+      }
+
+      function logout() {
+        fetch("/logout", { method: "POST" })
+          .then(() => {
+            window.location.href = "/login";
+          })
+          .catch((error) => console.error("Error logging out:", error));
+      }
     </script>
-</body>
-
+  </body>
 </html>

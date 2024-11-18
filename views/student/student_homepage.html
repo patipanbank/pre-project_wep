@@ -83,7 +83,7 @@
               placeholder="Search..."
             />
             <button type="submit">Search</button>
-            <div id="current-date" class=""></div>
+            <div id="current-date" class="current-time"></div>
           </form>
         </div>
       </div>
@@ -182,40 +182,80 @@
           .then((response) => response.json())
           .then((data) => {
             const cardContainer = document.getElementById("cardContainer");
-            // Filter data to only include items with available status 'on'
             const filteredData = data.filter((item) => item.available === "on");
+
             filteredData.forEach((item) => {
               const card = document.createElement("div");
               card.className = "card";
               card.id = `card-${item.data_id}`;
+
+              let statusStyle = "";
+              let statusText = "";
+              let cardBgColor = "";
+              let imgBgColor = "";
+
+              switch (item.status) {
+                case "in_office":
+                  statusStyle =
+                    "background-color: rgb(98, 245, 98); color: black; border: 2px solid green;";
+                  statusText = "In Office";
+                  cardBgColor = "background-color: rgb(98, 245, 98);"; // สีเขียวอ่อน
+                  imgBgColor = "background-color: rgb(98, 245, 98);"; // สีเขียวเข้มสำหรับรูป
+                  break;
+                case "out_office":
+                  statusStyle =
+                    "background-color: rgb(211, 102, 102); color: black; border: 2px solid red;";
+                  statusText = "Out Office";
+                  cardBgColor = "background-color: rgb(211, 102, 102);"; // สีแดงอ่อน
+                  imgBgColor = "background-color: rgb(211, 102, 102);"; // สีแดงเข้มสำหรับรูป
+                  break;
+                case "Leave":
+                  statusStyle =
+                    "background-color: rgb(185, 183, 183); color: black; border: 2px solid gray;";
+                  statusText = "Leave";
+                  cardBgColor = "background-color: rgb(185, 183, 183);"; // สีเทาอ่อน
+                  imgBgColor = "background-color: rgb(185, 183, 183);"; // สีเทาเข้มสำหรับรูป
+                  break;
+                default:
+                  statusStyle =
+                    "background-color: black; color: white; border: 2px solid black;";
+                  statusText = "Unknown";
+                  cardBgColor = "background-color: rgba(0, 0, 0, 0.2);"; // สีดำอ่อน
+                  imgBgColor = "background-color: rgba(0, 0, 0, 0.4);"; // สีดำเข้มสำหรับรูป
+              }
+
               card.innerHTML = `
-                        <img src="${
-                          item.image || "https://via.placeholder.com/150"
-                        }" class="card-img-top" alt="Image">
-                        <div class="card-body">
-                            <h5 class="card-title" style="font-size: 17px;">${
-                              item.name
-                            }</h5>
-                            <p class="card-text">Major: ${item.major}</p>
-                            <p class="card-text">Email: ${item.email}</p>
-                            <p class="card-text">Tel: ${item.tel}</p>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input hide-switch" type="checkbox" id="available-${
-                                  item.data_id
-                                }" ${
-                item.available === "on" ? "checked" : ""
-              } onchange="toggleAvailability(${item.data_id})">
-                            </div>
-                            <button class="btn btn-primary" onclick="makeOfficehours(${
-                              item.data_id
-                            })">Appointment</button>
-                        </div>
-                    `;
+          <div class="card-status" style="${statusStyle} padding: 5px; text-align: center; border-radius: 5px;">
+            <strong>${statusText}</strong>
+          </div>
+          <div class="image-container" style="${imgBgColor}">
+            <img src="${
+              item.image || "https://via.placeholder.com/150"
+            }" class="card-img-top" alt="Image">
+          </div>
+          <div class="card-body" style="${cardBgColor}; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+            <p class="card-text">Major: ${item.major}</p>
+            <p class="card-text">Email: ${item.email}</p>
+            <p class="card-text">Tel: ${item.tel}</p>
+            <div class="form-check form-switch">
+              <input class="form-check-input hide-switch" type="checkbox" id="available-${
+                item.data_id
+              }"
+                ${item.available === "on" ? "checked" : ""}
+                onchange="toggleAvailability(${item.data_id})">
+            </div>
+            <button class="btn btn-primary" onclick="makeOfficehours(${
+              item.data_id
+            })" style="margin-top: 10px;">Appointment</button>
+          </div>
+        `;
 
               cardContainer.appendChild(card);
-              updateCardStyle(item.data_id, item.available); // Set initial card style
+              updateCardStyle(item.data_id, item.available);
             });
-            reorderCards(); // Reorder cards initially
+
+            reorderCards();
           })
           .catch((error) => console.error("Error fetching data:", error));
       });
