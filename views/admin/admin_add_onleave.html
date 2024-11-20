@@ -112,10 +112,9 @@
                         <p class="card-text">Major: ${item.major}</p>
                         <p class="card-text">Email: ${item.email}</p>
                         <p class="card-text">Tel: ${item.tel}</p>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input hide-switch" type="checkbox" id="available-${item.data_id}" ${item.available === 'on' ? 'checked' : ''} onchange="toggleAvailability(${item.data_id})">
-                        </div>
+                        <div class="mt-auto w-100 d-flex justify-content-center">
                         <button class="btn btn-secondary" onclick="makeOfficehours(${item.data_id})">Edit On Leave</button>
+                    </div>
                     </div>
                 `;
 

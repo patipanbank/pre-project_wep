@@ -165,12 +165,12 @@
         const cards = Array.from(cardContainer.getElementsByClassName("card"));
 
         cards.sort((a, b) => {
-          const availableA = a.querySelector(".form-check-input").checked
-            ? 0
-            : 1;
-          const availableB = b.querySelector(".form-check-input").checked
-            ? 0
-            : 1;
+          const inputA = a.querySelector(".form-check-input");
+          const inputB = b.querySelector(".form-check-input");
+
+          const availableA = inputA ? (inputA.checked ? 0 : 1) : 1;
+          const availableB = inputB ? (inputB.checked ? 0 : 1) : 1;
+
           return availableA - availableB;
         });
 
@@ -238,16 +238,11 @@
             <p class="card-text">Major: ${item.major}</p>
             <p class="card-text">Email: ${item.email}</p>
             <p class="card-text">Tel: ${item.tel}</p>
-            <div class="form-check form-switch">
-              <input class="form-check-input hide-switch" type="checkbox" id="available-${
-                item.data_id
-              }"
-                ${item.available === "on" ? "checked" : ""}
-                onchange="toggleAvailability(${item.data_id})">
-            </div>
+            <div class="mt-auto w-100 d-flex justify-content-center">
             <button class="btn btn-primary" onclick="makeOfficehours(${
               item.data_id
             })" style="margin-top: 10px;">Appointment</button>
+          </div>
           </div>
         `;
 

@@ -22,6 +22,8 @@ const cookieParser = require('cookie-parser');
 const loginRoute = require('./backend/routes/login');
 const dataRoute = require('./backend/routes/data.route');
 const app = express();
+
+// const isAuthenticated = require('./backend/middleware/authenticated');
 app.use(cookieParser());
 const corsOptions = {
   origin: 'http://localhost:3001', // Replace with your frontend's origin
@@ -32,6 +34,14 @@ app.use(cors(corsOptions));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.use((req, res, next) => {
+//   const userId = req.cookies.user_id;
+//   if (!userId && !['/login', '/auth', '/auth/google', '/auth/callback'].includes(req.path)) {
+//       return res.redirect('/login');
+//   }
+//   next();
+// });
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();

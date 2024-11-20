@@ -169,7 +169,7 @@ function downloadTemplate() {
                 card.id = `card-${item.data_id}`;
                 card.innerHTML = ` 
                     <div class="card-header p-2"> <!-- เพิ่ม card-header สำหรับ dropdown -->
-                        <select class="form-select form-select-sm mx-auto" style="width: 150px;" 
+                        <select class="aa form-select form-select-sm mx-auto" style="width: 150px;" 
                                 onchange="updateStatus(${item.data_id}, this.value)" 
                                 id="status-${item.data_id}">
                             <option value="in_office" ${item.status === 'in_office' ? 'selected' : ''}>In Office</option>
@@ -185,12 +185,14 @@ function downloadTemplate() {
                         <p class="card-text mb-1">Major: ${item.major}</p>
                         <p class="card-text mb-1">Email: ${item.email}</p>
                         <p class="card-text mb-2">Tel: ${item.tel}</p>
+                        <div class="mt-auto w-100 d-flex justify-content-center">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="available-${item.data_id}" 
                                 ${item.available === 'on' ? 'checked' : ''} 
                                 onchange="toggleAvailability(${item.data_id})">
                             <label class="form-check-label" for="available-${item.data_id}">Available</label>
                         </div>
+                    </div>
                     </div>
                 `;
                 cardContainer.appendChild(card);
