@@ -2,9 +2,7 @@ const { Op } = require("sequelize");
 const Data = require("../model/data");
 const { connection_server } = require("../config/db");
 const express = require("express");
-
 const app = express();
-const port = 3000;
 
 let clients = [];
 let timeoutMap = new Map();
@@ -115,11 +113,6 @@ app.get("/events", (req, res) => {
   req.on("close", () => {
     clients = clients.filter((client) => client.id !== clientId);
   });
-});
-
-// Start server and process notifications
-app.listen(port, () => {
-  console.log(`SSE server is running on http://localhost:${port}`);
 });
 
 setInterval(processNotifications, 1000);
