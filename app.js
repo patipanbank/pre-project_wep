@@ -21,8 +21,11 @@ const bookingRoutes = require('./backend/routes/booking.route');
 const cookieParser = require('cookie-parser');
 const loginRoute = require('./backend/routes/login');
 const dataRoute = require('./backend/routes/data.route');
-const app = express();
+const { initializeWebSocket } = require('./backend/service/ws.service');
+const WebSocket = require('ws');
+const http = require("http");
 
+const app = express();
 // const isAuthenticated = require('./backend/middleware/authenticated');
 app.use(cookieParser());
 const corsOptions = {
@@ -34,6 +37,9 @@ app.use(cors(corsOptions));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const server = http.createServer(app); // Create an HTTP server
+initializeWebSocket(server);
 
 // app.use((req, res, next) => {
 //   const userId = req.cookies.user_id;
@@ -335,6 +341,8 @@ app.put('/data/:id/status', async (req, res) => {
   }
 });
 
+
+
 connection.sync({ alter: true })
   .then(() => console.log('Database connected and synced...')).then(()=>{
     connection_server.sync({ alter: true })
@@ -342,6 +350,9 @@ connection.sync({ alter: true })
     .catch(err => console.log('Error: ' + err));
   })
   .catch(err => console.log('Error: ' + err));
+
+
+
 
 
 // Serve the HTML file
@@ -364,7 +375,8 @@ app.use('/api', bookingRoutes);
 app.use('/api/login', loginRoute);
 app.use('/api/data', dataRoute);
 
+
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, function () {
-  console.log("Server is running at port " + PORT);
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

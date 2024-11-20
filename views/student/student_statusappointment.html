@@ -74,6 +74,8 @@
 
     <div class="control-width" id="appointmentsContainer"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
       // Function to get cookie value by name
       function getCookie(name) {
@@ -121,6 +123,7 @@
         }
       }
 
+      // Function to fetch appointments and display them
       async function fetchAppointments() {
         try {
           const userId = getCookie("user_id");
@@ -149,7 +152,7 @@
           appointments.forEach((appointment) => {
             const appointmentCard = document.createElement("div");
             appointmentCard.className = "card2 mt-5";
-            appointmentCard.onclick = () => toggleDetails(appointmentCard);
+            appointmentCard.onclick = () => showDetails(appointment);
 
             // Determine the badge class and color based on the status
             let badgeClass = "bg-warning";
@@ -175,28 +178,18 @@
             );
 
             appointmentCard.innerHTML = `
-                        <div>
-                            <h2>Teacher: ${appointment.teacher_name}</h2>
-                            <p>Email: ${appointment.teacher_email}</p>
-                            <h3>${appointment.day} ${formattedDate} ${
-              appointment.time
-            }</h3>
-                            <p>Click for more details</p>
-                            <div class="details" style="display: none;">
-                                <p>Student Detail: ${
-                                  appointment.detail || "No details provided"
-                                }</p>
-                                <p>Teacher Feedback: ${
-                                  appointment.feedback || "No feedback yet"
-                                }</p>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="status-badge status-badge-${appointment.status.toLowerCase()}">${
+          <div>
+            <h2>Teacher: ${appointment.teacher_name}</h2>
+            <p>Email: ${appointment.teacher_email}</p>
+            <h3>${appointment.day} ${formattedDate} ${appointment.time}</h3>
+            <p>Click for more details</p>
+          </div>
+          <div>
+            <span class="status-badge status-badge-${appointment.status.toLowerCase()}">${
               appointment.status
             }</span>
-                        </div>
-                    `;
+          </div>
+        `;
             container.appendChild(appointmentCard);
           });
         } catch (error) {
@@ -206,11 +199,53 @@
         }
       }
 
-      function toggleDetails(card) {
-        const details = card.querySelector(".details");
-        details.style.display =
-          details.style.display === "none" ? "block" : "none";
+      function showDetails(appointment) {
+        const formattedDate = new Date(appointment.date).toLocaleString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            timeZone: "Asia/Bangkok",
+          }
+        );
+
+        let icon = "question"; // Default icon for info
+        if (appointment.status === "Approved") {
+          icon = "success"; // ไอคอนสีเขียวสำหรับ Approved
+        } else if (appointment.status === "Reject") {
+          icon = "error"; // ไอคอนสีแดงสำหรับ Reject
+        } else if (appointment.status === "waiting") {
+          icon = "warning"; // ไอคอนนาฬิกาสำหรับ Waiting
+        } else if (appointment.status === "Leave") {
+          icon = "info"; // ไอคอนคำถามสำหรับ Leave
+        }
+
+        Swal.fire({
+          title: `Appointment Details`,
+          html: `
+        <strong>Teacher:</strong> ${appointment.teacher_name}<br>
+        <strong>Email:</strong> ${appointment.teacher_email}<br>
+        <strong>Day and Time:</strong> ${appointment.day} ${formattedDate} ${
+            appointment.time
+          }<br>
+        <strong>Student Detail:</strong> ${
+          appointment.detail || "No details provided"
+        }<br>
+        <strong>Teacher Feedback:</strong> ${
+          appointment.feedback || "No feedback yet"
+        }<br>
+        <strong>Status:</strong> ${appointment.status}
+      `,
+          icon: icon, // Use the icon based on the status
+          confirmButtonText: "Close",
+        });
       }
+
+      // Call fetchAppointments when page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchAppointments();
+      });
 
       function logout() {
         fetch("/logout", { method: "POST" })

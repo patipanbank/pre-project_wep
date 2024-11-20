@@ -94,6 +94,8 @@
 
     <script>
 
+const socket = new WebSocket("ws://localhost:3001/");
+
 function downloadTemplate() {
     fetch('/download-template')
         .then(response => response.blob())
@@ -113,99 +115,342 @@ function downloadTemplate() {
         });
 }
 
-        function toggleAvailability(id) {
-            const checkbox = document.getElementById(`available-${id}`);
-            const available = checkbox.checked ? 'on' : 'off';
+function toggleAvailability(id) {
+    const checkbox = document.getElementById(`available-${id}`);
+    const available = checkbox.checked ? 'on' : 'off';
 
-            fetch(`/data/${id}/available`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ available }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Availability updated successfully.') {
-                        updateCardStyle(id, available);
-                        reorderCards();
-                    } else {
-                        alert('Error updating availability: ' + data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function updateCardStyle(id, available) {
-            const card = document.getElementById(`card-${id}`);
-            if (available === 'off') {
-                card.style.opacity = '0.5';
-            } else {
-                card.style.opacity = '1';
-            }
-        }
-
-        function reorderCards() {
-            const cardContainer = document.getElementById('cardContainer');
-            const cards = Array.from(cardContainer.getElementsByClassName('card'));
-
-            cards.sort((a, b) => {
-                const availableA = a.querySelector('.form-check-input').checked ? 0 : 1;
-                const availableB = b.querySelector('.form-check-input').checked ? 0 : 1;
-                return availableA - availableB;
-            });
-
-            cards.forEach(card => cardContainer.appendChild(card));
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-    fetch('/data/images')
+    fetch(`/data/${id}/available`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ available }),
+    })
         .then(response => response.json())
         .then(data => {
-            const cardContainer = document.getElementById('cardContainer');
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card text-center'; // เพิ่ม text-center เพื่อจัดกลางเนื้อหาทั้งหมด
-                card.id = `card-${item.data_id}`;
-                card.innerHTML = ` 
-                    <div class="card-header p-2"> <!-- เพิ่ม card-header สำหรับ dropdown -->
-                        <select class="aa form-select form-select-sm mx-auto" style="width: 150px;" 
-                                onchange="updateStatus(${item.data_id}, this.value)" 
-                                id="status-${item.data_id}">
-                            <option value="in_office" ${item.status === 'in_office' ? 'selected' : ''}>In Office</option>
-                            <option value="out_office" ${item.status === 'out_office' ? 'selected' : ''}>Out Office</option>
-                            <option value="Leave" ${item.status === 'Leave' ? 'selected' : ''}>Leave</option>
-                        </select>
-                    </div>
-                    <div class="image-container"> <!-- เพิ่ม container สำหรับรูปภาพ -->
-                        <img src="${item.image || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Image">
-                    </div>
-                    <div class="card-body d-flex flex-column align-items-center"> <!-- จัดการ card-body ให้อยู่กึ่งกลาง -->
-                        <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
-                        <p class="card-text mb-1">Major: ${item.major}</p>
-                        <p class="card-text mb-1">Email: ${item.email}</p>
-                        <p class="card-text mb-2">Tel: ${item.tel}</p>
-                        <div class="mt-auto w-100 d-flex justify-content-center">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="available-${item.data_id}" 
-                                ${item.available === 'on' ? 'checked' : ''} 
-                                onchange="toggleAvailability(${item.data_id})">
-                            <label class="form-check-label" for="available-${item.data_id}">Available</label>
-                        </div>
-                    </div>
-                    </div>
-                `;
-                cardContainer.appendChild(card);
-
-                // เรียกใช้ updateCardStatusStyle เพื่ออัปเดตสีของการ์ดตามสถานะ
-                updateCardStatusStyle(item.data_id, item.status);
-
-                updateCardStyle(item.data_id, item.available);
-            });
-            reorderCards();
+            if (data.message === 'Availability updated successfully.') {
+                updateCardStyle(id, available);
+                reorderCards();
+            } else {
+                alert('Error updating availability: ' + data.message);
+            }
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => console.error('Error:', error));
+}
+
+function createCard(item) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = `card-${item.data_id}`;
+
+    let statusStyle = "";
+    let statusText = "";
+    let cardBgColor = "";
+    let imgBgColor = "";
+
+    switch (item.status) {
+        case "in_office":
+            statusStyle = "background-color: rgb(98, 245, 98); color: black; border: 2px solid green;";
+            statusText = "In Office";
+            cardBgColor = "background-color: rgb(98, 245, 98);";
+            imgBgColor = "background-color: rgb(98, 245, 98);";
+            break;
+        case "out_office":
+            statusStyle = "background-color: rgb(211, 102, 102); color: black; border: 2px solid red;";
+            statusText = "Out Office";
+            cardBgColor = "background-color: rgb(211, 102, 102);";
+            imgBgColor = "background-color: rgb(211, 102, 102);";
+            break;
+        case "Leave":
+            statusStyle = "background-color: rgb(185, 183, 183); color: black; border: 2px solid gray;";
+            statusText = "Leave";
+            cardBgColor = "background-color: rgb(185, 183, 183);";
+            imgBgColor = "background-color: rgb(185, 183, 183);";
+            break;
+        default:
+            statusStyle = "background-color: black; color: white; border: 2px solid black;";
+            statusText = "Unknown";
+            cardBgColor = "background-color: rgba(0, 0, 0, 0.2);";
+            imgBgColor = "background-color: rgba(0, 0, 0, 0.4);";
+    }
+
+    card.innerHTML = `
+        <div class="card-status mb-2" style="${statusStyle} padding: 5px; text-align: center; border-radius: 5px;">
+            <select class="aa form-select form-select-sm mx-auto" style="width: 150px;" 
+                    onchange="updateStatus(${item.data_id}, this.value)" 
+                    id="status-${item.data_id}">
+                <option value="in_office" ${item.status === 'in_office' ? 'selected' : ''}>In Office</option>
+                <option value="out_office" ${item.status === 'out_office' ? 'selected' : ''}>Out Office</option>
+                <option value="Leave" ${item.status === 'Leave' ? 'selected' : ''}>Leave</option>
+            </select>
+        </div>
+        <div class="image-container" style="${imgBgColor}">
+            <img src="${item.image || "https://via.placeholder.com/150"}" class="card-img-top" alt="Image">
+        </div>
+        <div class="card-body" style="${cardBgColor}; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+            <p class="card-text mb-1">Major: ${item.major}</p>
+            <p class="card-text mb-1">Email: ${item.email}</p>
+            <p class="card-text mb-2">Tel: ${item.tel}</p>
+            <div class="mt-auto w-100 d-flex justify-content-center">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="available-${item.data_id}" 
+                        ${item.available === 'on' ? 'checked' : ''} 
+                        onchange="toggleAvailability(${item.data_id})">
+                    <label class="form-check-label" for="available-${item.data_id}">Available</label>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+function updateCardStyle(dataId, available) {
+    const card = document.getElementById(`card-${dataId}`);
+    if (card) {
+        if (available === "off") {
+            card.style.opacity = "0.6";
+            card.style.filter = "grayscale(100%)";
+
+            const banner = document.createElement("div");
+            banner.className = "unavailable-banner";
+            banner.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: -35px;
+                background-color: #dc3545;
+                color: white;
+                padding: 5px 40px;
+                transform: rotate(45deg);
+                z-index: 1;
+                font-size: 12px;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            `;
+            banner.textContent = "Unavailable";
+
+            const existingBanner = card.querySelector('.unavailable-banner');
+            if (existingBanner) {
+                existingBanner.remove();
+            }
+
+            card.style.position = "relative";
+            card.appendChild(banner);
+        } else {
+            card.style.opacity = "1";
+            card.style.filter = "none";
+
+            const banner = card.querySelector('.unavailable-banner');
+            if (banner) {
+                banner.remove();
+            }
+        }
+    }
+}
+
+function reorderCards() {
+    const cardContainer = document.getElementById("cardContainer");
+    const cards = Array.from(cardContainer.children);
+
+    cards.sort((a, b) => {
+        const aAvailable = a.querySelector('.form-check-input').checked;
+        const bAvailable = b.querySelector('.form-check-input').checked;
+
+        if (aAvailable === bAvailable) return 0;
+        return aAvailable ? -1 : 1;
+    });
+
+    cards.forEach(card => cardContainer.appendChild(card));
+}
+
+function addFilterControls() {
+    const filterContainer = document.createElement("div");
+    filterContainer.className = "filter-container mb-3";
+    filterContainer.style.cssText = "display: flex; justify-content: flex-end; gap: 10px;";
+
+    const filterSelect = document.createElement("select");
+    filterSelect.className = "form-select";
+    filterSelect.style.width = "200px";
+    filterSelect.innerHTML = `
+        <option value="all">Show All</option>
+        <option value="available">Show Available Only</option>
+        <option value="unavailable">Show Unavailable Only</option>
+    `;
+
+    filterSelect.addEventListener("change", function () {
+        const cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+            const isAvailable = card.querySelector('.form-check-input').checked;
+            switch (this.value) {
+                case "all":
+                    card.style.display = "";
+                    break;
+                case "available":
+                    card.style.display = isAvailable ? "" : "none";
+                    break;
+                case "unavailable":
+                    card.style.display = !isAvailable ? "" : "none";
+                    break;
+            }
+        });
+    });
+
+    filterContainer.appendChild(filterSelect);
+    const cardContainer = document.getElementById("cardContainer");
+    cardContainer.parentNode.insertBefore(filterContainer, cardContainer);
+}
+
+function updateOrAddCard(item) {
+    console.log("Updating card:", item);
+
+    const cardContainer = document.getElementById("cardContainer");
+    if (!cardContainer) {
+        console.error("Card container not found");
+        return;
+    }
+
+    // Always update or add card, regardless of availability
+    const existingCard = document.getElementById(`card-${item.data_id}`);
+    const newCard = createCard(item);
+
+    if (existingCard) {
+        console.log("Replacing existing card:", item.data_id);
+        existingCard.replaceWith(newCard);
+    } else {
+        console.log("Adding new card:", item.data_id);
+        cardContainer.appendChild(newCard);
+    }
+
+    updateCardStyle(item.data_id, item.available);
+    reorderCards();
+}
+
+function updateOrAddMultipleCards(item) {
+    for (let i = 0; i < item.length; i++) {
+        updateOrAddCard(item[i]);
+    }
+}
+
+// Initialize WebSocket handling
+document.addEventListener("DOMContentLoaded", function () {
+    // Handle WebSocket connection opening
+    socket.onopen = () => {
+        console.log("Connected to WebSocket server");
+        // Request initial data
+        socket.send(JSON.stringify({ type: "requestInitialData" }));
+    };
+
+    // Handle incoming WebSocket messages
+    socket.onmessage = (event) => {
+        try {
+            const message = JSON.parse(event.data);
+            console.log("Received message type:", message.type);
+            console.log("Received message data:", message.data);
+
+            switch (message.type) {
+                case "initialData":
+    const cardContainer = document.getElementById("cardContainer");
+    cardContainer.innerHTML = ""; // Clear existing cards
+
+    if (Array.isArray(message.data)) {
+        message.data.forEach((item) => {
+            const card = createCard(item);
+            cardContainer.appendChild(card);
+            updateCardStyle(item.data_id, item.available);
+        });
+        reorderCards();
+    }
+    break;
+                case "create":
+                case "update":
+                    if (message.data) {
+                        updateOrAddCard(message.data.data);
+                    } else {
+                        console.error("No data received for create/update");
+                    }
+                    break;
+
+                case "delete":
+                    if (message.data && message.data.data_id) {
+                        const cardToDelete = document.getElementById(
+                            `card-${message.data.data.data_id}`
+                        );
+                        if (cardToDelete) {
+                            cardToDelete.remove();
+                            reorderCards();
+                        }
+                    } else {
+                        console.error("Invalid delete data received");
+                    }
+                    break;
+                case "bulkUpdate":
+                    if (message.data) {
+                        updateOrAddMultipleCards(message.data.data);
+                    } else {
+                        console.error("No data received for create/update");
+                    }
+                    break;
+                default:
+                    console.log("Unknown message type:", message.type);
+            }
+        } catch (error) {
+            console.error("Error processing message:", error);
+            console.error("Raw message:", event.data);
+        }
+    };
+
+    // Handle WebSocket errors
+    socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+    };
+
+    // Handle WebSocket connection closing
+    socket.onclose = () => {
+        console.log("Disconnected from WebSocket server");
+    };
 });
+
+// Add a reconnection mechanism
+function setupWebSocketReconnection() {
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    const reconnectDelay = 3000; // 3 seconds
+
+    function reconnect() {
+        if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            console.log(
+                `Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`
+            );
+
+            socket = new WebSocket("ws://localhost:3001/");
+
+            // Reset reconnection counter on successful connection
+            socket.onopen = () => {
+                console.log("Reconnected to WebSocket server");
+                reconnectAttempts = 0;
+                socket.send(JSON.stringify({ type: "requestInitialData" }));
+            };
+
+            socket.onclose = () => {
+                setTimeout(reconnect, reconnectDelay);
+            };
+        } else {
+            console.error(
+                "Max reconnection attempts reached. Please refresh the page."
+            );
+        }
+    }
+
+    socket.onclose = () => {
+        console.log("Connection lost. Attempting to reconnect...");
+        setTimeout(reconnect, reconnectDelay);
+    };
+}
+
+// Initialize reconnection handling
+setupWebSocketReconnection();
 
 function updateStatus(id, status) {
     fetch(`/data/${id}/status`, {
@@ -227,56 +472,7 @@ function updateStatus(id, status) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error updating status');
     });
-}
-
-// ฟังก์ชันสำหรับอัปเดตสีของการ์ด, dropdown และรูปภาพตามสถานะ
-function updateCardStatusStyle(id, status) {
-    const card = document.getElementById(`card-${id}`);
-    const select = document.getElementById(`status-${id}`);
-    const imageContainer = card.querySelector('.image-container');
-
-    // ลบ class เดิมทั้งหมด
-    card.classList.remove('status-in-office', 'status-out-office', 'status-leave');
-    
-    // เพิ่ม class ใหม่ตามสถานะ
-    card.classList.add(`status-${status.toLowerCase()}`);
-
-    // เปลี่ยนสีพื้นหลังของ card ตามสถานะ
-    switch(status) {
-        case 'in_office':
-            card.style.backgroundColor = 'rgb(98, 245, 98)'; // สีเขียวอ่อนสำหรับ In Office
-            break;
-        case 'out_office':
-            card.style.backgroundColor = 'rgb(211, 102, 102)'; // สีแดงอ่อนสำหรับ Out Office
-            break;
-        case 'Leave':
-            card.style.backgroundColor = 'rgb(185, 183, 183)'; // สีเหลืองอ่อนสำหรับ Leave
-            break;
-    }
-
-    // เปลี่ยนสีพื้นหลังของ dropdown
-    select.style.backgroundColor = getBackgroundColorByStatus(status);
-
-    // เปลี่ยนสีพื้นหลังของรูปภาพ
-    if (imageContainer) {
-        imageContainer.style.backgroundColor = getBackgroundColorByStatus(status);
-    }
-}
-
-function getBackgroundColorByStatus(status) {
-    switch (status) {
-        case 'in_office':
-            return 'rgb(98, 245, 98)'; // สีเขียวอ่อนสำหรับ In Office
-        case 'out_office':
-            return 'rgb(211, 102, 102)'; // สีแดงอ่อนสำหรับ Out Office
-        case 'Leave':
-            return 'rgb(185, 183, 183)'; // สีเหลืองอ่อนสำหรับ Leave
-        default:
-            return ''; // ไม่มีการเปลี่ยนแปลง
-    }
 }
 
         function searchTeachers() {

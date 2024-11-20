@@ -175,3 +175,10 @@ input:checked+.slider:before {
 .aa{
     font-weight: bold;
 }
+
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100px; */
+}
