@@ -80,6 +80,7 @@
 }
 
 .card-img-top {
+    margin-top: 20px;
     height: 280px;
     width: 200px;
     object-fit: cover;
@@ -115,4 +116,19 @@
 
 .hide-switch {
     display: none;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 200px; */
+    overflow: hidden;
+}
+
+.card-status {
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: rgb(185, 183, 183);
 }

@@ -4,7 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const xlsx = require("xlsx");
 const { DataTypes, Op } = require("sequelize");
-const sequelize = require("./backend/config/db");
+const {connection,connection_server} = require("./backend/config/db");
 const Datas = require("./backend/model/data");
 const login = require('./backend/routes/login');
 const student = require('./backend/routes/student');
@@ -20,8 +20,10 @@ const scheduleRoutes = require('./backend/routes/schedule.routes');
 const bookingRoutes = require('./backend/routes/booking.route');
 const cookieParser = require('cookie-parser');
 const loginRoute = require('./backend/routes/login');
-
+const dataRoute = require('./backend/routes/data.route');
 const app = express();
+
+// const isAuthenticated = require('./backend/middleware/authenticated');
 app.use(cookieParser());
 const corsOptions = {
   origin: 'http://localhost:3001', // Replace with your frontend's origin
@@ -32,6 +34,14 @@ app.use(cors(corsOptions));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.use((req, res, next) => {
+//   const userId = req.cookies.user_id;
+//   if (!userId && !['/login', '/auth', '/auth/google', '/auth/callback'].includes(req.path)) {
+//       return res.redirect('/login');
+//   }
+//   next();
+// });
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -61,7 +71,7 @@ app.post('/import', upload.single('file'), async (req, res) => {
 
     // Update or insert data
     for (const row of jsonData) {
-      const { data_id, name, email, tel, image, major, available } = row;
+      const { data_id, name, email, tel, image, major, available, status } = row;
 
       // Upsert data into Datas table (update if exists, insert if not)
       await Datas.upsert({
@@ -72,6 +82,7 @@ app.post('/import', upload.single('file'), async (req, res) => {
         image,
         major,
         available: available || 'on', // Set default value if not provided
+        status: status || 'out_office', // Set default status if not provided
       });
     }
 
@@ -93,15 +104,15 @@ app.post('/import', upload.single('file'), async (req, res) => {
 });
 
 
-// แก้ไข endpoint download-template ในไฟล์ server.js
+
 app.get('/download-template', async (req, res) => {
   try {
-    // ดึงข้อมูลทั้งหมดจาก database
+    // Fetch all records from the database
     const teachers = await Datas.findAll({
-      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available']
+      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available', 'status']
     });
 
-    // แปลงข้อมูลจาก Sequelize model เป็น plain object
+    // Convert Sequelize model data to plain object
     const templateData = teachers.map(teacher => ({
       data_id: teacher.data_id,
       name: teacher.name,
@@ -109,16 +120,17 @@ app.get('/download-template', async (req, res) => {
       tel: teacher.tel,
       image: teacher.image,
       major: teacher.major,
-      available: teacher.available
+      available: teacher.available,
+      status: teacher.status // Add the status field here
     }));
 
-    // สร้าง workbook ใหม่
+    // Create a new workbook
     const wb = xlsx.utils.book_new();
-    
-    // สร้าง worksheet จากข้อมูลจริง
+
+    // Create a worksheet from the template data
     const ws = xlsx.utils.json_to_sheet(templateData);
 
-    // ปรับความกว้างคอลัมน์ให้เหมาะสม
+    // Set column widths
     const colWidths = {
       A: 10,  // data_id
       B: 30,  // name
@@ -126,30 +138,32 @@ app.get('/download-template', async (req, res) => {
       D: 15,  // tel
       E: 50,  // image
       F: 25,  // major
-      G: 10   // available
+      G: 10,  // available
+      H: 20   // status
     };
 
     ws['!cols'] = Object.keys(colWidths).map(key => ({
       wch: colWidths[key]
     }));
-    
-    // เพิ่ม worksheet ลงใน workbook
+
+    // Append the worksheet to the workbook
     xlsx.utils.book_append_sheet(wb, ws, "Teachers Data");
-    
-    // สร้าง buffer
+
+    // Create the buffer for the Excel file
     const buf = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' });
-    
-    // ตั้งค่า headers สำหรับการดาวน์โหลด
+
+    // Set headers for the file download
     res.setHeader('Content-Disposition', 'attachment; filename=teachers_data.xlsx');
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    
-    // ส่ง file
+
+    // Send the buffer as the response
     res.send(buf);
   } catch (error) {
     console.error('Error creating template with data:', error);
     res.status(500).json({ message: 'Error creating template file: ' + error.message });
   }
 });
+
 
 
 app.get('/data/images/:data_id', async (req, res) => {
@@ -174,7 +188,7 @@ app.get('/data/images/:data_id', async (req, res) => {
 app.get('/data/images', async (req, res) => {
   try {
     const data = await Datas.findAll({
-      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available'] // Include available
+      attributes: ['data_id', 'name', 'email', 'tel', 'image', 'major', 'available', 'status'] // Include available
     });
     console.log(data); // Log the fetched data to see if IDs are correct
     res.status(200).json(data);
@@ -220,18 +234,29 @@ app.get('/semester/:id', async (req, res) => {
   }
 });
 
-
-app.get('/data/count/available', async (req, res) => {
+app.get('/data/count/:status/available', async (req, res) => {
   try {
+    const { status } = req.params;
+    const validStatuses = ['in_office', 'out_office', 'Leave', 'all'];  // Include 'all'
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    let whereClause = { available: 'on' };
+    
+    if (status !== 'all') {
+      whereClause.status = status;
+    }
+
     const count = await Datas.count({
-      where: {
-        available: 'on'
-      }
+      where: whereClause
     });
+
     res.status(200).json({ count });
   } catch (error) {
-    console.error('Error fetching available data count:', error);
-    res.status(500).json({ message: 'Error fetching available data count: ' + error.message });
+    console.error('Error fetching data count for status:', error);
+    res.status(500).json({ message: 'Error fetching data count for status: ' + error.message });
   }
 });
 
@@ -258,9 +283,66 @@ app.put('/data/:id/available', async (req, res) => {
   }
 });
 
-sequelize.sync({ alter: true })
-  .then(() => console.log('Database connected and synced...'))
+app.put('/data/:id/status', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      // Validate status
+      const validStatuses = ['in_office', 'out_office', 'Leave'];
+      if (!validStatuses.includes(status)) {
+          return res.status(400).json({
+              success: false,
+              message: 'Invalid status value',
+              currentStatus: (await Datas.findByPk(id))?.status
+          });
+      }
+
+      // Find and update the record
+      const data = await Datas.findByPk(id);
+      if (!data) {
+          return res.status(404).json({
+              success: false,
+              message: 'Record not found'
+          });
+      }
+
+      // Update status and last_checkin if status is changing
+      const updates = {
+          status,
+          last_checkin: status === 'in_office' ? new Date() : data.last_checkin
+      };
+
+      await data.update(updates);
+
+      res.json({
+          success: true,
+          message: 'Status updated successfully',
+          data: {
+              id,
+              status,
+              last_checkin: updates.last_checkin
+          }
+      });
+
+  } catch (error) {
+      console.error('Error updating status:', error);
+      res.status(500).json({
+          success: false,
+          message: 'Internal server error',
+          error: error.message
+      });
+  }
+});
+
+connection.sync({ alter: true })
+  .then(() => console.log('Database connected and synced...')).then(()=>{
+    connection_server.sync({ alter: true })
+    .then(() => console.log('Database Server connected and synced...'))
+    .catch(err => console.log('Error: ' + err));
+  })
   .catch(err => console.log('Error: ' + err));
+
 
 // Serve the HTML file
 app.get('/', (req, res) => {
@@ -280,6 +362,7 @@ app.use('/api/leave', leaveRoutes);
 app.use('/api', scheduleRoutes);
 app.use('/api', bookingRoutes);
 app.use('/api/login', loginRoute);
+app.use('/api/data', dataRoute);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {

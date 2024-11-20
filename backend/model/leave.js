@@ -1,4 +1,4 @@
-const connection = require('../config/db');
+const {connection} = require('../config/db');
 const { DataTypes, ENUM } = require('sequelize');
 const Data = require('./data')
 const Timeslot = require('./timeslot')

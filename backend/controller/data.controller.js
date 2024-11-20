@@ -109,3 +109,17 @@
 // }
 // module.exports = {createdata,createdatafromfile};
 
+
+const {updateOfficeStatus}= require('../service/data.service');
+
+const updateOfficeStatusController = async (req, res) => {
+  try {
+    await updateOfficeStatus();
+    res.status(200).json({ message: 'Office status updated successfully' });
+  } catch (error) {
+    console.error('Error updating office status:', error);
+    res.status(500).json({ message: 'Error updating office status: ' + error.message });
+  }
+};
+
+module.exports = {updateOfficeStatusController};

@@ -5,6 +5,10 @@ const connection = new Sequelize("project_web","root",password,{
     host: 'localhost',
     dialect: 'mysql'
 });
+const connection_server = new Sequelize("tenter_it","root",password,{
+    host: 'localhost',
+    dialect: 'mysql'
+});
 
 
-module.exports = connection;
+module.exports = {connection,connection_server};

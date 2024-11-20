@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const connection = require('../config/db');
+const {connection} = require('../config/db');
 
 const Datas = connection.define('Data', {
   data_id: {
@@ -32,12 +32,29 @@ const Datas = connection.define('Data', {
     type: DataTypes.STRING(255),
     allowNull: false,
     defaultValue: 'on'
+  },
+  status: {
+    type: DataTypes.ENUM('in_office', 'out_office', 'Leave'),
+    allowNull: false,
+    defaultValue: 'out_office',
+  } ,
+  last_checkin: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  c_date: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  c_time: {
+    type: DataTypes.INTEGER,
+    allowNull: true
   }
 }, {
   tableName: 'data',
   charset: 'utf8',
   collate: 'utf8_unicode_ci',
-  timestamps: false // Set this to true if you want to include createdAt and updatedAt fields
+  timestamps: false
 });
 
 module.exports = Datas;

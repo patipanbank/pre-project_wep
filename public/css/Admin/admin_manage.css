@@ -75,14 +75,29 @@
     /* Rounded corners */
     overflow: hidden;
     /* Hide overflowing content */
-
+    margin: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* width: 300px; */
+    transition: all 0.3s ease; /* เพิ่ม transition เพื่อให้การเปลี่ยนสีดูนุ่มนวล */
 }
 
 .card-img-top {
+    margin-top: 20px;
     height: 280px;
     width: 200px;
     object-fit: cover;
 }
+
+/* สไตล์สำหรับ dropdown */
+.form-select-sm {
+    height: 35px;
+    font-size: 0.875rem;
+    border-width: 2px;
+    background-color: white;
+}
+
 
 .card-body {
     flex: 1;
@@ -155,4 +170,8 @@ input:checked+.slider {
 
 input:checked+.slider:before {
     transform: translateX(14px);
+}
+
+.aa{
+    font-weight: bold;
 }

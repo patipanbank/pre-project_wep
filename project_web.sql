@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 01:23 PM
+-- Generation Time: Nov 20, 2024 at 07:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,19 +34,23 @@ CREATE TABLE `data` (
   `image` text DEFAULT NULL,
   `major` varchar(255) DEFAULT NULL,
   `available` varchar(255) NOT NULL DEFAULT 'on',
-  `data_id` int(11) NOT NULL
+  `data_id` int(11) NOT NULL,
+  `status` enum('in_office','out_office','Leave') NOT NULL DEFAULT 'out_office',
+  `last_checkin` datetime DEFAULT NULL,
+  `c_date` int(11) DEFAULT NULL,
+  `c_time` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `data`
 --
 
-INSERT INTO `data` (`name`, `email`, `tel`, `image`, `major`, `available`, `data_id`) VALUES
-('Asst.Prof.Teeravisit  Laohapensaeng, PhD', 'teeravisit.lao@mfu.ac.th', '053-916744', 'https://mfu.ac.th/fileadmin/School_of_IT_file_/staff/%E0%B8%94%E0%B8%A3.%E0%B8%98%E0%B8%B5%E0%B8%A3%E0%B8%A7%E0%B8%B4%E0%B8%A8%E0%B8%B4%E0%B8%8F%E0%B8%90%E0%B9%8C_01.jpg', 'Electrical Engineering', 'on', 1),
-('Asst. Prof. Worasak Rueangsirarak, PhD', 'worasak.rue@mfu.ac.th', '053-917198', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/mit_56.jpg', 'Computer Science', 'on', 2),
-('Asst. Prof. Pattaramon Vuttipittayamongkol, PhD', 'pattaramon.vut@mfu.ac.th', '053-916762', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/ice_26.jpg', 'Data Science', 'on', 3),
-('Patipan Rachaya', '6431501061@lamduan.mfu.ac.th', '082-5067473', 'https://mrwallpaper.com/images/high/nobita-with-a-sword-xsk758u52cm78smb.webp', NULL, 'on', 4),
-('Worawut Khumnoi', '6431501102@lamduan.mfu.ac.th', '012-3544455', 'https://imgcdn.stablediffusionweb.com/2024/9/10/7e0373fb-5810-4dba-88dc-bc11bb83aa2f.jpg', NULL, 'on', 5);
+INSERT INTO `data` (`name`, `email`, `tel`, `image`, `major`, `available`, `data_id`, `status`, `last_checkin`, `c_date`, `c_time`) VALUES
+('Asst.Prof.Teeravisit  Laohapensaeng, PhD', 'teeravisit.lao@mfu.ac.th', '053-916744', 'https://mfu.ac.th/fileadmin/School_of_IT_file_/staff/%E0%B8%94%E0%B8%A3.%E0%B8%98%E0%B8%B5%E0%B8%A3%E0%B8%A7%E0%B8%B4%E0%B8%A8%E0%B8%B4%E0%B8%8F%E0%B8%90%E0%B9%8C_01.jpg', 'Electrical Engineering', 'on', 1, 'out_office', '2024-11-20 06:08:24', NULL, NULL),
+('Asst. Prof. Worasak Rueangsirarak, PhD', 'worasak.rue@mfu.ac.th', '053-917198', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/mit_56.jpg', 'Computer Science', 'on', 2, 'out_office', '2024-11-20 03:23:13', NULL, NULL),
+('Asst. Prof. Pattaramon Vuttipittayamongkol, PhD', 'pattaramon.vut@mfu.ac.th', '053-916762', 'https://itschool.mfu.ac.th/fileadmin/School_of_IT_file_/staff/ice_26.jpg', 'Data Science', 'on', 3, 'out_office', '2024-11-19 11:23:17', NULL, NULL),
+('Patipan Rachaya', '6431501061@lamduan.mfu.ac.th', NULL, NULL, NULL, 'on', 4, 'out_office', '2024-11-20 03:39:46', NULL, NULL),
+('Surapong Uttama, PhD', 'surapong@mfu.ac.th', '053-916755', 'https://adt.mfu.ac.th/fileadmin/School_of_IT_file_/staff/cs_37.jpg', NULL, 'on', 42213017, 'out_office', '2024-11-19 09:55:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -68,6 +72,16 @@ CREATE TABLE `leave` (
   `feedback` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `leave`
+--
+
+INSERT INTO `leave` (`leave_id`, `date`, `created_at`, `updated_at`, `data_id`, `timeslots_id`, `status`, `semester_id`, `detail`, `users_id`, `feedback`) VALUES
+(439, '2024-11-19 17:00:00', '2024-11-20 03:40:55', NULL, 4, 37, 'Leave', 43, NULL, 0, NULL),
+(440, '2024-11-20 17:00:00', '2024-11-20 03:41:32', '2024-11-20 03:41:32', 4, 56, 'Approved', 43, 'Bank', 19, 'Bank'),
+(441, '2024-11-17 17:00:00', '2024-11-20 03:42:39', '2024-11-20 03:42:39', 1, 1, 'Waiting', 43, 'aaaa', 19, NULL),
+(442, '2024-11-18 17:00:00', '2024-11-20 03:55:36', '2024-11-20 03:55:36', 4, 20, 'Reject', 43, '1111', 19, 'aaaa');
+
 -- --------------------------------------------------------
 
 --
@@ -84,6 +98,22 @@ CREATE TABLE `schedules` (
   `semester_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `schedules`
+--
+
+INSERT INTO `schedules` (`schedules_id`, `created_at`, `updated_at`, `data_id`, `timeslots_id`, `status`, `semester_id`) VALUES
+(16481, '2024-11-20 03:40:43', NULL, 4, 20, 'Available', 43),
+(16482, '2024-11-20 03:40:43', NULL, 4, 1, 'Available', 43),
+(16483, '2024-11-20 03:40:43', NULL, 4, 37, 'Available', 43),
+(16484, '2024-11-20 03:40:43', NULL, 4, 56, 'Available', 43),
+(16485, '2024-11-20 03:40:43', NULL, 4, 73, 'Available', 43),
+(16486, '2024-11-20 03:42:23', NULL, 1, 1, 'Available', 43),
+(16487, '2024-11-20 03:42:23', NULL, 1, 39, 'Available', 43),
+(16488, '2024-11-20 03:42:23', NULL, 1, 56, 'Available', 43),
+(16489, '2024-11-20 03:42:23', NULL, 1, 73, 'Available', 43),
+(16490, '2024-11-20 03:42:23', NULL, 1, 20, 'Available', 43);
+
 -- --------------------------------------------------------
 
 --
@@ -99,6 +129,13 @@ CREATE TABLE `semester` (
   `updated_at` datetime DEFAULT NULL,
   `year` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `semester`
+--
+
+INSERT INTO `semester` (`semester_id`, `start_date`, `end_date`, `term`, `created_at`, `updated_at`, `year`) VALUES
+(43, '2024-08-05 00:00:00', '2024-12-15 00:00:00', '1', '2024-11-20 03:40:34', NULL, 2024);
 
 -- --------------------------------------------------------
 
@@ -229,7 +266,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`users_id`, `name`, `email`, `role`, `createdAt`, `updatedAt`) VALUES
-(19, 'PATIPAN RACHAYA', '6431501061@lamduan.mfu.ac.th', 2, '2024-10-28 07:03:11', '2024-10-28 07:03:11'),
+(19, 'PATIPAN RACHAYA', '6431501061@lamduan.mfu.ac.th', 0, '2024-10-28 07:03:11', '2024-10-28 07:03:11'),
 (20, 'THANAPORN THIMTHUEAN', '6332402130@lamduan.mfu.ac.th', 0, '2024-10-28 10:22:14', '2024-10-28 10:22:14'),
 (21, 'WORAWUT KHUMNOI', '6431501102@lamduan.mfu.ac.th', 0, '2024-10-28 10:51:30', '2024-10-28 10:51:30'),
 (22, 'TANAKORN PANGSUK', '6431501037@lamduan.mfu.ac.th', 0, '2024-11-11 09:12:08', '2024-11-11 09:12:08');
@@ -368,25 +405,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `data`
 --
 ALTER TABLE `data`
-  MODIFY `data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42213018;
 
 --
 -- AUTO_INCREMENT for table `leave`
 --
 ALTER TABLE `leave`
-  MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
+  MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=443;
 
 --
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `schedules_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16460;
+  MODIFY `schedules_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16491;
 
 --
 -- AUTO_INCREMENT for table `semester`
 --
 ALTER TABLE `semester`
-  MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `timeslots`

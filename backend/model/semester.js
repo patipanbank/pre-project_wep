@@ -1,4 +1,4 @@
-const connection = require('../config/db');
+const {connection} = require('../config/db');
 const { DataTypes } = require('sequelize');
 
 const Semester = connection.define('Semester', {
