@@ -24,6 +24,7 @@ const dataRoute = require('./backend/routes/data.route');
 const { initializeWebSocket } = require('./backend/service/ws.service');
 const WebSocket = require('ws');
 const http = require("http");
+const socketIo = require('socket.io');
 
 const app = express();
 // const isAuthenticated = require('./backend/middleware/authenticated');
@@ -40,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const server = http.createServer(app); // Create an HTTP server
 initializeWebSocket(server);
+const io = socketIo(server); 
 
 // app.use((req, res, next) => {
 //   const userId = req.cookies.user_id;
@@ -240,31 +242,55 @@ app.get('/semester/:id', async (req, res) => {
   }
 });
 
+// WebSocket connection handler
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
+// Function to broadcast counts
+async function broadcastCounts() {
+  const counts = {
+    all: await Datas.count({ where: { available: 'on' } }),
+    in_office: await Datas.count({ where: { available: 'on', status: 'in_office' } }),
+    out_office: await Datas.count({ where: { available: 'on', status: 'out_office' } }),
+    Leave: await Datas.count({ where: { available: 'on', status: 'Leave' } })
+  };
+
+  io.emit('countsUpdated', counts);
+}
+
+// Route for getting counts
 app.get('/data/count/:status/available', async (req, res) => {
   try {
     const { status } = req.params;
-    const validStatuses = ['in_office', 'out_office', 'Leave', 'all'];  // Include 'all'
-
+    const validStatuses = ['in_office', 'out_office', 'Leave', 'all'];
+    
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
     let whereClause = { available: 'on' };
-    
+   
     if (status !== 'all') {
       whereClause.status = status;
     }
 
-    const count = await Datas.count({
-      where: whereClause
-    });
-
+    const count = await Datas.count({ where: whereClause });
     res.status(200).json({ count });
   } catch (error) {
     console.error('Error fetching data count for status:', error);
     res.status(500).json({ message: 'Error fetching data count for status: ' + error.message });
   }
 });
+
+// Example of triggering broadcast on data change
+Datas.afterCreate(broadcastCounts);
+Datas.afterUpdate(broadcastCounts);
+Datas.afterDestroy(broadcastCounts);
 
 app.put('/data/:id/available', async (req, res) => {
   const { id } = req.params;
