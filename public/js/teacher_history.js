@@ -74,8 +74,8 @@ function generateCards(data) {
   console.log(data.length);
   if (data.length === 0) {
     const card = document.createElement("div");
-    card.className = "card2 mt-5";
-    card.innerHTML = "<h2>ไม่มีประวัติการยืนยันหรือปฏิเสธการนัดหมาย</h2>";
+    // card.className = "card2";
+    card.innerHTML = `<div class="alert alert-info mt-5">No history found.</div>`;
     container.appendChild(card);
   }
   data.forEach((item) => {

@@ -41,8 +41,8 @@ function generateCards(data) {
 
     if (data.length === 0) {
         const card = document.createElement('div');
-        card.className = 'card2 mt-5 p-4';
-        card.innerHTML = '<h2>ไม่มีคำขอการนัดหมาย</h2>';
+        // card.className = 'card2 mt-5 p-4';
+        card.innerHTML = `<div class="alert alert-info mt-5">No appointments found.</div>`;
         container.appendChild(card);
         return;
     }
