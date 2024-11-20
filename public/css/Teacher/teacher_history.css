@@ -1,15 +1,16 @@
 
 
-/* .card:hover { box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); } */
-  
-/* .control-width { width: 70%; margin: auto; } */
-
 .card2 {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative; /* เพิ่มตำแหน่งสัมพัทธ์ */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: 0.3s;
-    border-radius: 10px;
+    border-radius: 8px;
     margin: auto;
-    width: 70%;
+    width: 60%;
+    border: 2px solid #ddd;
+    padding: 15px;
+    background-color: white;
 }
 
 .card2:hover { box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
@@ -30,6 +31,38 @@
     width: 300px;
     
 }
+.status-badge {
+    position: absolute; /* วางตำแหน่งแบบสัมพัทธ์ภายใน card2 */
+    top: 10px; /* ระยะจากด้านบน */
+    right: 10px; /* ระยะจากด้านขวา */
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 0.25rem;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.status-badge-sweet {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 0.25rem;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge:hover {
+    transform: translateY(-2px);
+}
 
 .bg-success {
     background-color: #32df5a !important; /* Available */
@@ -37,5 +70,5 @@
 
   .bg-secondary {
     background-color: #6c757d !important; /* Leave */
+    color: white;
   }
-  

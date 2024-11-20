@@ -4,11 +4,24 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(";").shift();
 }
 const user_id = getCookie("user_id");
-function toggleDetails(card) {
-    const details = card.querySelector(".details");
-    details.style.display = details.style.display === "none" ? "block" : "none";
-}
+function toggleDetails(card, item) {
 
+    Swal.fire({
+        title: `<strong>Appointment Details</strong>`,
+        html: `
+          <div style="text-align: left;">
+            <p><strong>Student Name:</strong> ${item.studentName}</p>
+            <p><strong>Email:</strong> ${item.studentEmail}</p>
+            <p><strong>Date:</strong> ${formatDate(item.date)}</p>
+            <p><strong>Time:</strong> ${item.start_time} - ${item.end_time}</p>
+            <p><strong>Student Details:</strong> ${item.detail}</p>
+            <p><strong>Teacher Feedback:</strong> ${item.feedback}</p>
+            </div>
+            `,
+        icon: 'info', // Use the icon based on the status
+        confirmButtonText: "Close",
+  });
+}
 
 // Format date helper function
 function formatDate(dateString) {
@@ -20,7 +33,6 @@ function formatDate(dateString) {
         day: 'numeric'
     });
 }
-
 
 // Generate cards from data
 function generateCards(data) {
@@ -38,29 +50,29 @@ function generateCards(data) {
     data.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card2 mt-5';
-        card.onclick = () => toggleDetails(card);
+        // card.onclick = () => toggleDetails(card);
         card.innerHTML = `
             <div class="p-4">
                 <h2>Student:${item.studentName}</h2>
                 <p class="text-gray-600">Email: ${item.studentEmail}</p>
                 <h3>${formatDate(item.date)} ${item.start_time} - ${item.end_time}</h3>
-                <p>Click for more details</p>
-                <div class="details" style="display: none;">
-                    <p>Student Detail: ${item.detail}</p>
-                </div>
+                <span class="more-details text-primary" style="cursor: pointer; display: inline-block;">Click for more details</span><br>
+                <div class="mt-3">
                 <button class="btn btn-success" onclick="approveRequest(event, ${item.semester_id}, ${item.timeslots_id})">Approve</button>
                 <button class="btn btn-danger" onclick="rejectRequest(event, ${item.semester_id}, ${item.timeslots_id})">Reject</button>
             </div>
+            </div>
         `;
+        // เพิ่ม event listener ให้เฉพาะข้อความ "Click for more details"
+    const detailsLink = card.querySelector(".more-details");
+    detailsLink.onclick = () => toggleDetails(card, item);
         container.appendChild(card);
     }); 
 }
 
 async function fetchData() {
     try {
-        // if (user_id === null) {
-        //     throw new Error("user_id is null");
-        // }
+
         console.log(user_id);
         
         const response = await fetch(`http://localhost:3001/api/booking/userid/${user_id}/Waiting`);

@@ -152,7 +152,6 @@
           appointments.forEach((appointment) => {
             const appointmentCard = document.createElement("div");
             appointmentCard.className = "card2 mt-5";
-            appointmentCard.onclick = () => showDetails(appointment);
 
             // Determine the badge class and color based on the status
             let badgeClass = "bg-warning";
@@ -182,7 +181,7 @@
             <h2>Teacher: ${appointment.teacher_name}</h2>
             <p>Email: ${appointment.teacher_email}</p>
             <h3>${appointment.day} ${formattedDate} ${appointment.time}</h3>
-            <p>Click for more details</p>
+            <span class="more-details text-primary" style="cursor: pointer; display: inline-block;">Click for more details</span>
           </div>
           <div>
             <span class="status-badge status-badge-${appointment.status.toLowerCase()}">${
@@ -190,6 +189,13 @@
             }</span>
           </div>
         `;
+
+            // เพิ่ม event listener บน span "Click for more details"
+            const moreDetailsSpan =
+              appointmentCard.querySelector(".more-details");
+            moreDetailsSpan.addEventListener("click", () =>
+              showDetails(appointment)
+            );
             container.appendChild(appointmentCard);
           });
         } catch (error) {
@@ -220,22 +226,37 @@
         } else if (appointment.status === "Leave") {
           icon = "info"; // ไอคอนคำถามสำหรับ Leave
         }
+        let badgeClass = "bg-warning";
+        let textColor = "black";
+        if (appointment.status === "Approved") {
+          badgeClass = "bg-success";
+          textColor = "white";
+        } else if (appointment.status === "Reject") {
+          badgeClass = "bg-danger";
+          textColor = "white";
+        } else if (appointment.status === "waiting") {
+          badgeClass = "bg-warning";
+          textColor = "black";
+        }
 
         Swal.fire({
-          title: `Appointment Details`,
+          title: `<strong>Appointment Details</strong>`,
           html: `
-        <strong>Teacher:</strong> ${appointment.teacher_name}<br>
-        <strong>Email:</strong> ${appointment.teacher_email}<br>
-        <strong>Day and Time:</strong> ${appointment.day} ${formattedDate} ${
-            appointment.time
-          }<br>
-        <strong>Student Detail:</strong> ${
-          appointment.detail || "No details provided"
-        }<br>
-        <strong>Teacher Feedback:</strong> ${
-          appointment.feedback || "No feedback yet"
-        }<br>
-        <strong>Status:</strong> ${appointment.status}
+          <div style="text-align: left;">
+            <p><strong>Teacher:</strong> ${appointment.teacher_name}</p>
+            <p><strong>Email:</strong> ${appointment.teacher_email}</p>
+            <p><strong>Date:</strong> ${appointment.day} ${formattedDate} </p>
+            <p><strong>Time:</strong> ${appointment.time}</p>
+            <p><strong>Student Detail:</strong> ${
+              appointment.detail || "No details provided"
+            }</p>
+            <p><strong>Teacher Feedback:</strong> ${
+              appointment.feedback || "No feedback yet"
+            }</p>
+            <p class="status-badge-sweet status-badge-${appointment.status.toLowerCase()}"><strong>Status:</strong> ${
+            appointment.status
+          }</pclass>
+        </div>
       `,
           icon: icon, // Use the icon based on the status
           confirmButtonText: "Close",
