@@ -82,7 +82,7 @@ Datas.addHook('afterUpdate', async (instance, options) => {
     const freshData = await Datas.findByPk(instance.data_id, {
       raw: true
     });
-    
+    console.log('update Data...');
     notifyWebSocketClients('update', {
       type: 'update',
       data: freshData

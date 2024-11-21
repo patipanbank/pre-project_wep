@@ -25,8 +25,6 @@ const { initializeWebSocket } = require('./backend/service/ws.service');
 const WebSocket = require('ws');
 const http = require("http");
 const socketIo = require('socket.io');
-
-
 const app = express();
 // const isAuthenticated = require('./backend/middleware/authenticated');
 app.use(cookieParser());
@@ -291,6 +289,9 @@ app.get('/data/count/:status/available', async (req, res) => {
 // Example of triggering broadcast on data change
 Datas.afterCreate(broadcastCounts);
 Datas.afterUpdate(broadcastCounts);
+Datas.afterBulkCreate(broadcastCounts);
+Datas.afterBulkUpdate(broadcastCounts);
+Datas.afterBulkDestroy(broadcastCounts);
 Datas.afterDestroy(broadcastCounts);
 
 app.put('/data/:id/available', async (req, res) => {
