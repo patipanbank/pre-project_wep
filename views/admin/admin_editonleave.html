@@ -118,12 +118,15 @@
         </div>
         <div class="col-md-9 coltable">
           <div class="table-responsive mt-3">
-            <label for="semester-select">Select Semester:</label>
+            <label for="semester-select">
+              <span style="color: red; font-weight: bold;">*</span> Select Semester:
+          </label>
             <select id="semester-select" class="form-control">
               <option value>Select Semester</option>
               <!-- Options will be populated by JavaScript -->
             </select>
-            <label for="multi-date-input">Select Multiple Dates:</label>
+            <label for="multi-date-input">
+              <span style="color: red; font-weight: bold;">*</span> Select Multiple Dates:</label>
             <input type="text" id="multi-date-input" />
             <table class="table table-bordered">
               <thead>
@@ -140,6 +143,18 @@
         </div>
       </div>
       <div class="bt mt-5">
+        <div class="text"
+        style="
+            color: red;
+            font-size: 20px;
+            border: none;
+            font-weight: bold;
+            border-radius: 5%;
+            height: 40px;
+            margin-right: 20px;
+          ">
+          <span>Plese select cell on table before update leave or clear</span>
+        </div>
         <button
           onclick="updateLeave('Leave')"
           id="update-leave-btn"

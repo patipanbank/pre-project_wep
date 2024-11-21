@@ -88,7 +88,8 @@
         </div>
         <div class="col-md-9 coltable">
           <div class="table-responsive mt-3">
-            <label for="semester-select">Select Semester:</label>
+            <label for="semester-select">
+              <span style="color: red; font-weight: bold;">*</span> Select Semester:</label>
             <select id="semester-select" class="form-control">
               <option value>Select Semester</option>
               <!-- Options will be populated by JavaScript -->
@@ -109,6 +110,19 @@
         </div>
       </div>
       <div class="bt mt-5">
+        <div class="bt mt-5">
+          <div class="text"
+          style="
+              color: red;
+              font-size: 20px;
+              border: none;
+              font-weight: bold;
+              border-radius: 5%;
+              height: 40px;
+              margin-right: 20px;
+            ">
+            <span>Plese select cell on table before update officehours or clear</span>
+          </div>
         <button onclick="updateSchedule('Available')" id="update-available-btn" class="bg-success"
           style="color: white; border: none; font-weight: bold; border-radius: 5%; height: 40px; margin-right: 20px;" type="button">Update OfficeHours</button>
 
