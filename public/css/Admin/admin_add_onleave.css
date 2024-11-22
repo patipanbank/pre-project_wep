@@ -123,3 +123,8 @@
 .hide-switch {
   display: none;
 }
+
+.bts {
+  color: white;
+  background-color: blueviolet;
+}

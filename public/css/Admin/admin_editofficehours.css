@@ -40,3 +40,8 @@
 .bg-secondary {
   background-color: #6c757d !important; /* Leave */
 }
+
+.bts {
+  color: white;
+  background-color: blueviolet;
+}

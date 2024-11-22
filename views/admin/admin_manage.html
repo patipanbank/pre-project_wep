@@ -11,12 +11,13 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/public/css/Admin/admin_manage.css">
 </head>
 
 <body>
-    <nav><img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt=""></nav>
-
+    <nav><img src="/public/img/Header-School-ADT-MFU_Eng.jpg" alt="" /></nav>
+    
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -60,16 +61,20 @@
             <div class="mt-2 float-start" style="margin-left: 10px;">
                 <form action="#" method="GET" id="searchForm">
                     <input type="text" id="searchInput" onkeyup="searchTeachers()" placeholder="Search...">
-                    <button type="submit">Search</button>
+                    <button type="submit" class="bts">Search</button>
                 </form>
             </div>
         </div>
         <div class="col mt-2">
-            <button type="button" class="float-start" id="importBt" data-bs-toggle="modal"
-                data-bs-target="#importModal">Import</button>
-            <button type="button" class="float-start ms-2" id="downloadTemplateBt" onclick="downloadTemplate()">
-                Download Template
+            <button type="button" class="float-start btn btn-import" id="importBt" data-bs-toggle="modal" 
+                    data-bs-target="#importModal">
+                <i class="fas fa-upload me-2"></i> Import
             </button>
+    
+            <button type="button" class="float-start ms-2 btn btn-excel" id="downloadTemplateBt" onclick="downloadTemplate()">
+                <i class="fa fa-file-excel-o me-2"></i> Download Template
+            </button>
+                
         </div>
     </div>
     <!-- Modal -->
