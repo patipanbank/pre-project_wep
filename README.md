@@ -15,3 +15,29 @@
       หน้านี้ต้องสร้างปีการศึกษาก่อนนะครับถึงจะสามารถเพิ่ม officehours ได้ครับ
 
 เป็นเว็บเกี่ยวกับการนัดหมายอาจารย์นะครับ ซึ่งอยู่ระหว่างการทำครับ
+
+
+CREATE TABLE notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  data_id VARCHAR(255) NOT NULL,
+  c_date INT NOT NULL,
+  c_time INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+//////////////////////////////////////////////////////
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_test
+AFTER INSERT ON test
+FOR EACH ROW
+BEGIN
+  INSERT INTO notifications (data_id, c_date, c_time)
+  VALUES (NEW.l_uid, NEW.c_date, NEW.c_time);
+END $$
+
+DELIMITER ;
+
+///////////////////////////////////////////////////////
+npm  install socket.io

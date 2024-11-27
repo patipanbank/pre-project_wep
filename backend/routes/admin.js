@@ -12,4 +12,5 @@ router.get("/outoffice", page.outoffice );
 router.get("/semester", page.semester );
 router.get("/addonleave", page.addonleave );
 router.get("/editonleave", page.editonleave );
+router.get("/settimeout", page.settimeout );
 module.exports = router;

@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="/public/css/Admin/admin_semester.css" />
   </head>
   <body>
-    <nav>
-      <img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt />
-    </nav>
+    <nav><img src="/public/img/Header-School-ADT-MFU_Eng.jpg" alt="" /></nav>
 
     <nav
       class="navbar navbar-light navbar-expand-lg"
@@ -65,12 +63,21 @@
                 >SEMESTER</a
               >
             </li>
+            <li class="nav-item"></li>
+                        <a class="nav-link" style="color: white;" href="/admin/settimeout">SET TIME OUT</a>
+                    </li>
           </ul>
         </div>
         <div>
-          <button type="button" class="btn btn-danger" onclick="logout()">
-            Logout
-          </button>
+          <div class="d-flex align-items-center">
+            <span
+              id="userName"
+              style="color: white; margin-right: 15px; font-size: 16px"
+            >ADMIN</span>
+            <button type="button" class="btn btn-danger" onclick="logout()">
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </nav>

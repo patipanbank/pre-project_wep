@@ -21,8 +21,11 @@ const bookingRoutes = require('./backend/routes/booking.route');
 const cookieParser = require('cookie-parser');
 const loginRoute = require('./backend/routes/login');
 const dataRoute = require('./backend/routes/data.route');
+const { initializeWebSocket } = require('./backend/service/ws.service');
+const WebSocket = require('ws');
+const http = require("http");
+const socketIo = require('socket.io');
 const app = express();
-
 // const isAuthenticated = require('./backend/middleware/authenticated');
 app.use(cookieParser());
 const corsOptions = {
@@ -34,6 +37,10 @@ app.use(cors(corsOptions));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const server = http.createServer(app); // Create an HTTP server
+initializeWebSocket(server);
+const io = socketIo(server); 
 
 // app.use((req, res, next) => {
 //   const userId = req.cookies.user_id;
@@ -234,31 +241,80 @@ app.get('/semester/:id', async (req, res) => {
   }
 });
 
+// WebSocket connection handler
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
+// Function to broadcast counts
+async function broadcastCounts() {
+  const counts = {
+    all: await Datas.count({ where: { available: 'on' } }),
+    in_office: await Datas.count({ where: { available: 'on', status: 'in_office' } }),
+    out_office: await Datas.count({ where: { available: 'on', status: 'out_office' } }),
+    Leave: await Datas.count({ where: { available: 'on', status: 'Leave' } })
+  };
+
+  io.emit('countsUpdated', counts);
+}
+
+// Route for getting counts
 app.get('/data/count/:status/available', async (req, res) => {
   try {
     const { status } = req.params;
-    const validStatuses = ['in_office', 'out_office', 'Leave', 'all'];  // Include 'all'
-
+    const validStatuses = ['in_office', 'out_office', 'Leave', 'all'];
+    
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
     let whereClause = { available: 'on' };
-    
+   
     if (status !== 'all') {
       whereClause.status = status;
     }
 
-    const count = await Datas.count({
-      where: whereClause
-    });
-
+    const count = await Datas.count({ where: whereClause });
     res.status(200).json({ count });
   } catch (error) {
     console.error('Error fetching data count for status:', error);
     res.status(500).json({ message: 'Error fetching data count for status: ' + error.message });
   }
 });
+
+// เส้นทางสำหรับตั้งเวลาหมดเวลา
+app.post('/api/set-timeout', (req, res) => {
+  const { timeout } = req.body;
+  
+  // ตรวจสอบว่าเป็นตัวเลขบวก
+  if (timeout <= 0 || isNaN(timeout)) {
+    return res.status(400).json({ error: 'Timeout time must be a positive number.' });
+  }
+
+  // จัดเก็บเวลาหมดเวลาเป็นมิลลิวินาที
+  process.env.OFFICE_TIMEOUT = timeout * 60 * 1000;
+
+  res.json({ message: 'Updated timeout time successfully' });
+});
+
+app.get('/api/get-timeout', (req, res) => {
+  const timeout = process.env.OFFICE_TIMEOUT ? 
+    process.env.OFFICE_TIMEOUT / (60 * 1000) : 30; // ค่าเริ่มต้น 30 ถ้าไม่ได้ตั้งค่า
+  
+  res.json({ timeout });
+});
+
+// Example of triggering broadcast on data change
+Datas.afterCreate(broadcastCounts);
+Datas.afterUpdate(broadcastCounts);
+Datas.afterBulkCreate(broadcastCounts);
+Datas.afterBulkUpdate(broadcastCounts);
+Datas.afterBulkDestroy(broadcastCounts);
+Datas.afterDestroy(broadcastCounts);
 
 app.put('/data/:id/available', async (req, res) => {
   const { id } = req.params;
@@ -335,6 +391,8 @@ app.put('/data/:id/status', async (req, res) => {
   }
 });
 
+
+
 connection.sync({ alter: true })
   .then(() => console.log('Database connected and synced...')).then(()=>{
     connection_server.sync({ alter: true })
@@ -342,6 +400,9 @@ connection.sync({ alter: true })
     .catch(err => console.log('Error: ' + err));
   })
   .catch(err => console.log('Error: ' + err));
+
+
+
 
 
 // Serve the HTML file
@@ -364,7 +425,8 @@ app.use('/api', bookingRoutes);
 app.use('/api/login', loginRoute);
 app.use('/api/data', dataRoute);
 
+
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, function () {
-  console.log("Server is running at port " + PORT);
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

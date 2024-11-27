@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <title>Admin Set Timeout</title>
+    <link rel="stylesheet" href="/public/css/admin/admin_officehours.css">
+</head>
+
+<body>
+    <nav><img src="/public/img/Header-School-ADT-MFU_Eng.jpg" alt="" /></nav>
+    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #253b6d;">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" style="color: white;" aria-current="page"
+                            href="/admin/homepage">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/manage">MANAGE
+                            TEACHER</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/officehours">OFFICE HOURS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: white;" href="/admin/addonleave">ADD ON LEAVE</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" style="color: white;" href="/admin/semester">SEMESTER</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" style="color: white;" href="/admin/settimeout">SET TIME OUT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <span
+                  id="userName"
+                  style="color: white; margin-right: 15px; font-size: 16px"
+                >ADMIN</span>
+                <button type="button" class="btn btn-danger" onclick="logout()">
+                  Logout
+                </button>
+              </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>SET TIMEOUT</h2>
+        <div class="card">
+            <div class="card-body">
+                <form id="timeoutForm">
+                    <div class="mb-3">
+                        <label for="timeoutMinutes" class="form-label">set timeout (minutes)</label>
+                        <input 
+                            type="number" 
+                            class="form-control" 
+                            id="timeoutMinutes" 
+                            min="1"  // 1 นาทีขึ้นไป
+                            value="30"
+                        >
+                        <small class="form-text text-muted">set time (minutes) before change to out office (1 minute or more)</small>
+                     </div>
+                    <button type="submit" class="btn btn-primary">save timeout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+document.getElementById('timeoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const timeoutMinutes = document.getElementById('timeoutMinutes').value;
+
+            fetch('/api/set-timeout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ timeout: parseInt(timeoutMinutes) })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`set timeout to ${timeoutMinutes} minutes successfully!`);
+                } else {
+                    throw new Error('failed to set timeout');
+                }
+            })
+            .catch(error => {
+                console.error('error:', error);
+                alert('failed to set timeout');
+            });
+        });
+
+        // โหลดการตั้งค่าหมดเวลาปัจจุบันเมื่อหน้าโหลด
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/get-timeout')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('timeoutMinutes').value = data.timeout;
+                })
+                .catch(error => {
+                    console.error('failed to get timeout:', error);
+                });
+        });
+
+        function logout() {
+            fetch('/logout', { method: 'POST' }) // Adjust the logout endpoint as needed
+                .then(() => {
+                    window.location.href = '/login'; // Redirect to login after logout
+                })
+                .catch(error => console.error('Error logging out:', error));
+        }
+    </script>
+</body>
+
+</html>

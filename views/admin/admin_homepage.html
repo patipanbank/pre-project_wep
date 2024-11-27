@@ -21,10 +21,12 @@
     />
 
     <title>Admin Homepage</title>
+
+    <script src="/socket.io/socket.io.js"></script>
   </head>
 
   <body>
-    <nav><img src="/public/img/Header-School-IT-MFU_Thai.png" alt="" /></nav>
+    <nav><img src="/public/img/Header-School-ADT-MFU_Eng.jpg" alt="" /></nav>
 
     <nav
       class="navbar navbar-light navbar-expand-lg"
@@ -73,12 +75,21 @@
                 >SEMESTER</a
               >
             </li>
+            <li class="nav-item"></li>
+                        <a class="nav-link" style="color: white;" href="/admin/settimeout">SET TIME OUT</a>
+                    </li>
           </ul>
         </div>
         <div>
-          <button type="button" class="btn btn-danger" onclick="logout()">
-            Logout
-          </button>
+          <div class="d-flex align-items-center">
+            <span
+              id="userName"
+              style="color: white; margin-right: 15px; font-size: 16px"
+            >ADMIN</span>
+            <button type="button" class="btn btn-danger" onclick="logout()">
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -145,15 +156,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        
-      let myChart; // ประกาศตัวแปร chart
+      let myChart; // Existing chart variable
 
-      // ฟังก์ชันเพื่อดึงข้อมูลและอัพเดท widget และกราฟ
+      // Socket.io connection
+      const socket = io();
+
+      // Real-time count update handler
+      socket.on("countsUpdated", (countData) => {
+        // Update widgets
+        document.getElementById("alls").innerText = countData.all || 0;
+        document.getElementById("inofs").innerText = countData.in_office || 0;
+        document.getElementById("outofs").innerText = countData.out_office || 0;
+        document.getElementById("leaves").innerText = countData.Leave || 0;
+
+        // Update chart
+        updateChart(countData);
+      });
+
+      // Previous fetchDataAndUpdateChart function
       function fetchDataAndUpdateChart() {
         const statuses = ["all", "in_office", "out_office", "Leave"];
-        const countData = {}; // เก็บข้อมูลที่ได้จาก API
+        const countData = {};
 
-        // ดึงข้อมูลจากทุก status
         Promise.all(
           statuses.map((status) => {
             return fetch(`/data/count/${status}/available`)
@@ -163,23 +187,23 @@
               })
               .catch((error) => {
                 console.error(`Error fetching data for ${status}:`, error);
-                countData[status] = 0; // กรณีไม่สามารถดึงข้อมูลได้
+                countData[status] = 0;
               });
           })
         ).then(() => {
-          // อัพเดท widget
+          // Update widgets
           document.getElementById("alls").innerText = countData.all || 0;
           document.getElementById("inofs").innerText = countData.in_office || 0;
           document.getElementById("outofs").innerText =
             countData.out_office || 0;
           document.getElementById("leaves").innerText = countData.Leave || 0;
 
-          // อัพเดทกราฟ
+          // Update chart
           updateChart(countData);
         });
       }
 
-      // ฟังก์ชันในการอัพเดทกราฟ
+      // Existing chart update function remains the same
       function updateChart(countData) {
         const chartData = {
           labels: ["All", "In Office", "Out Office", "Leave"],
@@ -198,7 +222,6 @@
           ],
         };
 
-        // หากมี chart อยู่แล้ว, ให้ทำลายก่อน
         if (myChart) {
           myChart.destroy();
         }
@@ -213,9 +236,7 @@
             scales: {
               y: {
                 beginAtZero: true,
-                ticks: {
-                  stepSize: 1,
-                },
+                ticks: { stepSize: 1 },
               },
             },
           },

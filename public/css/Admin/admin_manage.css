@@ -175,3 +175,48 @@ input:checked+.slider:before {
 .aa{
     font-weight: bold;
 }
+
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100px; */
+}
+.bts {
+    color: white;
+    background-color: blueviolet;
+}
+
+.btn-excel {
+    background-color: #217346; /* สีเขียวของ Excel */
+    color: #fff; /* สีตัวหนังสือ */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-excel:hover {
+    background-color: #1e6a3c; /* สีเขียวที่เข้มขึ้นเมื่อ hover */
+}
+
+.btn-excel i {
+    font-size: 1.2em; /* ปรับขนาดไอคอน */
+}
+
+.btn-import {
+    background-color: #ffc107; /* สีเหลือง */
+    color: #000; /* สีตัวหนังสือ */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-import:hover {
+    background-color: #e0a800; /* สีเหลืองที่เข้มขึ้นเมื่อ hover */
+}
+
+.btn-import i {
+    font-size: 1.2em; /* ขนาดไอคอน */
+}

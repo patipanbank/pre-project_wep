@@ -1,291 +1,463 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <title>Student Homepage</title>
-    <link rel="stylesheet" href="/public/css/student/student_hompage.css" />
-  </head>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+      />
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"
+      ></script>
+      <title>Student Homepage</title>
+      <link rel="stylesheet" href="/public/css/student/student_hompage.css" />
+    </head>
 
-  <body>
-    <nav>
-      <img id="imgnav" src="/public/img/Header-School-IT-MFU_Thai.png" alt />
-    </nav>
+    <body>
+      <nav><img src="/public/img/Header-School-ADT-MFU_Eng.jpg" alt="" /></nav>
 
-    <nav
-      class="navbar navbar-light navbar-expand-lg"
-      style="background-color: #253b6d"
-    >
-      <div class="container-fluid">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                style="color: white"
-                aria-current="page"
-                href="/student/homepage"
-                >HOME</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                style="color: white"
-                href="/student/statusappointment"
-                >STATUS APPOINTMENT</a
-              >
-            </li>
-          </ul>
-          <div class="d-flex align-items-center">
-            <span
-              id="userName"
-              style="color: white; margin-right: 15px; font-size: 16px"
-            ></span>
-            <button type="button" class="btn btn-danger" onclick="logout()">
-              Logout
-            </button>
+      <nav
+        class="navbar navbar-light navbar-expand-lg"
+        style="background-color: #253b6d"
+      >
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  style="color: white"
+                  aria-current="page"
+                  href="/student/homepage"
+                  >HOME</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  style="color: white"
+                  href="/student/statusappointment"
+                  >STATUS APPOINTMENT</a
+                >
+              </li>
+            </ul>
+            <div class="d-flex align-items-center">
+              <span
+                id="userName"
+                style="color: white; margin-right: 15px; font-size: 16px"
+              ></span>
+              <button type="button" class="btn btn-danger" onclick="logout()">
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="row sandim">
+        <div class="col-md-2">
+          <div class="mt-2 float-start" style="margin-left: 10px">
+            <form action="#" method="GET" id="searchForm">
+              <input
+                type="text"
+                id="searchInput"
+                onkeyup="searchTeachers()"
+                placeholder="Search..."
+              />
+              <button type="submit" class="bts">Search</button>
+              <div id="current-date" class="current-time"></div>
+            </form>
           </div>
         </div>
       </div>
-    </nav>
 
-    <div class="row sandim">
-      <div class="col-md-2">
-        <div class="mt-2 float-start" style="margin-left: 10px">
-          <form action="#" method="GET" id="searchForm">
-            <input
-              type="text"
-              id="searchInput"
-              onkeyup="searchTeachers()"
-              placeholder="Search..."
-            />
-            <button type="submit">Search</button>
-            <div id="current-date" class="current-time"></div>
-          </form>
+      <div class="container my-4">
+        <div class="card-container" id="cardContainer">
+          <!-- Cards will be added dynamically here -->
         </div>
       </div>
-    </div>
 
-    <div class="container my-4">
-      <div class="card-container" id="cardContainer">
-        <!-- Cards will be added dynamically here -->
-      </div>
-    </div>
+      <script>
+        const socket = new WebSocket("ws://localhost:3001/");
+        const currentDate = new Date().toLocaleDateString();
+        document.getElementById(
+          "current-date"
+        ).textContent = `Today's date: ${currentDate}`;
 
-    <script>
-      const currentDate = new Date().toLocaleDateString();
-      document.getElementById(
-        "current-date"
-      ).textContent = `Today's date: ${currentDate}`;
-
-      // Function to get cookie value by name
-      function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-      }
-      console.log("Cookie user_id:", getCookie("user_id"));
-
-      async function fetchUserData() {
-        try {
-          const userId = getCookie("user_id");
-          console.log("Current user_id from cookie:", userId); // เพิ่ม logging
-
-          if (!userId) {
-            console.error("No user_id cookie found - redirecting to login");
-            window.location.href = "/login";
-            return;
-          }
-
-          const response = await fetch(`/api/user/${userId}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`Failed to fetch user data: ${response.status}`);
-          }
-
-          const userData = await response.json();
-          console.log("Fetched user data:", userData); // เพิ่ม logging
-
-          const userNameElement = document.getElementById("userName");
-          if (userNameElement) {
-            userNameElement.textContent = `${userData.name}`;
-          } else {
-            console.error("userName element not found in DOM");
-          }
-        } catch (error) {
-          console.error("Error in fetchUserData:", error);
-          // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
-          window.location.href = "/login";
+        // Function to get cookie value by name
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(";").shift();
         }
-      }
+        console.log("Cookie user_id:", getCookie("user_id"));
 
-      // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
-      document.addEventListener("DOMContentLoaded", fetchUserData);
+        async function fetchUserData() {
+          try {
+            const userId = getCookie("user_id");
+            console.log("Current user_id from cookie:", userId); // เพิ่ม logging
 
-      function updateCardStyle(id, available) {
-        const card = document.getElementById(`card-${id}`);
-        if (available === "off") {
-          card.style.opacity = "0.5";
-        } else {
-          card.style.opacity = "1";
-        }
-      }
+            if (!userId) {
+              console.error("No user_id cookie found - redirecting to login");
+              window.location.href = "/login";
+              return;
+            }
 
-      function reorderCards() {
-        const cardContainer = document.getElementById("cardContainer");
-        const cards = Array.from(cardContainer.getElementsByClassName("card"));
-
-        cards.sort((a, b) => {
-          const inputA = a.querySelector(".form-check-input");
-          const inputB = b.querySelector(".form-check-input");
-
-          const availableA = inputA ? (inputA.checked ? 0 : 1) : 1;
-          const availableB = inputB ? (inputB.checked ? 0 : 1) : 1;
-
-          return availableA - availableB;
-        });
-
-        cards.forEach((card) => cardContainer.appendChild(card));
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("/data/images")
-          .then((response) => response.json())
-          .then((data) => {
-            const cardContainer = document.getElementById("cardContainer");
-            const filteredData = data.filter((item) => item.available === "on");
-
-            filteredData.forEach((item) => {
-              const card = document.createElement("div");
-              card.className = "card";
-              card.id = `card-${item.data_id}`;
-
-              let statusStyle = "";
-              let statusText = "";
-              let cardBgColor = "";
-              let imgBgColor = "";
-
-              switch (item.status) {
-                case "in_office":
-                  statusStyle =
-                    "background-color: rgb(98, 245, 98); color: black; border: 2px solid green;";
-                  statusText = "In Office";
-                  cardBgColor = "background-color: rgb(98, 245, 98);"; // สีเขียวอ่อน
-                  imgBgColor = "background-color: rgb(98, 245, 98);"; // สีเขียวเข้มสำหรับรูป
-                  break;
-                case "out_office":
-                  statusStyle =
-                    "background-color: rgb(211, 102, 102); color: black; border: 2px solid red;";
-                  statusText = "Out Office";
-                  cardBgColor = "background-color: rgb(211, 102, 102);"; // สีแดงอ่อน
-                  imgBgColor = "background-color: rgb(211, 102, 102);"; // สีแดงเข้มสำหรับรูป
-                  break;
-                case "Leave":
-                  statusStyle =
-                    "background-color: rgb(185, 183, 183); color: black; border: 2px solid gray;";
-                  statusText = "Leave";
-                  cardBgColor = "background-color: rgb(185, 183, 183);"; // สีเทาอ่อน
-                  imgBgColor = "background-color: rgb(185, 183, 183);"; // สีเทาเข้มสำหรับรูป
-                  break;
-                default:
-                  statusStyle =
-                    "background-color: black; color: white; border: 2px solid black;";
-                  statusText = "Unknown";
-                  cardBgColor = "background-color: rgba(0, 0, 0, 0.2);"; // สีดำอ่อน
-                  imgBgColor = "background-color: rgba(0, 0, 0, 0.4);"; // สีดำเข้มสำหรับรูป
-              }
-
-              card.innerHTML = `
-          <div class="card-status" style="${statusStyle} padding: 5px; text-align: center; border-radius: 5px;">
-            <strong>${statusText}</strong>
-          </div>
-          <div class="image-container" style="${imgBgColor}">
-            <img src="${
-              item.image || "https://via.placeholder.com/150"
-            }" class="card-img-top" alt="Image">
-          </div>
-          <div class="card-body" style="${cardBgColor}; display: flex; flex-direction: column; justify-content: center; text-align: center;">
-            <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
-            <p class="card-text">Major: ${item.major}</p>
-            <p class="card-text">Email: ${item.email}</p>
-            <p class="card-text">Tel: ${item.tel}</p>
-            <div class="mt-auto w-100 d-flex justify-content-center">
-            <button class="btn btn-primary" onclick="makeOfficehours(${
-              item.data_id
-            })" style="margin-top: 10px;">Appointment</button>
-          </div>
-          </div>
-        `;
-
-              cardContainer.appendChild(card);
-              updateCardStyle(item.data_id, item.available);
+            const response = await fetch(`/api/user/${userId}`, {
+              method: "GET",
+              credentials: "include",
+              headers: {
+                Accept: "application/json",
+              },
             });
 
-            reorderCards();
-          })
-          .catch((error) => console.error("Error fetching data:", error));
-      });
+            if (!response.ok) {
+              throw new Error(`Failed to fetch user data: ${response.status}`);
+            }
 
-      function makeOfficehours(id) {
-        // Redirect to the Officehours page with the given ID as a query parameter
-        window.location.href = `/student/appointment?data_id=${id}`;
-        console.log(id);
-      }
+            const userData = await response.json();
+            console.log("Fetched user data:", userData); // เพิ่ม logging
 
-      function searchTeachers() {
-        var input, filter, cardContainer, cards, cardBody, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toLowerCase();
-        cardContainer = document.getElementById("cardContainer");
-        cards = cardContainer.getElementsByClassName("card");
-
-        for (i = 0; i < cards.length; i++) {
-          cardBody = cards[i].getElementsByClassName("card-body")[0];
-          txtValue = cardBody.textContent || cardBody.innerText;
-          if (txtValue.toLowerCase().indexOf(filter) > -1) {
-            cards[i].style.display = "";
-          } else {
-            cards[i].style.display = "none";
+            const userNameElement = document.getElementById("userName");
+            if (userNameElement) {
+              userNameElement.textContent = `${userData.name}`;
+            } else {
+              console.error("userName element not found in DOM");
+            }
+          } catch (error) {
+            console.error("Error in fetchUserData:", error);
+            // อาจจะ redirect กลับไปหน้า login ถ้าเกิดข้อผิดพลาด
+            window.location.href = "/login";
           }
         }
-      }
 
-      function logout() {
-        fetch("/logout", { method: "POST" }) // Adjust the logout endpoint as needed
-          .then(() => {
-            window.location.href = "/login"; // Redirect to login after logout
-          })
-          .catch((error) => console.error("Error logging out:", error));
-      }
-    </script>
-  </body>
-</html>
+        // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลด
+        document.addEventListener("DOMContentLoaded", fetchUserData);
+
+        function updateCardStyle(id, available) {
+          const card = document.getElementById(`card-${id}`);
+          if (available === "off") {
+            card.style.opacity = "0.5";
+          } else {
+            card.style.opacity = "1";
+          }
+        }
+
+        function reorderCards() {
+          const cardContainer = document.getElementById("cardContainer");
+          const cards = Array.from(cardContainer.getElementsByClassName("card"));
+
+          cards.sort((a, b) => {
+            const inputA = a.querySelector(".form-check-input");
+            const inputB = b.querySelector(".form-check-input");
+
+            const availableA = inputA ? (inputA.checked ? 0 : 1) : 1;
+            const availableB = inputB ? (inputB.checked ? 0 : 1) : 1;
+
+            return availableA - availableB;
+          });
+
+          cards.forEach((card) => cardContainer.appendChild(card));
+        }
+
+        // Function to create a card element
+        function createCard(item) {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.id = `card-${item.data_id}`;
+
+          let statusStyle = "";
+          let statusText = "";
+          let cardBgColor = "";
+          let imgBgColor = "";
+
+          switch (item.status) {
+            case "in_office":
+              statusStyle =
+                "background-color: rgb(98, 245, 98); color: black; border: 2px solid green;";
+              statusText = "In Office";
+              cardBgColor = "background-color: rgb(98, 245, 98);";
+              imgBgColor = "background-color: rgb(98, 245, 98);";
+              break;
+            case "out_office":
+              statusStyle =
+                "background-color: rgb(211, 102, 102); color: black; border: 2px solid red;";
+              statusText = "Out Office";
+              cardBgColor = "background-color: rgb(211, 102, 102);";
+              imgBgColor = "background-color: rgb(211, 102, 102);";
+              break;
+            case "Leave":
+              statusStyle =
+                "background-color: rgb(185, 183, 183); color: black; border: 2px solid gray;";
+              statusText = "Leave";
+              cardBgColor = "background-color: rgb(185, 183, 183);";
+              imgBgColor = "background-color: rgb(185, 183, 183);";
+              break;
+            default:
+              statusStyle =
+                "background-color: black; color: white; border: 2px solid black;";
+              statusText = "Unknown";
+              cardBgColor = "background-color: rgba(0, 0, 0, 0.2);";
+              imgBgColor = "background-color: rgba(0, 0, 0, 0.4);";
+          }
+
+          card.innerHTML = `
+      <div class="card-status" style="${statusStyle} padding: 5px; text-align: center; border-radius: 5px;">
+        <strong>${statusText}</strong>
+      </div>
+      <div class="image-container" style="${imgBgColor}">
+        <img src="${
+          item.image || "https://via.placeholder.com/150"
+        }" class="card-img-top" alt="Image">
+      </div>
+      <div class="card-body" style="${cardBgColor}; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+        <h5 class="card-title" style="font-size: 17px;">${item.name}</h5>
+        <p class="card-text">Major: ${item.major}</p>
+        <p class="card-text">Email: ${item.email}</p>
+        <p class="card-text">Tel: ${item.tel}</p>
+        <div class="mt-auto w-100 d-flex justify-content-center">
+          <button class="btn btn-primary" onclick="makeOfficehours(${
+            item.data_id
+          })" style="margin-top: 10px;">Appointment</button>
+        </div>
+      </div>
+    `;
+
+          return card;
+        }
+        function updateCardStyle(dataId, available) {
+          const card = document.getElementById(`card-${dataId}`);
+          if (card) {
+            // Add your card styling logic here
+            card.style.display = available === "on" ? "" : "none";
+          }
+        }
+        function reorderCards() {
+          // Add your card reordering logic here
+          const cardContainer = document.getElementById("cardContainer");
+          const cards = Array.from(cardContainer.children);
+          // Add your sorting logic here if needed
+        }
+        // Function to update or add a card
+        function updateOrAddCard(item) {
+          console.log("Updating card:", item); // Debug log
+
+          const cardContainer = document.getElementById("cardContainer");
+          if (!cardContainer) {
+            console.error("Card container not found");
+            return;
+          }
+          console.log("object :>> ", item.available);
+          // Remove card if available is not "on"
+          if (item.available !== "on") {
+            console.log("find card");
+            const existingCard = document.getElementById(`card-${item.data_id}`);
+            if (existingCard) {
+              existingCard.remove();
+              reorderCards();
+            }
+            return;
+          }
+          // Update or add card
+          const existingCard = document.getElementById(`card-${item.data_id}`);
+          const newCard = createCard(item);
+
+          if (existingCard) {
+            console.log("Replacing existing card:", item.data_id); // Debug log
+            existingCard.replaceWith(newCard);
+          } else {
+            console.log("Adding new card:", item.data_id); // Debug log
+            cardContainer.appendChild(newCard);
+          }
+
+          updateCardStyle(item.data_id, item.available);
+          reorderCards();
+        }
+
+        function updateOrAddMultipleCards(item) {
+          for (let i = 0; i < item.length; i++) {
+            updateOrAddCard(item[i]);
+          }
+        }
+        // Initialize WebSocket handling
+        document.addEventListener("DOMContentLoaded", function () {
+          // Handle WebSocket connection opening
+          socket.onopen = () => {
+            console.log("Connected to WebSocket server");
+            // Request initial data
+            socket.send(JSON.stringify({ type: "requestInitialData" }));
+          };
+
+          // Handle incoming WebSocket messages
+          socket.onmessage = (event) => {
+            try {
+              const message = JSON.parse(event.data);
+              console.log("Received message type:", message.type); // Debug log
+              console.log("Received message data:", message.data); // Debug log
+
+              switch (message.type) {
+                case "initialData":
+                  const cardContainer = document.getElementById("cardContainer");
+                  if (!cardContainer) {
+                    console.error("Card container not found");
+                    return;
+                  }
+
+                  cardContainer.innerHTML = ""; // Clear existing cards
+
+                  if (Array.isArray(message.data)) {
+                    const filteredData = message.data.filter(
+                      (item) => item.available === "on"
+                    );
+                    console.log("Filtered data:", filteredData); // Debug log
+
+                    filteredData.forEach((item) => {
+                      const card = createCard(item);
+                      cardContainer.appendChild(card);
+                      updateCardStyle(item.data_id, item.available);
+                    });
+                    reorderCards();
+                  } else {
+                    console.error("Initial data is not an array:", message.data);
+                  }
+                  break;
+
+                case "create":
+                case "update":
+                  if (message.data) {
+                    updateOrAddCard(message.data.data);
+                  } else {
+                    console.error("No data received for create/update");
+                  }
+                  break;
+
+                case "delete":
+                  if (message.data && message.data.data_id) {
+                    const cardToDelete = document.getElementById(
+                      `card-${message.data.data.data_id}`
+                    );
+                    if (cardToDelete) {
+                      cardToDelete.remove();
+                      reorderCards();
+                    }
+                  } else {
+                    console.error("Invalid delete data received");
+                  }
+                  break;
+                case "bulkUpdate":
+                  if (message.data) {
+                    updateOrAddMultipleCards(message.data.data);
+                  } else {
+                    console.error("No data received for create/update");
+                  }
+                  break;
+                default:
+                  console.log("Unknown message type:", message.type);
+              }
+            } catch (error) {
+              console.error("Error processing message:", error);
+              console.error("Raw message:", event.data);
+            }
+          };
+
+          // Handle WebSocket errors
+          socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+          };
+
+          // Handle WebSocket connection closing
+          socket.onclose = () => {
+            console.log("Disconnected from WebSocket server");
+          };
+        });
+
+        // Add a reconnection mechanism
+        function setupWebSocketReconnection() {
+          let reconnectAttempts = 0;
+          const maxReconnectAttempts = 5;
+          const reconnectDelay = 3000; // 3 seconds
+
+          function reconnect() {
+            if (reconnectAttempts < maxReconnectAttempts) {
+              reconnectAttempts++;
+              console.log(
+                `Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`
+              );
+
+              socket = new WebSocket("ws://localhost:3001/");
+
+              // Reset reconnection counter on successful connection
+              socket.onopen = () => {
+                console.log("Reconnected to WebSocket server");
+                reconnectAttempts = 0;
+                socket.send(JSON.stringify({ type: "requestInitialData" }));
+              };
+
+              socket.onclose = () => {
+                setTimeout(reconnect, reconnectDelay);
+              };
+            } else {
+              console.error(
+                "Max reconnection attempts reached. Please refresh the page."
+              );
+            }
+          }
+
+          socket.onclose = () => {
+            console.log("Connection lost. Attempting to reconnect...");
+            setTimeout(reconnect, reconnectDelay);
+          };
+        }
+        // Initialize reconnection handling
+        setupWebSocketReconnection();
+
+        function makeOfficehours(id) {
+          // Redirect to the Officehours page with the given ID as a query parameter
+          window.location.href = `/student/appointment?data_id=${id}`;
+          console.log(id);
+        }
+
+        function searchTeachers() {
+          var input, filter, cardContainer, cards, cardBody, i, txtValue;
+          input = document.getElementById("searchInput");
+          filter = input.value.toLowerCase();
+          cardContainer = document.getElementById("cardContainer");
+          cards = cardContainer.getElementsByClassName("card");
+
+          for (i = 0; i < cards.length; i++) {
+            cardBody = cards[i].getElementsByClassName("card-body")[0];
+            txtValue = cardBody.textContent || cardBody.innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+              cards[i].style.display = "";
+            } else {
+              cards[i].style.display = "none";
+            }
+          }
+        }
+
+        function logout() {
+          fetch("/logout", { method: "POST" }) // Adjust the logout endpoint as needed
+            .then(() => {
+              window.location.href = "/login"; // Redirect to login after logout
+            })
+            .catch((error) => console.error("Error logging out:", error));
+        }
+      </script>
+    </body>
+  </html>

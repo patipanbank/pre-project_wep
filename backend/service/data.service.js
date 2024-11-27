@@ -2,9 +2,7 @@ const { Op } = require("sequelize");
 const Data = require("../model/data");
 const { connection_server } = require("../config/db");
 const express = require("express");
-
 const app = express();
-const port = 3000;
 
 let clients = [];
 let timeoutMap = new Map();
@@ -54,7 +52,11 @@ async function updateOfficeStatus(latestUid, checkInTime) {
         last_checkin: checkInTime,
       });
 
-      // ตั้ง timeout 30 นาทีเพื่อเปลี่ยนสถานะเป็น out_office
+      // ใช้เวลาหมดเวลาที่ตั้งค่าหรือค่าเริ่มต้น 30 นาที
+      const timeoutDuration = process.env.OFFICE_TIMEOUT 
+      ? parseInt(process.env.OFFICE_TIMEOUT) 
+      : 30 * 60 * 1000;
+      
       const timeout = setTimeout(async () => {
         try {
           await Data.update(
@@ -67,7 +69,7 @@ async function updateOfficeStatus(latestUid, checkInTime) {
         } catch (error) {
           console.error("Error updating status to out_office:", error);
         }
-      }, 30 * 1000);
+      }, timeoutDuration);
       // 30 * 60 * 1000); // 30 นาที
 
       timeoutMap.set(latestUid, timeout);
@@ -115,11 +117,6 @@ app.get("/events", (req, res) => {
   req.on("close", () => {
     clients = clients.filter((client) => client.id !== clientId);
   });
-});
-
-// Start server and process notifications
-app.listen(port, () => {
-  console.log(`SSE server is running on http://localhost:${port}`);
 });
 
 setInterval(processNotifications, 1000);
