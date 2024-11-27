@@ -286,6 +286,28 @@ app.get('/data/count/:status/available', async (req, res) => {
   }
 });
 
+// เส้นทางสำหรับตั้งเวลาหมดเวลา
+app.post('/api/set-timeout', (req, res) => {
+  const { timeout } = req.body;
+  
+  // ตรวจสอบว่าเป็นตัวเลขบวก
+  if (timeout <= 0 || isNaN(timeout)) {
+    return res.status(400).json({ error: 'Timeout time must be a positive number.' });
+  }
+
+  // จัดเก็บเวลาหมดเวลาเป็นมิลลิวินาที
+  process.env.OFFICE_TIMEOUT = timeout * 60 * 1000;
+
+  res.json({ message: 'Updated timeout time successfully' });
+});
+
+app.get('/api/get-timeout', (req, res) => {
+  const timeout = process.env.OFFICE_TIMEOUT ? 
+    process.env.OFFICE_TIMEOUT / (60 * 1000) : 30; // ค่าเริ่มต้น 30 ถ้าไม่ได้ตั้งค่า
+  
+  res.json({ timeout });
+});
+
 // Example of triggering broadcast on data change
 Datas.afterCreate(broadcastCounts);
 Datas.afterUpdate(broadcastCounts);

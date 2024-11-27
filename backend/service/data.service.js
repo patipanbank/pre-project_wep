@@ -52,7 +52,11 @@ async function updateOfficeStatus(latestUid, checkInTime) {
         last_checkin: checkInTime,
       });
 
-      // ตั้ง timeout 30 นาทีเพื่อเปลี่ยนสถานะเป็น out_office
+      // ใช้เวลาหมดเวลาที่ตั้งค่าหรือค่าเริ่มต้น 30 นาที
+      const timeoutDuration = process.env.OFFICE_TIMEOUT 
+      ? parseInt(process.env.OFFICE_TIMEOUT) 
+      : 30 * 60 * 1000;
+      
       const timeout = setTimeout(async () => {
         try {
           await Data.update(
@@ -65,7 +69,7 @@ async function updateOfficeStatus(latestUid, checkInTime) {
         } catch (error) {
           console.error("Error updating status to out_office:", error);
         }
-      }, 30 * 1000);
+      }, timeoutDuration);
       // 30 * 60 * 1000); // 30 นาที
 
       timeoutMap.set(latestUid, timeout);
